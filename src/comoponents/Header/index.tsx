@@ -27,7 +27,7 @@ const Header: React.FC = () => {
   return (
     <div style={rootStyles}>
       <div>
-        <span style={{ visibility: 'hidden' }}>hidden</span>
+        <span style={{ visibility: 'hidden' }}>hiddenn</span>
         { link && <NavLink to={link} onClick={handleButtonClick}>Back button</NavLink> }
       </div>
       <img src={logo} />
