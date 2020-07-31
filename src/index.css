@@ -1,14 +1,49 @@
-/* comment */
+
+@font-face {
+  font-family: Roboto;
+  src: url("./fonts/Roboto-Bold.ttf") format("opentype");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("./fonts/Roboto-Black.ttf") format("opentype");
+  font-weight: bolder;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("./fonts/Roboto-Regular.ttf") format("opentype");
+  font-weight: normal;
+}
+
+element {
+  --main-bg-color: radial-gradient(100% 316.05% at 0% 48.15%, #2C004F 0%, #7C2FB9 50.04%, #32005A 100%);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Roboto';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif; */
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+a {
+  text-decoration: none!important;
+  color: #fff;
+  margin: 5px;
 }
