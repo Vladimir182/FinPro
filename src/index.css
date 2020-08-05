@@ -21,6 +21,9 @@ element {
   --main-bg-color: radial-gradient(100% 316.05% at 0% 48.15%, #2C004F 0%, #7C2FB9 50.04%, #32005A 100%);
 }
 
+* {
+    box-sizing: border-box;
+}
 html,
 body,
 #root {

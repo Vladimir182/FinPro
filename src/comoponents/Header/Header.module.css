@@ -1,0 +1,56 @@
+@media (max-width: 1280px) {
+  .layer {
+    width: 239px !important;
+    height: 118px !important; }
+
+  .backButton {
+    width: 228px !important;
+    height: 102px !important;
+    font-size: 32px !important; }
+    .backButton img {
+      width: 25px !important; } }
+@media (max-width: 1152px) {
+  .layer {
+    width: 182px !important;
+    height: 91px !important;
+    top: 72px !important; }
+
+  .backButton {
+    width: 172px !important;
+    font-size: 26px !important;
+    padding: 36px 25px !important;
+    height: 77px !important; }
+    .backButton img {
+      width: 20px !important; } }
+@media (max-width: 1024px) {
+  .layer {
+    width: 166px !important;
+    height: 83px !important; }
+
+  .backButton {
+    width: 157px !important;
+    height: 70px !important;
+    font-size: 24px !important;
+    padding: 28px 20px !important; }
+
+  .logoStyle {
+    width: 266px; } }
+@media (max-width: 800px) {
+  .logoStyle {
+    width: 177px; }
+
+  .layer {
+    width: 140px !important;
+    height: 69px !important;
+    top: 80px !important; }
+
+  .backButton {
+    width: 130px !important;
+    height: 55px !important;
+    font-size: 20px !important;
+    padding: 20px 15px !important;
+    top: 2px !important; }
+    .backButton img {
+      width: 15px !important; } }
+
+/*# sourceMappingURL=Header.module.css.map */
