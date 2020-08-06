@@ -11,7 +11,7 @@ type RequestParams = {
   body?: { [x: string]: any };
 };
 
-type Requset = (patam: RequestParams) => void;
+type Requset = (params: RequestParams) => void;
 
 type Query = (url: string, params: { [x: string]: any }) => void;
 
