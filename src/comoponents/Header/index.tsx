@@ -35,11 +35,12 @@ const Header: React.FC = () => {
     fontSize: '36px',
     justifyContent: 'space-between',
     height: '115px',
-    left: '0',
+    left: '5px',
+    top: '8px',
     letterSpacing: '0.05em',
     padding: '36px 30px',
     position: 'absolute',
-    top: '3px',
+    // top: '3px',
     textTransform: 'uppercase',
     width: '249px'
   } as React.CSSProperties;
