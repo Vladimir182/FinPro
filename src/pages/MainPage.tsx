@@ -10,6 +10,7 @@ import Header from '../comoponents/Header';
 import { ThemeContext } from '../ThemeContextProvider';
 import { useDispatch } from 'react-redux';
 import { fetchLogin } from '../redux/authorization';
+import Check from "../comoponents/Checks";
 // import './index.scss'
 
 const MainPage: React.FC = () => {
@@ -40,7 +41,7 @@ const MainPage: React.FC = () => {
         <Route
           exact={true}
           path="/voucher-login"
-          component={VoucherLogin}
+          component={Check}
         />
         {/* <Route
           exact={true}

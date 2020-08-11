@@ -1,0 +1,127 @@
+
+.check-page-wrapper .page-container-check {
+    display: flex;
+    justify-content: center; }
+.wrapper-check {
+    width: 100%;
+    max-width: 635px;
+    position: relative;
+}
+.wrapper-check img {
+    width: 100%;
+}
+.block-check {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    padding: 10px 50px 20px;
+    position: absolute;
+    top: 140px;
+    left: 95px;
+    width: 100%;
+    max-width: 443px;
+}
+
+.block-check p {
+    font-weight: normal;
+    color: #4D4D4D;
+    margin-bottom: 20px;
+    font-size: 36px;
+}
+.block-check .text {
+    font-weight: normal;
+    color: #4D4D4D;
+    margin: 8px 0;
+    font-size: 18px;
+    line-height: 150%;
+}
+.output-check-text {
+    border-top: 1px dashed #000000;
+    border-bottom: 1px solid #000;
+    display:flex;
+    justify-content: space-between;
+    padding: 12px 0 1px;
+    width: 100%;
+    color: red;
+}
+/*.output-check p {*/
+/*    font-size: 18px;*/
+/*}*/
+.output-check-text .wrapper{
+    font-size: 18px;
+    color: #4D4D4D;
+}
+
+.output-check-text .item-left{
+    margin-bottom: 8px;
+    line-height: 150%;
+}
+.output-check-text .item-right{
+    margin-bottom: 8px;
+    line-height: 150%;
+}
+
+@media (max-width: 1280px) {
+    .wrapper-check{
+        max-width: 554px;
+    }
+    .block-check {
+        padding: 10px 40px;
+        top: 122px;
+        left: 83px;
+        max-width: 386px;
+
+    }
+    .block-check p {
+        font-size: 30px;
+    }
+    .output-check-text .wrapper{
+        font-size: 16px;
+    }
+    .block-check .text {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 1152px) {
+    .wrapper-check{
+        max-width: 467px;
+    }
+    .block-check {
+        padding: 0px 35px;
+        top: 105px;
+        left: 70px;
+        max-width: 326px;
+    }
+    .block-check p {
+        font-size: 26px;
+    }
+    .output-check-text .wrapper{
+        font-size: 12px;
+    }
+    .block-check .text {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 800px) {
+    .wrapper-check{
+        max-width: 360px;
+    }
+    .block-check {
+        top: 80px;
+        left: 54px;
+        padding: 0px 32px;
+        max-width: 251px;
+    }
+    .block-check p {
+        font-size: 20px;
+    }
+    .output-check-text .wrapper{
+        font-size: 10px;
+    }
+    .block-check .text {
+        font-size: 10px;
+    }
+}
