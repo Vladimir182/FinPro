@@ -1,0 +1,77 @@
+/*
+  ANIMATION ON CLICK
+
+  
+.action-button-block:active {
+  background-color: red;
+}
+
+.action-button-wrapper:active {
+  background: white!important;
+} */
+
+.action-button-block {
+  border-radius: 30px;
+}
+
+.action-button-wrapper {
+  width: fit-content;
+  height: auto;
+  border-radius: 14px;
+  margin: 8px;
+  padding: 2vw 2.5vw;
+}
+
+.action-button-title {
+  margin-right: 1vw!important;
+  font-size: 1.9vw;
+}
+
+.action-button-block img {
+  width: 1.9vw;
+}
+
+@media (max-width: 1920px) {
+  .action-button-title {
+    font-size: 36px;
+    margin-right: 35px!important;
+  }
+
+  .action-button-block img {
+    width: auto;
+  }
+}
+
+@media (max-width: 1280px) {
+  .action-button-title {
+    font-size: 32px;
+    margin-right: 35px!important;
+  }
+}
+
+@media (max-height: 720px) and (max-width: 1280px) { 
+  .action-button-title {
+    font-size: 28px;
+    margin-right: 12px!important;
+  }
+}
+
+@media (max-width: 1152px) { 
+  .action-button-title {
+    font-size: 28px;
+    margin-right: 12px!important;
+  }
+}
+
+@media (max-width: 1024px) { 
+  .action-button-title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 800px) { 
+
+  .action-button-title {
+    font-size: 24px;
+  }
+}

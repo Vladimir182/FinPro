@@ -6,21 +6,20 @@ export const HeaderButtonContext = React.createContext({
 });
 
 const HeaderButtonContextProvider: React.FC = props => {
+  const [link, setNewLink] = useState('');
 
-  const setLink = (link: string) => {
-    sessionStorage.setItem('pinpro-backlink', link)
-    setState({ ...state, link: link });
+  const setLink = (newLink: string) => {
+    
+    if (link === newLink) {
+      return;
+    }
+
+    sessionStorage.setItem('finpro-backlink', newLink);
+    setNewLink(newLink);
   }
-
-  const initState = {
-    link: '',
-    setLink: setLink
-  }
-
-  const [state, setState] = useState(initState);
 
   return (
-    <HeaderButtonContext.Provider value={state}>
+    <HeaderButtonContext.Provider value={{ link, setLink }}>
       {props.children}
     </HeaderButtonContext.Provider>
   )

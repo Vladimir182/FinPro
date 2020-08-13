@@ -1,0 +1,64 @@
+.input-mask-error {
+  font-size: 1.4vw;
+  line-height: 44px;
+}
+
+.input-title {
+  font-size: 1.9vw;
+}
+
+@media (max-width: 1920px) {
+  .input-mask-error {
+    font-size: 18px;
+  }
+
+  .input-title {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 1280px) {
+  .input-mask-error {
+    font-size: 18px;
+  }
+
+  .input-title {
+    font-size: 32px;
+  }
+}
+
+@media (max-height: 720px) and (max-width: 1280px) { 
+  .input-mask-error {
+    font-size: 16px;
+  }
+
+  .input-title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 1152px) { 
+  .input-mask-error {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 1024px) { 
+  .input-mask-error {
+    font-size: 16px;
+  }
+
+  .input-title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 800px) { 
+  .input-mask-error {
+    font-size: 14px;
+  }
+
+  .input-title {
+    font-size: 22px;
+  }
+}

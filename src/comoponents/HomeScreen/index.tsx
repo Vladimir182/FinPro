@@ -1,12 +1,8 @@
 import React, {useContext, useEffect} from 'react';
-import {NavLink} from 'react-router-dom';
-import VoucherLogin from '../VoucherLogin';
-import VoucherPin from '../VoucherPin';
-import {HeaderButtonContext} from '../Header/HeaderButtonProvider';
-
-import newVoucher from '../../images/icon_new_voucher.svg'
-import existingVoucher from '../../images/icon_voucher.svg'
-import './index.module.css';
+import newVoucher from '../../images/icon_new_voucher.svg';
+import existingVoucher from '../../images/icon_voucher.svg';
+import BaseButton from '../Buttons/BaseButton';
+import './index.css'
 
 const HomeScreen: React.FC = () => {
   // const { setLink } = useContext(HeaderButtonContext);
@@ -14,31 +10,14 @@ const HomeScreen: React.FC = () => {
   // useEffect(() => {
   //   setLink('');
   // })
+  
+  const buttonStyles = {}
+
   return (
-    <>
-      <div className="home-page-wrapper">
-        <div className="home-container">
-            <div className="button-left block">
-              <div className="wrapper">
-              <NavLink to="/voucher">
-                <img src={newVoucher} alt="image"/>
-                <p>Новый ваучер</p>
-              </NavLink>
-            </div>
-          </div>
-
-
-          <div className="button-right block">
-            <div className="wrapper">
-              <NavLink to="/voucher">
-                <img src={existingVoucher} alt="image"/>
-                <p>Войти с ваучером</p>
-              </NavLink>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+    <div className="home-container">
+      <BaseButton className="home-screen-button"  title="Новый ваучер" link="/voucher" image={newVoucher}  style={buttonStyles}/>
+      <BaseButton className="home-screen-button" title="Войти с ваучером" link="/voucher-login" image={existingVoucher} style={{...buttonStyles, marginRight: '0'}} />
+    </div>
   )
 }
 

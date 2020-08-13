@@ -23,37 +23,48 @@ const MainPage: React.FC = () => {
     padding: '0 4%'
   }
 
+  const contentStyles = {
+    display: 'flex',
+    justifyContent: 'center'
+  }
+
   return (
     <div className="main-page-root" style={rootStyles}>
       <Header />
-      <p>Main Page</p>
-      <Switch>
-        <Route
-          exact={true}
-          path="/"
-          component={HomeScreen}
-        />
-        <Route
-          exact={true}
-          path="/voucher"
-          component={Voucher}
-        />
-        <Route
-          exact={true}
-          path="/voucher-login"
-          component={Check}
-        />
-        {/* <Route
-          exact={true}
-          path="/voucher-create"
-          component={VoucherCreate}
-        /> */}
-        {/* <Route
-          exact={true}
-          path="/voucher-pin"
-          component={VoucherPin}
-        /> */}
-      </Switch>
+      <div className="content" style={contentStyles}>
+        <Switch>
+          <Route
+            exact={true}
+            path="/"
+            component={HomeScreen}
+          />
+          <Route
+            exact={true}
+            path="/voucher"
+            component={Voucher}
+          />
+          <Route
+            exact={true}
+            path="/voucher-login"
+            component={VoucherLogin}
+          />
+          <Route
+            exact={true}
+            path="/voucher-login"
+            component={Check}
+          />
+          {/* <Route
+            exact={true}
+            path="/voucher-create"
+            component={VoucherCreate}
+          /> */}
+          {/* <Route
+            exact={true}
+            path="/voucher-pin"
+            component={VoucherPin}
+          /> */}
+        </Switch>
+      </div>
     </div>
   )
 }

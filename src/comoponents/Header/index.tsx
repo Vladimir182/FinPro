@@ -4,15 +4,16 @@ import { HeaderButtonContext } from './HeaderButtonProvider';
 import { NavLink } from 'react-router-dom';
 
 import './Header.module.css';
+import './index.css';
 import Arrow from '../../images/ArrowLeft.svg'
 
 const Header: React.FC = () => {
   let { link, setLink } = useContext(HeaderButtonContext);
 
-  link = !link ? (sessionStorage.getItem('pinpro-backlink') ?? '') : link;
+  link = !link ? (sessionStorage.getItem('finpro-backlink') ?? '') : link;
 
   const handleButtonClick = () => {
-    sessionStorage.removeItem('pinpro-backlink');
+    sessionStorage.removeItem('finpro-backlink');
     setLink('');
   }
 
@@ -20,45 +21,32 @@ const Header: React.FC = () => {
     display: 'flex',
     justifyContent: 'space-between',
     width: '100%',
-    height: '180pt',
-    padding: '76px 0',
-    
-    // background: theme.background,
   }
   const backButton = {
+    justifyContent: 'center',
     alignItems: 'center',
     background: 'linear-gradient(180deg, #56007D 0%, #9100D2 52.08%, #8A00C9 98.96%, #61018C 100%)',
     borderRadius: '14px',
     display: 'flex',
     fontStyle: 'normal',
-    fontWeight: 900,
-    fontSize: '36px',
-    justifyContent: 'space-between',
-    height: '115px',
+    // justifyContent: 'space-between',
     left: '5px',
-    top: '8px',
     letterSpacing: '0.05em',
-    padding: '36px 30px',
-    position: 'absolute',
-    // top: '3px',
     textTransform: 'uppercase',
-    width: '249px'
+    fontWeight: 'bolder',
   } as React.CSSProperties;
 
   const layer = {
-    alignContent: "center",
+    justifyContent: "center",
+    justifyItems: "center",
     background: 'linear-gradient(180deg, #40005D 0%, #7400A8 100%)',
     borderRadius: '20px',
     display: "flex",
-    justifyContent: "center",
-    height: '131px',
     position: 'absolute',
-    top: '55px',
-    width: '260px',
   } as React.CSSProperties;
 
   return (
-    <div style={rootStyles}>
+    <div className="header" style={rootStyles}>
       <div>
         <span style={{ visibility: 'hidden' }}>hiddenn</span>
         { link && <div style={layer} className='layer'>
@@ -67,7 +55,7 @@ const Header: React.FC = () => {
 		        Назад</NavLink>
         </div> }
       </div>
-      <img src={logo} className="logoStyle"/>
+      <img src={logo} className="logoStyle" />
       <div>
         <span style={{ visibility: 'hidden' }}> hidden</span>
       </div>
