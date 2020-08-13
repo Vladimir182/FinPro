@@ -8,14 +8,14 @@ import { HeaderButtonContext } from '../Header/HeaderButtonProvider';
 
 
 const VoucherRoads: React.FC = () => {
-  const isLoginVerified = useSelector((state: AppState) => state.voucher.isLoginVerified);
+  const isVoucherVerified = useSelector((state: AppState) => state.voucher.isVoucherVerified);
   const { setLink } = useContext(HeaderButtonContext);
   
   setLink('/');
   
   return (
     <>
-      { !isLoginVerified && <Redirect to="/voucher-login" /> }
+      { !isVoucherVerified && <Redirect to="/voucher-login" /> }
       <p>Voucher interface</p>
     </>
   )

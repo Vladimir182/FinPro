@@ -19,7 +19,7 @@ const Roads: React.FC = () => {
           <Route path="/" component={AuthLazy} />
       </Suspense>
     </Switch>
-  );
+);
 }
 
 export default withRouter(Roads);

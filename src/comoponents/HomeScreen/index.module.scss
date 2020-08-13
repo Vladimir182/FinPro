@@ -1,0 +1,98 @@
+//@media (min-width: 1153px) and (max-width: 1280px) and (max-height: 720px){
+//
+//}
+
+.home-page-wrapper{
+ display: flex;
+  width:100%;
+  //background: red;
+  .home-container{
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1260px;
+    //background: green;
+    .block{
+      filter: drop-shadow(0px 0px 5px #EAA900);
+      box-shadow:  0px 0px 1px 8px #EAA900;
+      -webkit-box-shadow: 0px 0px 1px 8px #EAA900;
+      -moz-box-shadow: 0px 0px 1px 8px #EAA900;
+      flex-basis: 568px;
+      background: transparent;
+      border-radius: 14px;
+      a{
+        text-align: center;
+        display: block;
+        padding: 68px 0 54px 0;
+        img{
+          margin-bottom: 60px;
+        }
+        p{
+          margin: 0;
+          font-weight: bold;
+          font-size: 36px;
+          text-transform: uppercase;
+        }
+      }
+      @media (max-width: 1280px){
+        flex-basis: 414px;
+        a{
+          padding: 52px 0 48px 0;
+          img{
+            width: 94px;
+            margin-bottom: 28px;
+          }
+          p{
+            font-size: 24px;
+          }
+        }
+      }
+      @media (max-width: 1152px){
+        flex-basis: 345px;
+        a{
+          padding: 46px 0 55px 0;
+          img{
+            width: 94px;
+            margin-bottom: 28px;
+          }
+          p{
+            font-size: 24px;
+          }
+        }
+      }
+      @media (max-width: 800px){
+        flex-basis: 261px;
+        a{
+          padding: 36px 0 31px 0;
+          img{
+            width: 73px;
+            margin-bottom: 28px;
+          }
+          p{
+            font-size: 18px;
+          }
+        }
+      }
+    }
+    .button-left{
+      margin-right: 55px;
+      //background: silver;
+      @media (max-width: 1280px){
+        margin-right: 38px;
+      }
+    }
+    .button-right{
+      margin-left: 55px;
+      //background: #2C004F;
+      @media (max-width: 1280px){
+        margin-left: 38px;
+      }
+    }
+  }
+  .wrapper{
+    border-radius: 14px;
+    background: linear-gradient(338deg, rgba(138,0,201,1) 0%, rgba(97,8,138,1) 33%, rgba(97,8,138,1) 60%, rgba(138,0,201,1) 100%);
+    margin: 13px;
+  }
+}

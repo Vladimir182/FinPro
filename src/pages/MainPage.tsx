@@ -11,6 +11,7 @@ import { ThemeContext } from '../ThemeContextProvider';
 import { useDispatch } from 'react-redux';
 import { fetchLogin } from '../redux/authorization';
 import Check from "../comoponents/Checks";
+import voucher from "../redux/voucher";
 // import './index.scss'
 
 const MainPage: React.FC = () => {
@@ -31,6 +32,7 @@ const MainPage: React.FC = () => {
   return (
     <div className="main-page-root" style={rootStyles}>
       <Header />
+
       <div className="content" style={contentStyles}>
         <Switch>
           <Route
@@ -50,7 +52,7 @@ const MainPage: React.FC = () => {
           />
           <Route
             exact={true}
-            path="/voucher-login"
+            path="/voucher-create"
             component={Check}
           />
           {/* <Route

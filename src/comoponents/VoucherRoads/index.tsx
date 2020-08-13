@@ -6,12 +6,12 @@ import VoucherPin from '../VoucherPin';
 import { Redirect } from 'react-router';
 
 const VoucherRoads: React.FC = () => {
-  const { login, pincode, isLoginVerified, isPincodeVerified } = useSelector((state: AppState) => state.voucher);
+  const { login, pincode, isVoucherVerified, isPincodeVerified } = useSelector((state: AppState) => state.voucher);
   
-  if (isLoginVerified && isPincodeVerified) {
+  if (isVoucherVerified && isPincodeVerified) {
     // return <VoucherInterface />
     return <p>TEST</p>
-  } else if (isLoginVerified) {
+  } else if (isVoucherVerified) {
     return <VoucherPin />
   } else {
     return <VoucherLogin /> 
