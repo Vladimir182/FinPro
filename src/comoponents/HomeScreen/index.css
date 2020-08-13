@@ -1,0 +1,33 @@
+.home-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.home-screen-button {
+  width: 27vw!important;
+}
+
+@media (max-width: 1920px) { 
+  .home-screen-button {
+    width: 27vw!important;
+  }
+}
+
+@media (max-width: 1280px) { 
+  .home-screen-button {
+    width: 31vw!important;
+  }
+}
+
+@media (max-height: 720px) and (max-width: 1280px) {
+
+}
+
+@media (max-width: 1152px) { 
+
+}
+
+
+@media (max-width: 800px) { 
+
+}

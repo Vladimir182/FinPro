@@ -1,4 +1,45 @@
-@media (min-width: 1153px) and (max-width: 1280px) and (max-height: 720px) {
+
+
+.logoStyle {
+  width: 15vw; 
+}
+.layer {
+  width: fit-content;
+  height: fit-content;
+  top: 5.7vh!important;
+  padding: 0.4vw 0.6vw;
+  border-radius: 1vw;
+}
+.backButton {
+  width: 15vw!important;
+  height: 7vw!important;
+  padding: 1vw 1.25vw;
+  font-size: 1.7vw;
+  border-radius: 1vw;
+}
+.backButton img {
+  width: 1.7vw;
+  margin-right: 1vw;
+}
+
+@media (max-width: 1920px) {
+  .logoStyle {
+    width: 300px;
+  }
+  .layer {
+    top: 8px;
+    padding: 6px 10px;
+  }
+  .backButton {
+    width: 260px!important;
+    height: 131px!important;
+    padding: 36px 30px;
+    font-size: 36px;
+  }
+  .backButton img {
+    margin-right: 23px;
+  }
+} @media (min-width: 1153px) and (max-width: 1280px) and (max-height: 720px) {
   .layer.layer {
     width: 182px !important;
     height: 91px !important;
@@ -10,7 +51,9 @@
     padding: 36px 25px !important;
     height: 77px !important; }
     .backButton.backButton img {
-      width: 20px !important; } }
+      width: 20px !important; 
+      margin-right: 17px;
+    } }
 @media (max-width: 1280px) {
   .layer {
     width: 239px !important;
