@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux';
 import { AppState } from '../../redux';
 
 const VoucherPin: React.FC = () => {
-  const isLoginVerified = useSelector((state: AppState) => state.voucher.isLoginVerified);
-  
+  // const isVoucherVerified = useSelector((state: AppState) => state.voucher.isVoucherVerified);
+
   return (
     <>
-      {/* { !isLoginVerified && <Redirect to="/voucher-login" /> } */}
+      {/* { !isVoucherVerified && <Redirect to="/voucher-login" /> } */}
       <p>Voucher pin</p>
     </>
   )

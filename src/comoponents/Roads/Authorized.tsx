@@ -19,7 +19,7 @@ const Authorized: React.FC = (props) => {
   return (
     <>
       { 
-        isLoading ? <p>loading</p>
+        isLoading ? <span className="spinner-loader">Loading</span>
         : <>
           { !isAuth && <Redirect to="/login" /> }
           { (isAuth && isLoginPage) && <Redirect to="/" /> }

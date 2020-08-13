@@ -9,8 +9,9 @@ const LOG_OUT = 'LOG_OUT';
 
 const initialState = {
   isLoading: false,
+  isCreateLoading: false,
   login: '',
-  isLoginVerified: false,
+  isVoucherVerified: false,
   pincode: '',
   isPincodeVerified: false,
   sessionKey: '',
