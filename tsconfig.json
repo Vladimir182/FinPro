@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    // "baseUrl": "https://kiosk-api.kiosk-frontend.finpro.pw",
     "target": "es5",
     "lib": [
       "dom",

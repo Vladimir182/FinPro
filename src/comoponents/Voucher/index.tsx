@@ -7,11 +7,7 @@ import { HeaderButtonContext } from '../Header/HeaderButtonProvider';
 // import VoucherPin from '../VoucherPin';
 
 const VoucherRoads: React.FC = () => {
-<<<<<<< HEAD
-  const voucherSessionKey = useSelector((state: AppState) => state.voucher.voucherSessionKey);
-=======
   const { voucherSessionKey } = useSelector((state: AppState) => state.voucher);
->>>>>>> voucher-authorization-tmp
   const { setLink } = useContext(HeaderButtonContext);
   
   useEffect(() => {

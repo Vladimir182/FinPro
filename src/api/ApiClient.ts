@@ -71,13 +71,8 @@ export default class ApiClient {
 			})
 			.catch((error: any) => {
 				const response = error.response;
-<<<<<<< HEAD
-
-        throw response
-=======
 				
 				throw response;
->>>>>>> voucher-authorization-tmp
 			});
   }
     
