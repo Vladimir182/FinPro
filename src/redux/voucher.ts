@@ -7,9 +7,6 @@ const REQUEST_VOUCHER_PINCODE_SUCCESS = 'REQUEST_VOUCHER_PINCODE_SUCCESS';
 const REQUEST_VOUCHER_FAILURE = 'REQUEST_VOUCHER_FAILURE';
 const LOG_OUT = 'LOG_OUT';
 
-const REQUEST_PRINT_VOUCHER_SUCCESS = 'REQUEST_PRINT_VOUCHER_SUCCESS';
-const REQUEST_PRINT_VOUCHER_ERROR = 'REQUEST_PRINT_VOUCHER_ERROR';
-
 const initialState = {
   isLoading: false,
   isCreateLoading: false,
@@ -36,6 +33,7 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         isError: false,
 			};
 		case REQUEST_VOUCHER_LOGIN_SUCCESS:
+      sessionStorage.setItem('finpro-voucher-session-key', payload.msid);
 			return {
 				...state,
 				voucherSessionKey: payload.msid,
@@ -43,13 +41,6 @@ const voucher = (state = initialState, { type, payload }: Action) => {
 				isError: false,
 				errorMessage: ''
 			};
-
-		  case REQUEST_PRINT_VOUCHER_SUCCESS:
-			return {
-         ...state,
-        voucherSessionKey: payload.msid,
-    		isLoading: false,
-		 	}	
 		case REQUEST_VOUCHER_FAILURE:
 			return {
 				...state,
@@ -84,13 +75,11 @@ export const fetchVoucherLogin = (voucherLogin: string) => (dispatch: any) => {
     const data = res.data;
 
     if (!data.success) {
-      // dispatch(showError());
       dispatch({ type: REQUEST_VOUCHER_FAILURE, payload: { message: data.error_message } });
 
       return;
     }
 
-    sessionStorage.setItem('finpro-voucher-session-key', data.msid);
     dispatch({ type: REQUEST_VOUCHER_LOGIN_SUCCESS, payload: data });  
   })
   .catch((error: any) => {
@@ -127,27 +116,28 @@ export const fetchPin = (data: any) => (dispatch: any) => {
 export const fetchPrintVoucher = () => (dispatch: any) => {
   dispatch({type: REQUEST_VOUCHER_START});
   api.voucher
-    .printVoucher()
-    .then((res: any) => {
-      const data = res.data;
-      console.log(data);
-      if (data.success) {
-        dispatch({
-          type: REQUEST_PRINT_VOUCHER_SUCCESS,
-          payload: data
-        });
-      } else {
-        dispatch({type: REQUEST_PRINT_VOUCHER_ERROR,
-          payload: data.messages_error
-        });
-      }
-    })
-    .catch((error: any) => {
-      console.log(error)
-      dispatch({type: REQUEST_PRINT_VOUCHER_ERROR,
-        payload: error
-        });
-    })
+  .printVoucher()
+  .then((res: any) => {
+    const data = res.data;
+    console.log(data);
+    if (data.success) {
+      dispatch({
+        type: REQUEST_VOUCHER_LOGIN_SUCCESS,
+        payload: data
+      });
+    } else {
+      dispatch(showError());
+      dispatch({type: REQUEST_VOUCHER_FAILURE,
+        payload: data.messages_error
+      });
+    }
+  })
+  .catch((error: any) => {
+    dispatch(showError());
+    dispatch({type: REQUEST_VOUCHER_FAILURE,
+      payload: error
+      });
+  });
 };
 
 export default voucher;

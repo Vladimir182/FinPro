@@ -3,7 +3,6 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import HomeScreen from '../comoponents/HomeScreen';
 import Voucher from '../comoponents/Voucher';
 import VoucherLogin from '../comoponents/VoucherLogin';
-import VoucherCreate from '../comoponents/VoucherCreate';
 import VoucherPin from '../comoponents/VoucherPin';
 import Header from '../comoponents/Header';
 import { ThemeContext } from '../ThemeContextProvider';
@@ -56,14 +55,9 @@ const MainPage: React.FC = () => {
             path="/voucher-login"
             component={VoucherLogin}
           />
-          <Route
-            exact={true}
-            path="/voucher-create"
-            component={VoucherCreate}
-          />
           {/* <Route
             exact={true}
-            path="/voucher-pin" 
+            path="/voucher-pin"
             component={VoucherPin}
           /> */}
         </Switch>

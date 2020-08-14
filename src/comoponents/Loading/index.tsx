@@ -8,7 +8,7 @@ type LoaderProps = {
 }
 
 const Loader: React.FC<LoaderProps> = ({ style }) => (
-  <span className="spinner-loader" style={style}>Loading</span>
+  <span className="spinner-loader" style={style}></span>
 );
 
 export default Loader;

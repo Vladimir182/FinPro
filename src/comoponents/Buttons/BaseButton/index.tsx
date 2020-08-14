@@ -3,9 +3,9 @@ import { NavLink } from 'react-router-dom';
 import './index.css'
 
 type BaseButtonProps = {
-  link: string
   title: string,
   image: string,
+  link?: string
   width?: string,
   className?: string,
   style?: {
@@ -43,16 +43,23 @@ const BaseButton: React.FC<BaseButtonProps> = ({ link, title, image, width, styl
 
   const titleStyles = {
     fontWeight: 'bold',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    color: '#fff'
   } as React.CSSProperties;
 
   return (
     <div className={`base-button-block ${className}`} onClick={onClick} style={{ ...buttonBlockStyles, ...style }}>
       <div className="base-button-wrapper" style={buttonWrapperStyles}>
-        <NavLink to={link} style={linkStyles}>
-          <img className="base-button-image" src={image} style={imageStyles} alt="image"/>
-          <p className="base-button-title" style={titleStyles}>{title}</p>
-        </NavLink>
+        { link ?
+          <NavLink to={link} style={linkStyles}>
+            <img className="base-button-image" src={image} style={imageStyles} alt="image"/>
+            <p className="base-button-title" style={titleStyles}>{title}</p>
+          </NavLink>
+          : <div style={linkStyles}>
+            <img className="base-button-image" src={image} style={imageStyles} alt="image"/>
+            <p className="base-button-title" style={titleStyles}>{title}</p>
+          </div>
+        }
       </div>
     </div>
   )
