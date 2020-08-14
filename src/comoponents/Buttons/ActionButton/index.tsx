@@ -41,8 +41,8 @@ const ActionButton: React.FC<ActionButton> = ({ title, link, image, handleButton
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    'text-align': 'center',
-  }
+    textAlign: 'center',
+  } as React.CSSProperties;
 
   const imageStyles = {}
 
@@ -53,16 +53,16 @@ const ActionButton: React.FC<ActionButton> = ({ title, link, image, handleButton
   } as React.CSSProperties;
 
   return (
-    <div className={`action-button-block`} style={{...buttonBlockStyles, ...style}}>
+    <div className={`action-button-block`}  onClick={handleButtonClick} style={{...buttonBlockStyles, ...style}}>
       <div className={`action-button-wrapper ${className ?? ''}`} style={buttonWrapperStyles}>
         {
           link ? (
-            <NavLink to={link} style={linkStyles} onClick={handleButtonClick}>
+            <NavLink to={link} style={linkStyles}>
               <p className="action-button-title" style={titleStyles}>{title}</p>
               <img src={image} style={imageStyles} alt="image" />
             </NavLink>
           ) : (
-            <div style={linkStyles} onClick={handleButtonClick}>
+            <div style={linkStyles}>
               <p className="action-button-title" style={titleStyles}>{title}</p>
               <img className="action-button-image" src={image} style={imageStyles} alt="image" />
             </div>

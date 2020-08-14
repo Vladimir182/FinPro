@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { AppState } from '../../redux';
@@ -8,14 +8,16 @@ import { HeaderButtonContext } from '../Header/HeaderButtonProvider';
 
 
 const VoucherRoads: React.FC = () => {
-  const isVoucherVerified = useSelector((state: AppState) => state.voucher.isVoucherVerified);
+  const { voucherSessionKey } = useSelector((state: AppState) => state.voucher);
   const { setLink } = useContext(HeaderButtonContext);
   
-  setLink('/');
+  useEffect(() => {
+    setLink('/');
+  })
   
   return (
     <>
-      { !isVoucherVerified && <Redirect to="/voucher-login" /> }
+      { !voucherSessionKey && <Redirect to="/voucher-login" /> }
       <p>Voucher interface</p>
     </>
   )

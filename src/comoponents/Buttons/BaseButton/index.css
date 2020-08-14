@@ -1,0 +1,14 @@
+.base-button-wrapper {
+  padding-bottom: 2.5vw;
+  padding-top: 2.8vw;
+}
+
+.base-button-image {
+  width: 8vw;
+  margin-bottom: 8%
+}
+
+.base-button-title {
+  font-size: 1.8vw;
+  margin: 0;
+}

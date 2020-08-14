@@ -1,21 +1,20 @@
 import api from '../api';
-console.log('API', api)
+import { showError } from './error-screen';
 
 const REQUEST_VOUCHER_START = 'REQUEST_VOUCHER_START';
 const REQUEST_VOUCHER_LOGIN_SUCCESS = 'REQUEST_VOUCHER_LOGIN_SUCCESS';
 const REQUEST_VOUCHER_PINCODE_SUCCESS = 'REQUEST_VOUCHER_PINCODE_SUCCESS';
-const REQUEST_VOUCHER_FAILURE = 'REQUEST_VOUCHER_ERROR';
+const REQUEST_VOUCHER_FAILURE = 'REQUEST_VOUCHER_FAILURE';
 const LOG_OUT = 'LOG_OUT';
 
 const initialState = {
   isLoading: false,
   isCreateLoading: false,
-  login: '',
   isVoucherVerified: false,
   pincode: '',
   isPincodeVerified: false,
-  sessionKey: '',
-	isError: false,
+  voucherSessionKey: sessionStorage.getItem('finpro-voucher-session-key') ?? '',
+  isError: false,
 	errorMessage: ''
 };
 
@@ -29,15 +28,16 @@ const voucher = (state = initialState, { type, payload }: Action) => {
 		case REQUEST_VOUCHER_START:
 			return {
 				...state,
-				sessionKey: '',
-				isLoading: true
+				voucherSessionKey: '',
+        isLoading: true,
+        isError: false,
 			};
 		case REQUEST_VOUCHER_LOGIN_SUCCESS:
 			return {
 				...state,
-				sessionKey: payload.mskey,
-        isLoading: false,
-        isError: false,
+				voucherSessionKey: payload.msid,
+				isLoading: false,
+				isError: false,
 				errorMessage: ''
 			};
 		case REQUEST_VOUCHER_FAILURE:
@@ -54,36 +54,39 @@ const voucher = (state = initialState, { type, payload }: Action) => {
 	}
 };
 
-const requestStart = () => ({
-	type: REQUEST_VOUCHER_START
-});
-
-const requestFailure = (error: any) => ({
-	type: REQUEST_VOUCHER_FAILURE,
-	payload: error
-});
-
 export const logOut = () => (dispatch: any) => {
 	return dispatch({
 		type: LOG_OUT
 	});
 };
 
-export const fetchVoucherLogin = (data: any) => (dispatch: any) => {
-//   dispatch({ type: REQUEST_VOUCHER_LOGIN_SUCCESS });
+export const fetchVoucherLogin = (voucherLogin: string) => (dispatch: any) => {
+  dispatch({ type: REQUEST_VOUCHER_START });
+  const data = {
+    login: voucherLogin
+  };
 
-	// api.auth
-	// 	.login({})
-	// 	.then((response: any) => {
-	// 		// dispatch(requestSuccess(response.data.data));
-	// 		console.log('LOGIN RESPONSE', response)
-	// 	})
-	// 	.catch((error: any) => {
-	// 		// if (error.response.status == 401)
-	// 		// 	dispatch({
-	// 		// 		type: LOG_OUT
-	// 		// 	});
-	// 	});
+//   api.voucher.printVoucher();
+//   api.voucher.closeSession({  msid: 'kiosk_5f365630f10e17.90948060' });
+
+	//@ts-ignore
+  api.voucher.find(data).then((res: any) => {
+    const data = res.data;
+
+    if (!data.success) {
+      // dispatch(showError());
+      dispatch({ type: REQUEST_VOUCHER_FAILURE, payload: { message: data.error_message } });
+
+      return;
+    }
+
+    sessionStorage.setItem('finpro-voucher-session-key', data.msid);
+    dispatch({ type: REQUEST_VOUCHER_LOGIN_SUCCESS, payload: data });  
+  })
+  .catch((error: any) => {
+    dispatch(showError());
+    dispatch({ type: REQUEST_VOUCHER_FAILURE, payload: { message: error } });
+  })
 };
 
 export const fetchPin = (data: any) => (dispatch: any) => {

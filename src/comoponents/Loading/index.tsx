@@ -1,8 +1,14 @@
 import React from 'react';
 import './index.css';
 
-const Loading: React.FC = () => (
-  <span className="spinner-loader">Loading</span>
+type LoaderProps = {
+  style?: {
+    [x: string]: string | number
+  }
+}
+
+const Loader: React.FC<LoaderProps> = ({ style }) => (
+  <span className="spinner-loader" style={style}>Loading</span>
 );
 
-export default Loading;
+export default Loader;

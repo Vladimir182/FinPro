@@ -70,8 +70,9 @@ export default class ApiClient {
 				return res;
 			})
 			.catch((error: any) => {
-				// const response = error.response;
-				throw error;
+				const response = error.response;
+				
+				throw response;
 			});
   }
     
@@ -82,7 +83,7 @@ export default class ApiClient {
 			? `?${queryString.stringify(params)}`
       : '';
 
-    query += token ? `?accessToken=${token}` : "";
+    query += token ? `?accessToken=${token}` : '';
 
 		const res = Axios({
 			// baseURL: process.env.REACT_APP_API_URL,

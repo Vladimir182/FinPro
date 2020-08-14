@@ -7,13 +7,13 @@ class Voucher extends Base {
 		return this.apiClient.post(`/find-voucher`, body);
 	}
 
-	// logout(body: Body) {
-	// 	return this.apiClient.post(`/logout`);
-	// }
+	printVoucher() {
+		return this.apiClient.get('/print-voucher');
+	}
 
-	// checkAuth() {
-	// 	return this.apiClient.get(`${path}`);
-	// }
+	closeSession(body: Body) {
+		return this.apiClient.post('/close', body);
+	}
 }
 
 export default Voucher;
