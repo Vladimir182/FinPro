@@ -10,10 +10,11 @@ type BaseButtonProps = {
   className?: string,
   style?: {
     [x: string]: string | number
-  }
+  },
+  onClick?: () => void
 }
 
-const BaseButton: React.FC<BaseButtonProps> = ({ link, title, image, width, style, className }) => {
+const BaseButton: React.FC<BaseButtonProps> = ({ link, title, image, width, style, className,onClick }) => {
 
   const buttonBlockStyles = {
     width: width ? width : 'auto',
@@ -52,7 +53,7 @@ const BaseButton: React.FC<BaseButtonProps> = ({ link, title, image, width, styl
   } as React.CSSProperties;
 
   return (
-    <div className={`button-block ${className}`} style={{ ...buttonBlockStyles, ...style }}>
+    <div className={`button-block ${className}`} onClick={onClick} style={{ ...buttonBlockStyles, ...style }}>
       <div className="button-wrapper" style={buttonWrapperStyles}>
         <NavLink to={link} style={linkStyles}>
           <img src={image} style={imageStyles} alt="image"/>

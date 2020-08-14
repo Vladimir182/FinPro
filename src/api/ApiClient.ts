@@ -11,7 +11,7 @@ type RequestParams = {
   body?: { [x: string]: any };
 };
 
-type Requset = (params: RequestParams) => void;
+type Request = (params: RequestParams) => void;
 
 type Query = (url: string, params: { [x: string]: any }) => void;
 
@@ -70,12 +70,13 @@ export default class ApiClient {
 				return res;
 			})
 			.catch((error: any) => {
-				// const response = error.response;
-				throw error;
+				const response = error.response;
+
+        throw response
 			});
   }
     
-	request: Requset = async ({ url, method, params = {}, body }) => {
+	request: Request = async ({ url, method, params = {}, body }) => {
     const token = localStorage.getItem('finpro_access_token');
 
 		let query = Object.keys(params).length

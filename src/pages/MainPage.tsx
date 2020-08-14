@@ -22,12 +22,12 @@ const MainPage: React.FC = () => {
     color: theme.color,
     height: '100%',
     padding: '0 4%'
-  }
+  };
 
   const contentStyles = {
     display: 'flex',
     justifyContent: 'center'
-  }
+  };
 
   return (
     <div className="main-page-root" style={rootStyles}>
@@ -53,7 +53,7 @@ const MainPage: React.FC = () => {
           <Route
             exact={true}
             path="/voucher-create"
-            component={Check}
+            component={VoucherCreate}
           />
           {/* <Route
             exact={true}

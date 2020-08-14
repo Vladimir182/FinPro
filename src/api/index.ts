@@ -8,7 +8,7 @@ export default (function({ apiPrefix }: any = {}) {
 	// }
 
 	const apiClient = new ApiClient({ prefix: 'cashpro/voucher' });
-  const authClient = new ApiClient({ prefix: 'oauth2' })
+  const authClient = new ApiClient({ prefix: 'oauth2' });
   
 	return {
 		apiClient,

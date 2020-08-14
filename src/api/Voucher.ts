@@ -6,7 +6,9 @@ class Voucher extends Base {
 	find(body: Body) {
 		return this.apiClient.post(`/find-voucher`, body);
 	}
-
+  printVoucher() {
+	  return this.apiClient.get(`/print-voucher`);
+  }
 	// logout(body: Body) {
 	// 	return this.apiClient.post(`/logout`);
 	// }

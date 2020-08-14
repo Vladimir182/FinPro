@@ -6,16 +6,15 @@ import { HeaderButtonContext } from '../Header/HeaderButtonProvider';
 // import VoucherLogin from '../VoucherLogin';
 // import VoucherPin from '../VoucherPin';
 
-
 const VoucherRoads: React.FC = () => {
-  const isVoucherVerified = useSelector((state: AppState) => state.voucher.isVoucherVerified);
+  const voucherSessionKey = useSelector((state: AppState) => state.voucher.voucherSessionKey);
   const { setLink } = useContext(HeaderButtonContext);
   
   setLink('/');
   
   return (
     <>
-      { !isVoucherVerified && <Redirect to="/voucher-login" /> }
+      { !voucherSessionKey && <Redirect to="/voucher-login" /> }
       <p>Voucher interface</p>
     </>
   )
