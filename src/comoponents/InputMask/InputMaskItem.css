@@ -1,13 +1,12 @@
 .input-mask-item-wrapper {
-    margin-right: 0.3vw;
-    border: 0.15vw solid #8400BF;
+  margin-right: 0.3vw;
+  padding: 0.15vw;
 }
 
 .input-mask-item {
   box-sizing: content-box;
   width: 4.7vw;
   height: 4.7vw;
-
   font-style: normal;
   font-weight: bold;
   font-size: 4.2vw;
@@ -21,14 +20,14 @@
 @media (max-width: 1920px) { 
 	.input-mask-item-wrapper {
     margin-right: 6px;
-    border: 2px solid #8400BF;
+    padding: 2px;
   }
   
   .input-mask-item {
     width: 90px;
     height: 90px;
     font-size: 68px;
-    border: '3px solid #540088';
+    border: 3px solid #540088;
   }
 }
 

@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import InputMaskItem from './InputMaskItem';
 import './index.css';
+import { error } from 'console';
 
 type InputMaskType = {
   title: string,
   length: number,
   onInputChange: (value: string) => void,
   padding?: string,
-  errorMessage?: string
+  errorMessage?: string,
+  cleanErrorMessage?: () => void
 }
 
 const inputBlockStyles = {
@@ -57,8 +59,29 @@ const inputMaskErrorStyles = {
   margin: 0
 } as React.CSSProperties;
 
-const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessage, onInputChange  }) => {
+const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessage, onInputChange, cleanErrorMessage }) => {
   const [ inputValue, setInputValue ] = useState('');
+  const [ isInputActive, setInputActive ] = useState(false);
+  
+  const inputRef = React.createRef<HTMLInputElement>();
+  useEffect(() => {
+    setInputActive(true);
+
+    inputRef.current?.focus();
+    inputRef.current?.addEventListener('focusout', function() {
+      setInputActive(false);
+    })
+  },[])
+
+  const handleBlockClick = () => {
+    
+    if (cleanErrorMessage) {
+      cleanErrorMessage();
+    }
+
+    setInputActive(true);
+    inputRef.current?.focus();
+  }
 
   const handleChangeInputValue = (value: string) => {
     if (value.length > length) {
@@ -70,19 +93,19 @@ const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessa
   }
 
   return (
-    <div className="input-block" style={inputBlockStyles}>
+    <div className="input-block" onClick={handleBlockClick} style={inputBlockStyles}>
       <p className="input-title" style={titleStyles}>{title}</p>
         <label htmlFor="voucher" style={labelStyles}>
           <div className="input-mask" style={inputMaskStyles}>
             {Array(length).fill("").map((item, index) => {
               const value = inputValue[index] ?? '';
 
-              return <InputMaskItem  value={value} isError={!!errorMessage} />
+              return <InputMaskItem key={index} value={value} isInputActive={isInputActive} isError={!!errorMessage} />
             })}
           </div>
-          <input id="voucher" style={inputStyles} value={inputValue} onChange={e => handleChangeInputValue(e.target.value)}/>
+          <input id="voucher" ref={inputRef} style={inputStyles} value={inputValue} onChange={e => handleChangeInputValue(e.target.value)}/>
         </label>
-        <p className="input-mask-error" style={inputMaskErrorStyles}>{errorMessage}</p>
+      <p className="input-mask-error" style={inputMaskErrorStyles}>{errorMessage}</p>
     </div>
   )
 }

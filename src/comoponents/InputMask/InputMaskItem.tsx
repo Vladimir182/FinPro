@@ -4,14 +4,17 @@ import './InputMaskItem.css';
 type InputMaskItemType = {
   value?: string,
   isError?: boolean,
-  isMasked?: boolean
+  isMasked?: boolean,
+  isInputActive?: boolean,
 }
 
-const InputMaskItem: React.FC<InputMaskItemType> = ({ value, isError, isMasked }) => {
+const activeInputMaskItemGradient = 'linear-gradient(#FFB800 0%, #FFDA7B 31.77%, #FFB800 62.5%, #FFDA7B 100%, #FFDA7B 100%)';
 
+const InputMaskItem: React.FC<InputMaskItemType> = ({ value, isError, isMasked, isInputActive }) => {
+  
   const inputMaskItemWrapperStyles = {
-    background: '#540088',
-    borderColor: isError ? '#FF0000' : '#8400BF',
+    background: (isInputActive && !isError) ? activeInputMaskItemGradient : isError ? '#FF0000' : '#8400BF',
+    filter: (isInputActive && !isError && value) ? 'drop-shadow(0 0 8px #EAA900)' : 'none',
     borderRadius: '12px',
     boxSizing: 'border-box',
   } as React.CSSProperties;

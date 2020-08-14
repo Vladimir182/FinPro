@@ -55755,7 +55755,7 @@ var initialState = {
     isLoginVerified: false,
     pincode: '',
     isPincodeVerified: false,
-    sessionKey: '',
+    voucherSessionKey: '',
     isError: false,
     errorMessage: ''
 };
@@ -55764,9 +55764,9 @@ var voucher = function (state, _a) {
     var type = _a.type, payload = _a.payload;
     switch (type) {
         case REQUEST_VOUCHER_START:
-            return __assign(__assign({}, state), { sessionKey: '', isLoading: true });
+            return __assign(__assign({}, state), { voucherSessionKey: '', isLoading: true });
         case REQUEST_VOUCHER_LOGIN_SUCCESS:
-            return __assign(__assign({}, state), { sessionKey: payload.mskey, isLoading: false, isError: false, errorMessage: '' });
+            return __assign(__assign({}, state), { voucherSessionKey: payload.mskey, isLoading: false, isError: false, errorMessage: '' });
         case REQUEST_VOUCHER_FAILURE:
             return __assign(__assign({}, state), { isLoading: false, isError: true, errorMessage: payload.message });
         case LOG_OUT:

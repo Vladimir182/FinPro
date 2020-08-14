@@ -6,16 +6,23 @@ class Voucher extends Base {
 	find(body: Body) {
 		return this.apiClient.post(`/find-voucher`, body);
 	}
+<<<<<<< HEAD
   printVoucher() {
 	  return this.apiClient.get(`/print-voucher`);
   }
 	// logout(body: Body) {
 	// 	return this.apiClient.post(`/logout`);
 	// }
+=======
 
-	// checkAuth() {
-	// 	return this.apiClient.get(`${path}`);
-	// }
+	printVoucher() {
+		return this.apiClient.get('/print-voucher');
+	}
+>>>>>>> voucher-authorization-tmp
+
+	closeSession(body: Body) {
+		return this.apiClient.post('/close', body);
+	}
 }
 
 export default Voucher;

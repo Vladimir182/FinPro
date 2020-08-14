@@ -3,8 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppState} from "../../redux";
 import Check from "../Checks";
 import {Redirect} from "react-router";
-import Error from "../Error/Error";
-import { fetchPrintVoucher } from "../../redux/voucher";
+import Error from '../Error';
 
 const VoucherCreate: React.FC = () => {
   const dispatch = useDispatch();
@@ -14,18 +13,16 @@ const VoucherCreate: React.FC = () => {
   let isError = useSelector((state: AppState) => state.voucher.isError);
 
   isCreateLoading = true;
-  voucherSessionKey = 'sadasdasd';
   isError = true;
-  // console.log('BEFORE USE EFFECT')
-  // useEffect(() => {
-  //   // setLink('/');
-  //   console.log('BEFORE FETCH')
-  //   fetchPrintVoucher()(dispatch);
-  // })
 
   if (isCreateLoading) {
     return <Check />
   }
+  useEffect(() => {
+    // setLink('/');
+  })
+
+
   if (!isCreateLoading && voucherSessionKey) {
     return <Redirect to="/voucher" />
   }

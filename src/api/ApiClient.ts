@@ -71,8 +71,13 @@ export default class ApiClient {
 			})
 			.catch((error: any) => {
 				const response = error.response;
+<<<<<<< HEAD
 
         throw response
+=======
+				
+				throw response;
+>>>>>>> voucher-authorization-tmp
 			});
   }
     
@@ -83,7 +88,7 @@ export default class ApiClient {
 			? `?${queryString.stringify(params)}`
       : '';
 
-    query += token ? `?accessToken=${token}` : "";
+    query += token ? `?accessToken=${token}` : '';
 
 		const res = Axios({
 			// baseURL: process.env.REACT_APP_API_URL,
