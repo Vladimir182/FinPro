@@ -15,12 +15,11 @@ import {fetchPrintVoucher} from "../../redux/voucher";
 
 const HomeScreen: React.FC = () => {
   const dispatch = useDispatch();
-  let { isLoading, voucherSessionKey } = useSelector((state: AppState) => state.voucher)
+  const { isLoading, voucherSessionKey } = useSelector((state: AppState) => state.voucher)
   // const { setLink } = useContext(HeaderButtonContext);
   // useEffect(() => {
   //   setLink('');
   // })
-
   const handlePrintVoucher = () =>{
     fetchPrintVoucher()(dispatch);
   };
@@ -30,6 +29,7 @@ const HomeScreen: React.FC = () => {
   if (isLoading) {
     return <PrintCheck />;
   }
+
   return (
     <>
       {voucherSessionKey && <Redirect to="/voucher" /> }

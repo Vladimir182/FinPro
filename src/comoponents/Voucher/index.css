@@ -1,0 +1,29 @@
+.voucher-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .voucher-button {
+    /* width: 25.5vw!important; */
+    margin-right: 3vw;
+  }
+
+  .voucher-button img {
+    width: 22vw!important;
+    height: 10vw;
+    margin-bottom: 10%;
+  }
+  
+  @media (max-width: 1280px) { 
+  
+    .voucher-button {
+      margin-right: 5vw;
+    }
+  }
+  
+  @media (max-width: 1024px) { 
+    .voucher-button {
+      margin-right: 7vw;
+    }
+  }
+  

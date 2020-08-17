@@ -19,17 +19,15 @@ const BaseButton: React.FC<BaseButtonProps> = ({ link, title, image, width, styl
   const buttonBlockStyles = {
     width: width ? width : 'auto',
     borderRadius: '14px',
-    boxShadow: '0px 0px 1px 8px #EAA900',
-    WebkitBoxShadow: '0px 0px 1px 8px #EAA900',
+    border: '7px solid #EAA900',
+    padding: '13px',
     filter: 'drop-shadow(0px 0px 5px #EAA900)',
     WebkitFlter: 'drop-shadow(0px 0px 5px #EAA900)',
-    marginRight: '5vw'
   } as React.CSSProperties;
 
   const buttonWrapperStyles = {
     height: 'calc(100%-13px)',
     borderRadius: '14px',
-    margin: '13px',
     background: 'linear-gradient(112deg, #8a00c9 0%, #61088a 33%, #61088a 60%, #8a00c9 100%)',
   } as React.CSSProperties;
 

@@ -5,6 +5,7 @@
 
 .home-screen-button {
   width: 27vw!important;
+  margin-right: 5vw;
 }
 
 @media (max-width: 1920px) { 

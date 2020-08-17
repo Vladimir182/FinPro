@@ -63,7 +63,7 @@ export const fetchCheckAuth = () => (dispatch: any) => {
 			dispatch({ type: FETCH_LOGIN_SUCCESS });
 		})
 		.catch((error: any) => {
-      if (error.response.status === 401) {
+      if (error.status === 401) {
         fetchRefreshToken()(dispatch);
       }
 		});
