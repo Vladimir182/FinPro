@@ -1,15 +1,17 @@
 import React, {useContext, useEffect} from 'react';
-import paperCheck from '../../images/paper_check.svg'
+import { HeaderContext } from '../Header/HeaderContextProvider';
+import paperCheck from '../../images/paper_check.svg';
 
 import './check.module.css';
 import Loading from "../Loading";
 
 const Check: React.FC = () => {
-  // const { setLink } = useContext(HeaderButtonContext);
+  const { setLink, setHideLogo} = useContext(HeaderContext);
 
-  // useEffect(() => {
-  //   setLink('');
-  // })
+  useEffect(() => {
+    // setLink('');
+    setHideLogo(true);
+  })
   return (
     <>
       <div className="check-page-wrapper">

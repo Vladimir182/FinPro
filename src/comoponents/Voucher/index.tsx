@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { AppState } from '../../redux';
-import { HeaderButtonContext } from '../Header/HeaderButtonProvider';
+import { HeaderContext } from '../Header/HeaderContextProvider';
 import BaseButton from '../Buttons/BaseButton';
 import deposit from '../../images/Deposit.svg';
 import withdraw from '../../images/Withdraw.svg';
@@ -16,22 +16,23 @@ const buttonStyles = {};
 
 const VoucherRoads: React.FC = () => {
   let { voucherSessionKey } = useSelector((state: AppState) => state.voucher);
-  const { setLink } = useContext(HeaderButtonContext);
-  voucherSessionKey = 'sadasd'
+  let { setLink, setStopVoucherSession, setHideLogo } = useContext(HeaderContext);
   
   useEffect(() => {
-    setLink('/');
+    setStopVoucherSession(true);
+    // setHideLogo(true);
+    // setLink('/');
   })
   
   return (
     <>
-      { !voucherSessionKey && <Redirect to="/voucher-login" /> }
+      { !voucherSessionKey && <Redirect to="/" /> }
       <div className="voucher-container">
         <BaseButton
           className="voucher-button"
           link="/voucher-deposit"
           title={depoistButtonText}
-          onClick={() => console.log('click')}
+          // onClick={() => console.log('click')}
           image={deposit}
           style={buttonStyles}
         />
@@ -48,7 +49,7 @@ const VoucherRoads: React.FC = () => {
           link="/voucher-balance"
           image={balance}
           style={{
-            ...buttonStyles, 
+            ...buttonStyles,
             marginRight: '0'
           }}
         />

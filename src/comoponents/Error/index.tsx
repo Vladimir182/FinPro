@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import ErrorImage from '../../images/Error.svg';
 import { useDispatch } from 'react-redux';
 import { hideError } from '../../redux/error-screen';
-import { HeaderButtonContext } from '../Header/HeaderButtonProvider';
+import { HeaderContext } from '../Header/HeaderContextProvider';
 import './error.module.css';
 
 const errorMessageTitle = 'УПС';
@@ -10,7 +10,7 @@ const somethisngWrongMessage = 'что-то пошло не так';
 
 const Error: React.FC = () => {
   const dispatch = useDispatch();
-  const { setLink } = useContext(HeaderButtonContext);
+  const { setLink } = useContext(HeaderContext);
 
   useEffect(() => {
     setLink('');

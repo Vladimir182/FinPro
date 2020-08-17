@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { HeaderButtonContext } from '../Header/HeaderButtonProvider';
+import { HeaderContext } from '../Header/HeaderContextProvider';
 import ActionButton from '../Buttons/ActionButton';
 import ArrowRight from '../../images/ArrowRight.svg';
 import ArrowRightShort from '../../images/ArrowRightShort.svg';
@@ -19,7 +19,7 @@ const wrongVoucherKeyErrorMessage = 'Ваучер не найден';
 const VoucherLogin: React.FC = () => {
   const { isLoading, isError, voucherSessionKey } = useSelector((state: AppState) => state.voucher);
   const dispatch = useDispatch();
-  const { link, setLink } = useContext(HeaderButtonContext);
+  const { link, setLink } = useContext(HeaderContext);
   const [ errorMessage, setErrorMessage ] = useState('');
   const [ voucherValue, setVoucherValue ] = useState('');
   const voucherValueLength = 10;
