@@ -46,20 +46,29 @@ const BaseButton: React.FC<BaseButtonProps> = ({ link, title, image, width, styl
   } as React.CSSProperties;
 
   return (
-    <div className={`base-button-block ${className}`} onClick={onClick} style={{ ...buttonBlockStyles, ...style }}>
-      <div className="base-button-wrapper" style={buttonWrapperStyles}>
-        { link ?
-          <NavLink to={link} style={linkStyles}>
-            <img className="base-button-image" src={image} style={imageStyles} alt="image"/>
-            <p className="base-button-title" style={titleStyles}>{title}</p>
-          </NavLink>
-          : <div style={linkStyles}>
-            <img className="base-button-image" src={image} style={imageStyles} alt="image"/>
-            <p className="base-button-title" style={titleStyles}>{title}</p>
+    <>
+    { link
+      ? (
+        <NavLink to={link} style={linkStyles}>
+          <div className={`base-button-block ${className}`} onClick={onClick} style={{ ...buttonBlockStyles, ...style }}>
+            <div className="base-button-wrapper" style={buttonWrapperStyles}>
+              <img className="base-button-image" src={image} style={imageStyles} alt="image"/>
+              <p className="base-button-title" style={titleStyles}>{title}</p>
+            </div>
           </div>
-        }
-      </div>
-    </div>
+        </NavLink>
+      ) : (
+        <div className={`base-button-block ${className}`} onClick={onClick} style={{ ...buttonBlockStyles, ...style }}>
+          <div className="base-button-wrapper" style={buttonWrapperStyles}>
+            <div style={linkStyles}>
+              <img className="base-button-image" src={image} style={imageStyles} alt="image"/>
+              <p className="base-button-title" style={titleStyles}>{title}</p>
+            </div>
+          </div>
+        </div>
+      )
+    }
+    </>
   )
 }
 

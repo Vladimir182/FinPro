@@ -9,7 +9,7 @@ import Header from './comoponents/Header';
 // import logo from './logo.svg';
 import Roads from './comoponents/Roads';
 import ThemeContextProvider from './ThemeContextProvider';
-import HeaderButtonContextProvider from './comoponents/Header/HeaderButtonProvider';
+import HeaderContextProvider from './comoponents/Header/HeaderContextProvider';
 
 const getStateFromStorage = () => {
 	const state = localStorage.getItem('finpro-state');
@@ -28,9 +28,9 @@ console.log('ENV', process.env)
     <Provider store={store}>
       <BrowserRouter>
         <ThemeContextProvider>
-          <HeaderButtonContextProvider>
+          <HeaderContextProvider>
             <Roads />
-          </HeaderButtonContextProvider>
+          </HeaderContextProvider>
         </ThemeContextProvider>
       </BrowserRouter>
     </Provider>

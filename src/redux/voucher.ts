@@ -2,14 +2,16 @@ import api from '../api';
 import { showError } from './error-screen';
 
 const REQUEST_VOUCHER_START = 'REQUEST_VOUCHER_START';
+const REQUEST_PRINT_LOADER_START = 'REQUEST_PRINT_LOADER_START';
 const REQUEST_VOUCHER_LOGIN_SUCCESS = 'REQUEST_VOUCHER_LOGIN_SUCCESS';
 const REQUEST_VOUCHER_PINCODE_SUCCESS = 'REQUEST_VOUCHER_PINCODE_SUCCESS';
 const REQUEST_VOUCHER_FAILURE = 'REQUEST_VOUCHER_FAILURE';
+const CLOSE_VOUCHER_SESSION_SUCCESS = 'CLOSE_VOUCHER_SESSION_SUCCESS';
 const LOG_OUT = 'LOG_OUT';
 
 const initialState = {
   isLoading: false,
-  isCreateLoading: false,
+  isPrintLoading: false,
   isVoucherVerified: false,
   pincode: '',
   isPincodeVerified: false,
@@ -31,7 +33,12 @@ const voucher = (state = initialState, { type, payload }: Action) => {
 				voucherSessionKey: '',
         isLoading: true,
         isError: false,
-			};
+      };
+    case REQUEST_PRINT_LOADER_START:
+      return {
+        ...state,
+        isPrintLoading: true
+      };
 		case REQUEST_VOUCHER_LOGIN_SUCCESS:
       sessionStorage.setItem('finpro-voucher-session-key', payload.msid);
 			return {
@@ -40,13 +47,22 @@ const voucher = (state = initialState, { type, payload }: Action) => {
 				isLoading: false,
 				isError: false,
 				errorMessage: ''
-			};
+      };
+    case CLOSE_VOUCHER_SESSION_SUCCESS:
+      sessionStorage.removeItem('finpro-voucher-session-key');
+      return {
+        ...state,
+        voucherSessionKey: '',
+        isLoading: false,
+				isError: false,
+      }
 		case REQUEST_VOUCHER_FAILURE:
 			return {
 				...state,
 				isLoading: false,
 				isError: true,
-				errorMessage: payload.message
+        errorMessage: payload.message,
+        isPrintLoading: false
 			};
 		case LOG_OUT:            
 			return initialState;
@@ -67,10 +83,6 @@ export const fetchVoucherLogin = (voucherLogin: string) => (dispatch: any) => {
     login: voucherLogin
   };
 
-//   api.voucher.printVoucher();
-//   api.voucher.closeSession({  msid: 'kiosk_5f365630f10e17.90948060' });
-
-	//@ts-ignore
   api.voucher.find(data).then((res: any) => {
     const data = res.data;
 
@@ -115,6 +127,8 @@ export const fetchPin = (data: any) => (dispatch: any) => {
 
 export const fetchPrintVoucher = () => (dispatch: any) => {
   dispatch({type: REQUEST_VOUCHER_START});
+  dispatch({ type: REQUEST_PRINT_LOADER_START });
+
   api.voucher
   .printVoucher()
   .then((res: any) => {
@@ -136,8 +150,32 @@ export const fetchPrintVoucher = () => (dispatch: any) => {
     dispatch(showError());
     dispatch({type: REQUEST_VOUCHER_FAILURE,
       payload: error
-      });
+    });
   });
+};
+
+export const fetchCloseVoucherSession = (voucherSessionKey: string) => (dispatch: any) => {
+  dispatch({type: REQUEST_VOUCHER_START});
+  
+  const data = {
+    msid: voucherSessionKey
+  }
+
+  api.voucher.closeSession(data).then((res: any) => {
+    const resData = res.data;
+
+    if (resData.success === false) {
+      dispatch(showError());
+      dispatch({type: REQUEST_VOUCHER_FAILURE, payload: resData.message });
+      
+      return;
+    }
+
+    dispatch({ type: CLOSE_VOUCHER_SESSION_SUCCESS })
+  }).catch((error: any) => {
+    dispatch(showError());
+    dispatch({type: REQUEST_VOUCHER_FAILURE, payload: error });
+  })
 };
 
 export default voucher;
