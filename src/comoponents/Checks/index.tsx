@@ -17,7 +17,9 @@ const Check: React.FC = () => {
             <div className="wrapper-check">
               <img src={paperCheck} alt=""/>
               <div className="block-check">
-               <Loading />
+                <div className="wrapp-loading">
+                 <Loading />
+                </div>
                 <p>Подождите, <br/>
                   печатается чек
                 </p>

@@ -1,5 +1,6 @@
 import React from 'react';
 import Loader from './index';
+import './index.css'
 
 const LoaderModal: React.FC = () => {
 
@@ -21,13 +22,16 @@ const LoaderModal: React.FC = () => {
 
   const preloaderWrapperStyles = {
     display: 'flex',
+    position: 'relative',
     flexDirection: 'column'
   } as React.CSSProperties;
   
   return (
     <div className="preloader-modal" style={preloaderModalStyles}>
       <div className="preloader-wrapper" style={preloaderWrapperStyles}>
-        <Loader style={{ zIndex: 100 }}/>
+        <div style={{position: 'absolute', left: '50px', top: '-50px'}}>
+        <Loader style={{ zIndex: 100, color: '#fff' }} />
+        </div>
         <p>Подождите...</p>
       </div>
     </div>
