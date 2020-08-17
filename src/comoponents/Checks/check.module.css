@@ -22,6 +22,10 @@
     width: 100%;
     max-width: 443px;
 }
+.wrapp-loading{
+    padding: 50px 0 30px;
+    transform: scale(1);
+}
 
 .block-check p {
     font-weight: normal;
@@ -127,13 +131,17 @@
         max-width: 360px;
     }
     .block-check {
-        top: 80px;
+        top: 90px;
         left: 54px;
         padding: 0px 32px;
         max-width: 251px;
     }
     .block-check p {
         font-size: 20px;
+    }
+    .wrapp-loading{
+        padding: 10px 0;
+        transform: scale(0.5);
     }
     .output-check-text .wrapper{
         font-size: 10px;
