@@ -12,6 +12,7 @@ import Check from "../comoponents/Checks";
 import Error from '../comoponents/Error';
 import { AppState } from '../redux';
 // import './index.scss'
+import Absence from '../comoponents/absence/index'
 
 const MainPage: React.FC = () => {
   const { theme } = useContext(ThemeContext);

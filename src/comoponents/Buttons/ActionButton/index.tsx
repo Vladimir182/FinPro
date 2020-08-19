@@ -4,7 +4,7 @@ import './index.css';
 
 type ActionButton = {
   title: string,
-  image: string,
+  image?: string,
   handleButtonClick: () => void,
   link?: string,
   width?: string,
@@ -59,12 +59,12 @@ const ActionButton: React.FC<ActionButton> = ({ title, link, image, handleButton
           link ? (
             <NavLink to={link} style={linkStyles}>
               <p className="action-button-title" style={titleStyles}>{title}</p>
-              <img src={image} style={imageStyles} alt="image" />
+              { image && <img src={image} style={imageStyles} alt="image" /> }
             </NavLink>
           ) : (
             <div style={linkStyles}>
               <p className="action-button-title" style={titleStyles}>{title}</p>
-              <img className="action-button-image" src={image} style={imageStyles} alt="image" />
+              { image && <img className="action-button-image" src={image} style={imageStyles} alt="image" /> }
             </div>
           )
         }

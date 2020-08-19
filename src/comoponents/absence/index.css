@@ -1,0 +1,354 @@
+.absence-page-wrapper{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  /* background: green; */
+  width: 100%;
+  height:100%;
+  top: -100px;
+}
+.absence-container-page{
+  background: rgba(72, 0, 129, 0.9);
+  box-shadow: 0px 4px 30px rgba(174, 130, 225, 0.2);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 58px 100px 34px;
+  width: 100%;
+  height: 100%;
+  max-width: 834px;
+  /* height: 784px; */
+}
+.absence-img-wrapper {
+  position: relative;
+  max-width: 635px;
+  /* height: 473px; */
+  margin-bottom: 37px;
+}
+
+.absence-spinner{
+  position: relative;
+  bottom: 150px;
+  color: red;
+  transform: scale(1.36);
+  /* background: green; */
+  left: 62.5%;
+  width: 442px;
+}
+.absence-counter{
+  text-align: center;
+  position: absolute;
+  bottom: 130px;
+  left: 95px;
+  width: 441px;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 44px;
+  /* background:green; */
+  color: #49009E;
+
+}
+.absence-img-wrapper img {
+  width:100%;
+}
+.absence-message img{
+  width:100%;
+}
+.absence-message {
+  position: absolute;
+  top: 20px;
+  left: 65px;
+  width: 176px;
+  height: 145px;
+}
+.absence-text {
+  position: absolute;
+  bottom: 62%;
+  text-align: center;
+  position: relative;
+  color: #000;
+  font-size: 18px;
+  line-height: 150%;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.absence-button-wrapper {
+  text-align: center;
+ 
+}
+.absence-button {
+  padding: 20px;
+  width:270px;
+  height:152px;
+}
+
+.absence-button .action-button-title {
+  margin-right: 0!important;
+}
+
+.absence-button:hover {
+  transition: .1s ease-in-out;
+  filter: drop-shadow(0px 0px 17px #FFF500);
+}
+
+/* @media (max-width: 1921px) {
+  .absence-page-wrapper{
+    top: -160px;
+  }
+} */
+
+@media (min-width: 1921px) {
+  .absence-page-wrapper{
+    top: -160px;
+  }
+}
+
+@media (max-width: 1280px) {
+  .absence-page-wrapper{
+    top: -100px;
+  }
+  .absence-img-wrapper{
+    max-width: 511px;
+  }
+  .absence-message {
+    width: 149px;
+    height: 122px;
+    left: 53px;
+    top: 8px;
+  }
+  .absence-text {
+    font-size: 16px;
+  }
+  .absence-spinner{
+    position: relative;
+    bottom: 110px;
+    color: red;
+    transform: scale(1.2);
+    /* background: green; */
+    left: 58.5%;
+    width: 442px;
+  }
+  .absence-counter {
+    font-size: 19px;
+    line-height: 44px;
+    bottom: 88px;
+    left: 35px;
+  }
+}
+
+@media (max-height: 1024px) and (max-width:1280px){
+  .absence-container-page{
+    max-width: 733px;
+  }
+  .absence-img-wrapper{
+    max-width: 511px;
+  }
+  .absence-message {
+    width: 149px;
+    height: 122px;
+    left: 53px;
+    top: 8px;
+  }
+  .absence-text {
+    font-size: 16px;
+  }
+  .absence-spinner{
+    position: relative;
+    bottom: 110px;
+    color: red;
+    transform: scale(1.2);
+    /* background: green; */
+    left: 58.5%;
+    width: 442px;
+  }
+  .absence-counter {
+    font-size: 19px;
+    line-height: 44px;
+    bottom: 88px;
+    left: 35px;
+  }
+}
+
+@media (max-height: 720px) and (max-width:1280px){
+  .absence-page-wrapper{
+    top: -30px;
+  }
+
+  .absence-container-page{
+    max-width: 428px;
+    padding: 39px 20px 27px;
+  }
+  .absence-img-wrapper{
+    max-width: 268px;
+  }
+  .absence-message {
+    width: 97px;
+    height: 80px;
+    left: 15px;
+    top: -17px;
+  }
+  .absence-text {
+    font-size: 10px;
+
+  }
+  .absence-spinner{
+    position: relative;
+    bottom: 58px;
+    color: red;
+    transform: scale(0.7);
+    /* background: green; */
+    left: 25.59%;
+    width: 442px;
+  }
+  .absence-counter {
+    font-size: 12px;
+    line-height: 44px;
+    bottom: 36px;
+    left: -86px;
+  }
+  .absence-button {
+    padding: 20px;
+    width:198px;
+    height:108px;
+  }
+}
+
+@media (max-width: 1152px) {
+  .absence-page-wrapper{
+    top: -100px;
+  }
+
+  .absence-container-page{
+    max-width: 583px;
+    padding: 38px 20px 26px;
+    /* height: 784px; */
+  }
+  .absence-img-wrapper{
+    max-width: 420px;
+    margin-bottom: 27px;
+  }
+  .absence-message {
+    width: 136px;
+    height: 112px;
+    left: 34px;
+    top: -10px;
+  }
+  .absence-text {
+    font-size: 14px;
+
+  }
+  .absence-spinner{
+    position: relative;
+    bottom: 90px;
+    color: red;
+    transform: scale(1.1);
+    /* background: green; */
+    left: 55%;
+    width: 442px;
+  }
+  .absence-counter {
+    font-size: 19px;
+    line-height: 44px;
+    bottom: 68px;
+    left: -11px;
+  }
+  .absence-button {
+    padding: 20px;
+    width:240px;
+    height:134px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .absence-page-wrapper{
+    top: -80px;
+  }
+  .absence-container-page{
+    max-width: 505px;
+    padding: 36px 20px 17px;
+    /* height: 784px; */
+  }
+  .absence-img-wrapper{
+    max-width: 370px;
+    margin-bottom: 17px;
+  }
+  .absence-message {
+    width: 119px;
+    height: 98px;
+    left: 34px;
+    top: -8px;
+  }
+  .absence-text {
+    font-size: 12px;
+
+  }
+  .absence-spinner{
+    position: relative;
+    bottom: 80px;
+    color: red;
+    transform: scale(0.9);
+    /* background: green; */
+    left: 44%;
+    width: 442px;
+  }
+  .absence-counter {
+    font-size: 15px;
+    line-height: 44px;
+    bottom: 59px;
+    left: -36px;
+  }
+  .absence-button {
+    padding: 20px;
+    width:198px;
+    height:108px;
+  }
+}
+
+@media (max-width: 800px) {
+  .absence-page-wrapper{
+    top: -50px;
+  }
+  .absence-container-page{
+    max-width: 379px;
+    padding: 22px 20px 13px;
+    /* height: 784px; */
+  }
+  .absence-img-wrapper{
+    max-width: 302px;
+    margin-bottom: 13px;
+  }
+  .absence-message {
+    width: 99px;
+    height: 81px;
+    left: 30px;
+    top: -8px;
+  }
+  .absence-text {
+    bottom: 64%;
+    font-size: 10px;
+  }
+  .absence-spinner{
+    position: relative;
+    bottom: 65px;
+    color: red;
+    transform: scale(0.75);
+    /* background: green; */
+    left: 31.59%;
+    width: 442px;
+  }
+  .absence-counter {
+    font-size: 13px;
+    line-height: 44px;
+    bottom: 43px;
+    left: -70px;
+  }
+  .absence-button {
+    border-radius: 20px;
+    padding: 20px;
+    width:152px;
+    height:70px;
+  }
+  .absence-button.action-button-wrapper {
+    margin: 1px!important;
+  }
+}

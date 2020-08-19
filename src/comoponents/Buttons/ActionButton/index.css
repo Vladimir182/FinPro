@@ -11,6 +11,7 @@
 } */
 
 .action-button-block {
+  cursor: pointer;
   border-radius: 30px;
 }
 
