@@ -23,7 +23,7 @@ export const store = initStore(getStateFromStorage());
 
 const App = () => {
 
-console.log('ENV', process.env)
+// console.log('ENV', process.env)
   return (
     <Provider store={store}>
       <BrowserRouter>

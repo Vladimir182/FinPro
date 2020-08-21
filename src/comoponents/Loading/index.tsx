@@ -1,4 +1,4 @@
-import React, { useEffect, CSSProperties } from 'react';
+import React, { useEffect, CSSProperties, useState } from 'react';
 import spinnerInit from './spinner'
 import './index.css';
 
@@ -10,8 +10,13 @@ type LoaderProps = {
 }
 
 const Loader: React.FC<LoaderProps> = ({style}) => {
+  const [ isPreloaderRinning, setPreloaderRunning ] = useState(false);
+
   useEffect(() => {
-    spinnerInit(style?.color);
+    if (!isPreloaderRinning) {
+      setPreloaderRunning(true)
+      spinnerInit(style?.color);
+    }
   })
   return (
       <div id="spinnerContainer"

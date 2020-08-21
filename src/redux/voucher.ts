@@ -1,5 +1,15 @@
 import api from '../api';
 import { showError } from './error-screen';
+import { store } from '../App';
+
+window.setInterval(function() {
+  //@ts-ignore
+  if (!window.checkAbsenceTimer && sessionStorage.getItem('finpro-voucher-session-key')) {
+    window.addEventListener('mousemove', userAbsenceTimeoutPreccess);
+    //@ts-ignore
+    window.checkAbsenceTimer = true;
+  }
+}, 1000);
 
 const REQUEST_VOUCHER_START = 'REQUEST_VOUCHER_START';
 const REQUEST_PRINT_LOADER_START = 'REQUEST_PRINT_LOADER_START';
@@ -9,6 +19,8 @@ const REQUEST_VOUCHER_FAILURE = 'REQUEST_VOUCHER_FAILURE';
 const CLOSE_VOUCHER_SESSION_SUCCESS = 'CLOSE_VOUCHER_SESSION_SUCCESS';
 const LOG_OUT = 'LOG_OUT';
 
+const SET_SHOW_USER_ABSENCE = 'SET_SHOW_USER_ABSENCE';
+
 const initialState = {
   isLoading: false,
   isPrintLoading: false,
@@ -17,12 +29,30 @@ const initialState = {
   isPincodeVerified: false,
   voucherSessionKey: sessionStorage.getItem('finpro-voucher-session-key') ?? '',
   isError: false,
-	errorMessage: ''
+  errorMessage: '',
+  showUserAbsence: false
 };
 
 interface Action {
   type: string,
   payload: any
+}
+
+let userAbsenceTimer: any = null;
+
+
+
+function userAbsenceTimeoutPreccess() {
+  if (userAbsenceTimer) {
+    clearTimeout(userAbsenceTimer)
+  }
+  userAbsenceTimer = setTimeout(function() {
+    ShowUserAbsence()
+  }, 10000);
+}
+
+function ShowUserAbsence() {
+  store.dispatch(setShowUserAbsence(true));
 }
 
 const voucher = (state = initialState, { type, payload }: Action) => {
@@ -49,6 +79,7 @@ const voucher = (state = initialState, { type, payload }: Action) => {
 				errorMessage: ''
       };
     case CLOSE_VOUCHER_SESSION_SUCCESS:
+      window.removeEventListener('mousemove', userAbsenceTimeoutPreccess);
       sessionStorage.removeItem('finpro-voucher-session-key');
       return {
         ...state,
@@ -63,7 +94,16 @@ const voucher = (state = initialState, { type, payload }: Action) => {
 				isError: true,
         errorMessage: payload.message,
         isPrintLoading: false
-			};
+      };
+    case SET_SHOW_USER_ABSENCE:
+      if (!payload) {
+        //@ts-ignore
+        window.checkAbsenceTimer = false;
+      }
+      return {
+        ...state,
+        showUserAbsence: payload
+      }
 		case LOG_OUT:            
 			return initialState;
 		default:
@@ -177,5 +217,10 @@ export const fetchCloseVoucherSession = (voucherSessionKey: string) => (dispatch
     dispatch({type: REQUEST_VOUCHER_FAILURE, payload: error });
   })
 };
+
+export const setShowUserAbsence = (status: boolean) => ({
+  type: SET_SHOW_USER_ABSENCE,
+  payload: status
+});
 
 export default voucher;
