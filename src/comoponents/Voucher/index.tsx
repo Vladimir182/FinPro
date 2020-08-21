@@ -1,10 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-<<<<<<< HEAD
-
-import { useSelector } from 'react-redux';
-=======
 import { useSelector, useDispatch } from 'react-redux';
->>>>>>> depoist-component
 import { Redirect } from 'react-router-dom';
 import { AppState } from '../../redux';
 import { HeaderContext } from '../Header/HeaderContextProvider';
@@ -12,11 +7,8 @@ import BaseButton from '../Buttons/BaseButton';
 import deposit from '../../images/Deposit.svg';
 import withdraw from '../../images/Withdraw.svg';
 import balance from '../../images/Balance.svg';
-<<<<<<< HEAD
-import Absence from '../Absence';
-=======
 import { resetVoucherPin } from '../../redux/voucher';
->>>>>>> depoist-component
+import Absence from '../absence';
 import './index.css';
 
 const depoistButtonText = 'Пополнить';
@@ -25,16 +17,10 @@ const checkBalanceButtonText = 'Проверить баланс';
 const buttonStyles = {};
 
 const VoucherRoads: React.FC = () => {
-<<<<<<< HEAD
-  let { voucherSessionKey, showUserAbsence } = useSelector((state: AppState) => state.voucher);
-  let { setLink, setStopVoucherSession, setHideLogo } = useContext(HeaderContext);
-  
-=======
-  const { voucherSessionKey, isPinVerified, pin } = useSelector((state: AppState) => state.voucher);
+  let { voucherSessionKey, showUserAbsence, isPinVerified, pin } = useSelector((state: AppState) => state.voucher);  
   const { setLink, setStopVoucherSession, setHideLogo } = useContext(HeaderContext);
   const dispatch = useDispatch();
 
->>>>>>> depoist-component
   useEffect(() => {
     setStopVoucherSession(true);
     if (pin || isPinVerified) {
