@@ -3,7 +3,6 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import HomeScreen from '../comoponents/HomeScreen';
 import Voucher from '../comoponents/Voucher';
 import VoucherLogin from '../comoponents/VoucherLogin';
-import VoucherPin from '../comoponents/VoucherPin';
 import Header from '../comoponents/Header';
 import { ThemeContext } from '../ThemeContextProvider';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +10,9 @@ import { fetchLogin } from '../redux/authorization';
 import Check from "../comoponents/Checks";
 import Error from '../comoponents/Error';
 import { AppState } from '../redux';
-
+import VoucherWithdraw from '../comoponents/VoucherWithdraw';
+import VoucherBalance from '../comoponents/VoucherBalance';
+// import './index.scss'
 
 const MainPage: React.FC = () => {
   const { theme } = useContext(ThemeContext);
@@ -55,11 +56,21 @@ const MainPage: React.FC = () => {
             path="/voucher-login"
             component={VoucherLogin}
           />
-          {/* <Route
+          <Route
             exact={true}
-            path="/voucher-pin"
-            component={VoucherPin}
-          /> */}
+            path="/voucher-balance"
+            component={VoucherBalance}
+          />
+          <Route
+            exact={true}
+            path="/voucher-deposit"
+            // component={VoucherDeposit}
+          />
+          <Route
+            exact={true}
+            path="/voucher-withdraw"
+            component={VoucherWithdraw}
+          />
         </Switch>
       </div>
     </div>

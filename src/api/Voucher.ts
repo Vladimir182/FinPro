@@ -1,5 +1,5 @@
 import Base from './Base';
-import { Body } from './types';
+import { Body, WithdrawBody, PinBody } from './types';
 const path = '';
 
 class Voucher extends Base {
@@ -13,6 +13,18 @@ class Voucher extends Base {
 
 	closeSession(body: Body) {
 		return this.apiClient.post('/close', body);
+	}
+
+	withdraw(body: WithdrawBody) {
+		return this.apiClient.post('/withdraw', body);
+	}
+
+	cassetteInfo(body: Body) {
+		return this.apiClient.post('/cassete-info', body);
+	}
+
+	pin(body: PinBody) {
+		return this.apiClient.post('/withdraw-pin', body);
 	}
 }
 

@@ -32,7 +32,6 @@ const HeaderContextProvider: React.FC = props => {
     sessionStorage.setItem('finpro-backlink', newLink);
     setNewLink(newLink);
   }
-  
   return  (
     <HeaderContext.Provider value={{ link, setLink, stopVoucherSession, setStopVoucherSession, hideLogo, setHideLogo }}>
       {props.children}

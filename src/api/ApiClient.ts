@@ -1,6 +1,7 @@
 import queryString from 'query-string';
 import Axios from 'axios';
 import { store } from '../App';
+import { fetchRefreshToken } from '../redux/authorization';
 
 type RequestMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
@@ -71,7 +72,13 @@ export default class ApiClient {
 			})
 			.catch((error: any) => {
 				const response = error.response;
-				
+
+				if (response.status === 401) {
+					fetchRefreshToken()(store.dispatch);
+
+					return;
+				}
+
 				throw response;
 			});
   }
@@ -87,15 +94,12 @@ export default class ApiClient {
 
 		const res = Axios({
 			// baseURL: process.env.REACT_APP_API_URL,
-      method: 'POST',
-      // ${process.env.REACT_APP_URL}/
-      url: `${this.prefix}${url}${query}`,
-      data: method !== 'GET' ? body : null,
-      withCredentials: true,
+			method: 'POST',
+			url: `${this.prefix}${url}${query}`,
+			data: method !== 'GET' ? body : null,
+			withCredentials: true,
 		});
 
 		return this.handleResponse(res);
 	}
 }
-
-// https://kiosk-api.kiosk-frontend.finpro.pw/cashpro/voucher/print-voucher?accessToken=ef9cfcb1ed421fda6cc9338e40e853d591a84b0d

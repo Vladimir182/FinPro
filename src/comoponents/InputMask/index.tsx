@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import InputMaskItem from './InputMaskItem';
 import './index.css';
-import { error } from 'console';
 
 type InputMaskType = {
   title: string,
@@ -9,7 +8,9 @@ type InputMaskType = {
   onInputChange: (value: string) => void,
   padding?: string,
   errorMessage?: string,
-  cleanErrorMessage?: () => void
+  cleanErrorMessage?: () => void,
+  style?: { [key: string]: any },
+  isMasked?: boolean
 }
 
 const inputBlockStyles = {
@@ -20,7 +21,7 @@ const inputBlockStyles = {
   position:'relative',
   background: '#480081',
   boxShadow: '0px 4px 30px rgba(174, 130, 225, 0.2)',
-  padding: '7.41vh 4vw 10vh 4vw',
+  padding: '7.41vh 3vw 10vh 3vw',
   boxSizing: 'border-box'
 } as React.CSSProperties;
 
@@ -59,7 +60,7 @@ const inputMaskErrorStyles = {
   margin: 0
 } as React.CSSProperties;
 
-const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessage, onInputChange, cleanErrorMessage }) => {
+const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessage, onInputChange, cleanErrorMessage, style, isMasked }) => {
   const [ inputValue, setInputValue ] = useState('');
   const [ isInputActive, setInputActive ] = useState(false);
   
@@ -93,14 +94,14 @@ const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessa
   }
 
   return (
-    <div className="input-block" onClick={handleBlockClick} style={inputBlockStyles}>
+    <div className="input-block" onClick={handleBlockClick} style={{ ...inputBlockStyles, ...style }}>
       <p className="input-title" style={titleStyles}>{title}</p>
         <label htmlFor="voucher" style={labelStyles}>
           <div className="input-mask" style={inputMaskStyles}>
             {Array(length).fill("").map((item, index) => {
               const value = inputValue[index] ?? '';
 
-              return <InputMaskItem key={index} value={value} isInputActive={isInputActive} isError={!!errorMessage} />
+              return <InputMaskItem key={index} value={value} isInputActive={isInputActive} isError={!!errorMessage} isMasked={isMasked} />
             })}
           </div>
           <input id="voucher" ref={inputRef} style={inputStyles} value={inputValue} onChange={e => handleChangeInputValue(e.target.value)}/>

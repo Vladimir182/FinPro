@@ -7,3 +7,15 @@ export interface Body {
 export interface Params {
     [x: string]: string
 };
+
+export type WithdrawBody = {
+	amount: number,
+	msid: string,
+	pin: number
+};
+
+export type PinBody = {
+	pin: string,
+	msid: string
+};
+

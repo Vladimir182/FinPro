@@ -7,11 +7,11 @@ import { fetchCheckAuth } from '../../redux/authorization';
 import LoaderModal from '../Loading/LoaderModal';
 
 const Authorized: React.FC = (props) => {
-  const { isAuth, isLoading } = useSelector((state: AppState) => state.authorization);
+  const { isAuth, isLoading, accessToken } = useSelector((state: AppState) => state.authorization);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!isAuth)
+    if (!isAuth && accessToken)
       fetchCheckAuth()(dispatch)
   }, [isAuth]);
 

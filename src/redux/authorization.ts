@@ -6,10 +6,11 @@ const FETCH_AUTH_FAILURE = 'FETCH_AUTH_FAILURE';
 const LOG_OUT = 'LOG_OUT';
 
 const initialState = {
-	isLoading: true,
+	isLoading: false,
 	isAuth: false,
 	isError: false,
-	errorMessage: ''
+	errorMessage: '',
+	accessToken: localStorage.getItem('finpro_access_token')
 };
 
 interface Action {
@@ -37,7 +38,8 @@ const authorization = (state = initialState, { type, payload }: Action) => {
 				isAuth: false,
 				isLoading: false,
 				isError: true,
-				errorMessage: payload
+				errorMessage: payload,
+				accessToken: null
 			};
 		case LOG_OUT:            
 			return initialState;
@@ -61,13 +63,7 @@ export const fetchCheckAuth = () => (dispatch: any) => {
 		.find({ login: 'check'})
 		.then((res: any) => {
 			dispatch({ type: FETCH_LOGIN_SUCCESS });
-		})
-		.catch((error: any) => {
-      if (error.status === 401) {
-        fetchRefreshToken()(dispatch);
-      }
-		});
-};
+		})};
 
 export const fetchRefreshToken = () => (dispatch: any) => {
   const refresh_token = localStorage.getItem('finpro_refresh_token');

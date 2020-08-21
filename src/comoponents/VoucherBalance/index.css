@@ -1,0 +1,117 @@
+
+.balance-title {
+  font-size: 1.9vw;
+}
+
+.voucher-balance-button {
+  width: auto!important;
+}
+
+.voucher-balance-button .action-button-title {
+  margin-right: 1.5vw!important;
+}
+
+.balance-sum-wrapper {
+  padding: 0.6vw 0.4vw;
+  border: 0.1vw solid #8400BF
+}
+
+.balance-sum {
+  width: 40vw;
+  font-size: 2.7vw;
+  line-height: 1.8vw;
+  padding: 1.5vw;
+}
+
+@media (max-width: 1920px) {
+  .balance-title {
+    font-size: 36px;
+  }
+
+  .voucher-balance-button .action-button-title {
+    margin-right: 30px!important;
+  }
+
+  .balance-sum {
+    width: 40vw;
+    font-size: 64px;
+    line-height: 44px;
+    padding: 30px;
+  }
+}
+
+@media (max-width: 1280px) {
+  .balance-title {
+    font-size: 32px;
+  }
+
+  .voucher-balance-button .action-button-title {
+    margin-right: 11px!important;
+  }
+
+  .balance-sum {
+    width: 50vw;
+    font-size: 65px;
+    padding: 16px;
+  }
+}
+
+@media (max-height: 720px) and (max-width: 1280px) { 
+  .balance-title {
+    font-size: 28px;
+  }
+
+  .balance-sum {
+    width: 40vw;
+    font-size: 48px;
+    padding: 7px;
+  }
+}
+
+@media (max-width: 1152px) { 
+  .balance-sum {
+    font-size: 50px;
+    padding: 11px;
+  }
+
+  .balance-title {
+    font-size: 28px;
+  }
+
+  .voucher-balance-button .action-button-title {
+    margin-right: 18px!important;
+  }
+}
+
+@media (max-width: 1024px) { 
+  .balance-title {
+    font-size: 24px;
+  }
+
+  .balance-sum {
+    width: 50vw;
+    font-size: 48px;
+    padding: 7px;
+  }
+
+  .voucher-balance-button .action-button-title {
+    margin-right: 10px!important;
+  }
+
+  .voucher-balance-button {
+    margin: 4px;
+    padding: 1vw 5vw!important;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 800px) { 
+  .balance-title {
+    font-size: 22px;
+  }
+
+  .balance-sum {
+    font-size: 40px;
+    padding: 2px;
+  }
+}

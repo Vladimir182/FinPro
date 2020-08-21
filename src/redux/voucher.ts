@@ -1,4 +1,5 @@
 import api from '../api';
+import { WithdrawBody, PinBody } from '../api/types';
 import { showError } from './error-screen';
 import { store } from '../App';
 
@@ -14,19 +15,29 @@ window.setInterval(function() {
 const REQUEST_VOUCHER_START = 'REQUEST_VOUCHER_START';
 const REQUEST_PRINT_LOADER_START = 'REQUEST_PRINT_LOADER_START';
 const REQUEST_VOUCHER_LOGIN_SUCCESS = 'REQUEST_VOUCHER_LOGIN_SUCCESS';
-const REQUEST_VOUCHER_PINCODE_SUCCESS = 'REQUEST_VOUCHER_PINCODE_SUCCESS';
 const REQUEST_VOUCHER_FAILURE = 'REQUEST_VOUCHER_FAILURE';
+const REQUEST_CASSETTE_INFO_SUCCESS = 'REQUEST_CASSETTE_INFO_SUCCESS';
 const CLOSE_VOUCHER_SESSION_SUCCESS = 'CLOSE_VOUCHER_SESSION_SUCCESS';
-const LOG_OUT = 'LOG_OUT';
+const SET_AVAILABLE_WITHDRAW_SUM = 'SET_AVAILABLE_WITHDRAW_SUM';
+const REQUEST_VOUCHER_PIN_SUCCESS = 'REQUEST_VOUCHER_PIN_SUCCESS';
+const SET_VOUCHER_PIN = 'SET_VOUCHER_PIN';
+const RESET_VOUCHER_PIN = 'RESET_VOUCHER_PIN';
+const RESET_VOUCHER_ERROR_STATUS = 'RESET_VOUCHER_ERROR_STATUS';
+const REQUEST_VOUCHER_WITHDRAW_SUCCESS = 'REQUEST_VOUCHER_WITHDRAW_SUCCESS';
 
 const SET_SHOW_USER_ABSENCE = 'SET_SHOW_USER_ABSENCE';
 
 const initialState = {
   isLoading: false,
   isPrintLoading: false,
-  isVoucherVerified: false,
-  pincode: '',
-  isPincodeVerified: false,
+  isPinVerified: false,
+  balance: 0,
+  pin: '',
+  currency: sessionStorage.getItem('finpro-currency') ?? null,
+  cassetteInfo: [],
+  withdrawSum: null,
+  availableWithdrawSum: null,
+  waitingWithdrawSocket: false,
   voucherSessionKey: sessionStorage.getItem('finpro-voucher-session-key') ?? '',
   isError: false,
   errorMessage: '',
@@ -60,7 +71,8 @@ const voucher = (state = initialState, { type, payload }: Action) => {
 		case REQUEST_VOUCHER_START:
 			return {
 				...state,
-				voucherSessionKey: '',
+        // voucherSessionKey: '',
+        availableWithdrawSum: null,
         isLoading: true,
         isError: false,
       };
@@ -71,21 +83,63 @@ const voucher = (state = initialState, { type, payload }: Action) => {
       };
 		case REQUEST_VOUCHER_LOGIN_SUCCESS:
       sessionStorage.setItem('finpro-voucher-session-key', payload.msid);
+      sessionStorage.setItem('finpro-currency', payload.currency);
+
 			return {
 				...state,
-				voucherSessionKey: payload.msid,
+        voucherSessionKey: payload.msid,
+        currency: payload.currency,
 				isLoading: false,
 				isError: false,
 				errorMessage: ''
       };
+    case REQUEST_CASSETTE_INFO_SUCCESS: 
+      return {
+        ...state,
+        cassetteInfo: payload.cassete_info,
+        isLoading: false
+      }  
     case CLOSE_VOUCHER_SESSION_SUCCESS:
       window.removeEventListener('mousemove', userAbsenceTimeoutPreccess);
       sessionStorage.removeItem('finpro-voucher-session-key');
+
       return {
         ...state,
         voucherSessionKey: '',
         isLoading: false,
 				isError: false,
+      }
+    case SET_AVAILABLE_WITHDRAW_SUM:
+      return {
+        ...state,
+        availableWithdrawSum: payload,
+        isLoading: false
+      }
+    case REQUEST_VOUCHER_WITHDRAW_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        waitingWithdrawSocket: true,
+        isError: false,
+        errorMessage: ''
+      }  
+    case SET_VOUCHER_PIN:
+      return {
+        ...state,
+        pin: payload
+      }
+    case RESET_VOUCHER_PIN:
+      return {
+        ...state,
+        pin: '',
+        isPinVerified: false
+      }  
+    case REQUEST_VOUCHER_PIN_SUCCESS:
+      return {
+        ...state,
+        pin: payload.pin,
+        isPinVerified: true,
+        isLoading: false
       }
 		case REQUEST_VOUCHER_FAILURE:
 			return {
@@ -104,17 +158,18 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         ...state,
         showUserAbsence: payload
       }
-		case LOG_OUT:            
-			return initialState;
+    case RESET_VOUCHER_ERROR_STATUS:
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        errorMessage: false,
+        isPrintLoading: false,
+        isPinVerified: false,
+      }
 		default:
 			return state;
 	}
-};
-
-export const logOut = () => (dispatch: any) => {
-	return dispatch({
-		type: LOG_OUT
-	});
 };
 
 export const fetchVoucherLogin = (voucherLogin: string) => (dispatch: any) => {
@@ -135,34 +190,9 @@ export const fetchVoucherLogin = (voucherLogin: string) => (dispatch: any) => {
     dispatch({ type: REQUEST_VOUCHER_LOGIN_SUCCESS, payload: data });  
   })
   .catch((error: any) => {
-    dispatch(showError());
     dispatch({ type: REQUEST_VOUCHER_FAILURE, payload: { message: error } });
+    dispatch(showError());
   })
-};
-
-export const fetchPin = (data: any) => (dispatch: any) => {
-  dispatch({ type: REQUEST_VOUCHER_PINCODE_SUCCESS });
-	// return API.auth
-	// 	.logIn(data)
-	// 	.then(response => {
-	// 		Cookies.set('token', response.data.data.token);
-	// 		dispatch(requestSuccess(response.data.data));
-	// 	})
-	// 	.catch(error => {
-	// 		const res = error.response;
-
-	// 		let formData = {};
-
-	// 		if (res.data.errors) {
-	// 			_.map(res.data.errors, item => {
-	// 				formData[item.fieldName] = item.message;
-	// 			});
-	// 			throw new SubmissionError(formData);
-	// 		} else {
-	// 			formData = { _error: res.data.message };
-	// 			throw new SubmissionError(formData);
-	// 		}
-	// 	});
 };
 
 export const fetchPrintVoucher = () => (dispatch: any) => {
@@ -187,10 +217,93 @@ export const fetchPrintVoucher = () => (dispatch: any) => {
     }
   })
   .catch((error: any) => {
-    dispatch(showError());
     dispatch({type: REQUEST_VOUCHER_FAILURE,
       payload: error
     });
+    dispatch(showError());
+  });
+};
+
+export const fetchCassetteInfo = (data: { msid: string }) => (dispatch: any) => {
+  dispatch({type: REQUEST_VOUCHER_START});
+  
+  api.voucher
+  .cassetteInfo(data)
+  .then((res: any) => {
+    const data = res.data;
+    
+    if (data.success) {
+      dispatch({
+        type: REQUEST_CASSETTE_INFO_SUCCESS,
+        payload: data
+      });
+    } else {
+      dispatch({ type: REQUEST_VOUCHER_FAILURE, payload: '' });
+      dispatch(showError());
+    }
+
+    return;
+  }).catch((error: any) => {
+    dispatch({type: REQUEST_VOUCHER_FAILURE,
+      payload: error
+    });
+    dispatch(showError());
+  });
+};
+
+export const fetchVoucherPin = (data: PinBody) => (dispatch: any) => {
+  dispatch({type: REQUEST_VOUCHER_START});
+
+  api.voucher
+  .pin(data)
+  .then((res: any) => {
+    const data = res.data;
+
+    if (data.success) {
+      dispatch({
+        type: REQUEST_VOUCHER_PIN_SUCCESS,
+        payload: data
+      });  
+    } else {
+      dispatch({ type: REQUEST_VOUCHER_FAILURE, payload: '' });
+    }
+
+    return;
+  }).catch((error: any) => {
+    dispatch({type: REQUEST_VOUCHER_FAILURE,
+      payload: error
+    });
+    dispatch(showError());
+  });
+}
+
+export const fetchVoucherWithdraw = (data: WithdrawBody) => (dispatch: any) => {
+  dispatch({type: REQUEST_VOUCHER_START});
+
+  api.voucher
+  .withdraw(data)
+  .then((res: any) => {
+    const data = res.data;
+    if (data.success) {
+      dispatch({
+        type: REQUEST_VOUCHER_WITHDRAW_SUCCESS,
+      });
+    } else {
+      if (data.validation_errors) {
+        dispatch({ 
+          type: SET_AVAILABLE_WITHDRAW_SUM,
+          payload: data.validation_errors?.cassette_info 
+        });
+        
+        return;
+      }
+    }
+  })
+  .catch((error: any) => {
+    dispatch({type: REQUEST_VOUCHER_FAILURE,
+      payload: error
+    });
+    dispatch(showError());
   });
 };
 
@@ -221,6 +334,19 @@ export const fetchCloseVoucherSession = (voucherSessionKey: string) => (dispatch
 export const setShowUserAbsence = (status: boolean) => ({
   type: SET_SHOW_USER_ABSENCE,
   payload: status
+});
+
+export const setVoucherPin = (pin: string) => ({
+  type: SET_VOUCHER_PIN,
+  payload: pin
+});
+
+export const resetVoucherPin = () => ({
+  type: RESET_VOUCHER_PIN
+});
+
+export const resetVoucehrErrors = () => ({
+  type: RESET_VOUCHER_ERROR_STATUS
 });
 
 export default voucher;
