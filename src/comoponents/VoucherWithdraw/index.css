@@ -1,0 +1,141 @@
+
+.withdraw-title {
+  font-size: 1.9vw;
+}
+
+.voucher-withdraw-button {
+  width: auto!important;
+  padding: 3vw 3.5vw;
+}
+
+.voucher-withdraw-button .action-button-title {
+  margin-right: 1.5vw!important;
+}
+
+.withdraw-sum-wrapper {
+  padding: 0.6vw 0.4vw;
+}
+
+.withdraw-sum-outer-middle-wrapper {
+  padding: 0.6vw 0.4vw;
+}
+
+.withdraw-sum-outer-wrapper {
+  padding: 0.3vw 0.25vw;
+  border: 0.1vw solid #8400BF
+}
+
+.withdraw-sum {
+  width: 40vw;
+  font-size: 2.7vw;
+  line-height: 1.8vw;
+  padding: 1vw;
+  padding-left: 1vw;
+}
+
+.input-subtitle {
+  font-size: 1.4vw;
+  line-height: 44px;
+}
+
+@media (max-width: 1920px) {
+  .withdraw-title {
+    font-size: 36px;
+  }
+
+  .voucher-withdraw-button .action-button-title {
+    margin-right: 30px!important;
+  }
+
+  .withdraw-sum {
+    width: 40vw;
+    font-size: 64px;
+    line-height: 44px;
+    padding: 18px;
+    padding-left: 1vw;
+  }
+}
+
+@media (max-width: 1280px) {
+  .withdraw-title {
+    font-size: 32px;
+  }
+
+  .voucher-withdraw-button .action-button-title {
+    margin-right: 11px!important;
+  }
+
+  .withdraw-sum {
+    width: 50vw;
+    font-size: 46px;
+    padding: 2px;
+    padding-left: 1vw;
+  }
+}
+
+@media (max-height: 720px) and (max-width: 1280px) { 
+  .withdraw-title {
+    font-size: 28px;
+  }
+
+  .withdraw-sum {
+    font-size: 48px;
+    padding: 5px;
+    padding-left: 1vw;
+  }
+
+  .voucher-withdraw-button {
+    padding: 2vw 2.5vw;
+  }
+}
+
+@media (max-width: 1152px) { 
+  .withdraw-sum {
+    font-size: 40px;
+    padding: 2px;
+    padding-left: 1vw;
+  }
+
+  .withdraw-title {
+    font-size: 28px;
+  }
+
+  .voucher-withdraw-button .action-button-title {
+    margin-right: 18px!important;
+  }
+}
+
+@media (max-width: 1024px) { 
+  .withdraw-title {
+    font-size: 24px;
+  }
+
+  .withdraw-sum {
+    width: 50vw;
+    font-size: 36px;
+    padding: 7px;
+    padding-left: 1vw;
+  }
+
+  .voucher-withdraw-button .action-button-title {
+    margin-right: 10px!important;
+  }
+
+  .voucher-withdraw-button {
+    margin: 4px;
+    /* padding: 1vw 3.5vw!important; */
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 800px) { 
+  .withdraw-title {
+    font-size: 22px;
+  }
+
+  .withdraw-sum {
+    font-size: 27px;
+    padding: 2px;
+    padding-left: 1vw;
+  }
+}

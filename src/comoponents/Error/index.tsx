@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { hideError } from '../../redux/error-screen';
 import { HeaderContext } from '../Header/HeaderContextProvider';
 import './error.module.css';
+import { resetVoucehrErrors } from '../../redux/voucher';
 
 const errorMessageTitle = 'УПС';
 const somethisngWrongMessage = 'что-то пошло не так';
@@ -18,6 +19,7 @@ const Error: React.FC = () => {
 
   useEffect(() => {
     setTimeout(function() {
+      dispatch(resetVoucehrErrors());
       dispatch(hideError());
     }, Number(process.env.REACT_APP_REQUEST_ERROR_TIMEOUT))
   });

@@ -1,0 +1,27 @@
+.voucher-withdraw-pin-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: fit-content;
+}
+
+@media (max-width: 1920px) {
+    
+  .voucher-withdraw-pin-button {
+    padding: 51px 65px; 
+  }
+}
+
+@media (max-width: 1280px) {
+    
+  .voucher-withdraw-pin-button {
+    padding: 42px 58px; 
+  }
+}
+
+@media (max-width: 1280px) and (max-height: 720px) {
+    
+  .voucher-withdraw-pin-button {
+    padding: 22px 35px; 
+  }
+}

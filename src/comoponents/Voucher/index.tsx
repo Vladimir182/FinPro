@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { AppState } from '../../redux';
 import { HeaderContext } from '../Header/HeaderContextProvider';
@@ -7,6 +7,7 @@ import BaseButton from '../Buttons/BaseButton';
 import deposit from '../../images/Deposit.svg';
 import withdraw from '../../images/Withdraw.svg';
 import balance from '../../images/Balance.svg';
+import { resetVoucherPin } from '../../redux/voucher';
 import './index.css';
 
 const depoistButtonText = 'Пополнить';
@@ -15,11 +16,15 @@ const checkBalanceButtonText = 'Проверить баланс';
 const buttonStyles = {};
 
 const VoucherRoads: React.FC = () => {
-  let { voucherSessionKey } = useSelector((state: AppState) => state.voucher);
-  let { setLink, setStopVoucherSession, setHideLogo } = useContext(HeaderContext);
-  
+  const { voucherSessionKey, isPinVerified, pin } = useSelector((state: AppState) => state.voucher);
+  const { setLink, setStopVoucherSession, setHideLogo } = useContext(HeaderContext);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     setStopVoucherSession(true);
+    if (pin || isPinVerified) {
+      dispatch(resetVoucherPin());
+    }
     // setHideLogo(true);
     // setLink('/');
   })
