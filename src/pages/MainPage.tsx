@@ -12,6 +12,7 @@ import Error from '../comoponents/Error';
 import { AppState } from '../redux';
 import VoucherWithdraw from '../comoponents/VoucherWithdraw';
 import VoucherBalance from '../comoponents/VoucherBalance';
+import OptionalCheck from '../comoponents/OptionalCheck'
 // import './index.scss'
 
 const MainPage: React.FC = () => {

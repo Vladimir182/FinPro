@@ -8,7 +8,7 @@ import deposit from '../../images/Deposit.svg';
 import withdraw from '../../images/Withdraw.svg';
 import balance from '../../images/Balance.svg';
 import { resetVoucherPin } from '../../redux/voucher';
-import Absence from '../absence';
+import Absence from '../Absence';
 import './index.css';
 
 const depoistButtonText = 'Пополнить';

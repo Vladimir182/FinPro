@@ -1,0 +1,221 @@
+.optional-page-wrapper{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.optional-container-page{
+  width: 100%;
+  max-width: 894px;
+}
+.optional-wrapper{
+  box-shadow: 0px 4px 30px rgba(174, 130, 225, 0.2);
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 125px 121px;
+  background: #480081;
+  
+}
+.optional-img{
+  width: 92px;
+  height: 97px;
+}
+.optional-img img {
+  width: 100%;
+}
+.optional-wrapper .optional-text{
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 150%;
+  color: #fff;
+  text-transform: uppercase;
+}
+.optional-button-wrapper{
+  display: flex;
+  padding: 80px 50px;
+  justify-content: space-around;
+  width: 100%;
+}
+.optional-button .action-button-title{
+  margin-right: 0!important;
+
+}
+.optional-button{
+  width: auto!important;
+}
+
+.action-button-block .optional-button {
+  padding: 55px 100px !important;
+  width: 270px !important;
+}
+
+@media (max-width: 1280px) {
+
+}
+
+@media (max-height: 1024px) and (max-width:1280px){
+  .optional-container-page{
+    width: 100%;
+    max-width: 780px;
+  }
+  .optional-wrapper{
+    padding: 106px 94px; 
+  }
+  .optional-img{
+    width: 85px;
+    height: 90px;
+  }
+  .optional-img img {
+    width: 100%;
+  }
+  .optional-wrapper .optional-text{
+    font-size: 32px;
+    line-height: 44px;
+  }
+  .optional-button-wrapper{
+    display: flex;
+    padding: 75px 50px;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .optional-button{
+    width: auto!important;
+  }
+  
+  .action-button-block .optional-button {
+    padding: 55px 100px !important;
+    width: 270px !important;
+  }
+}
+
+@media (max-height: 720px) and (max-width:1280px){
+
+  .optional-container-page{
+    width: 100%;
+    max-width: 614px;
+  }
+  .optional-wrapper{
+    padding: 82px 57px; 
+  }
+  .optional-img{
+    width: 71px;
+    height: 76px;
+  }
+  .optional-wrapper .optional-text{
+    font-size: 28px;
+    line-height: 44px;
+  }
+  .optional-button-wrapper{
+    display: flex;
+    padding: 48px 52px;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .optional-button{
+    width: auto!important;
+  }
+  
+  .action-button-block .optional-button {
+    padding: 34px 71px !important;
+    width: 200px !important;
+  }
+}
+
+@media (max-width: 1152px) {
+  .optional-container-page{
+    width: 100%;
+    max-width: 715px;
+  }
+  .optional-wrapper{
+    padding: 82px 57px; 
+  }
+  .optional-img{
+    width: 85px;
+    height: 90px;
+  }
+  .optional-wrapper .optional-text{
+    font-size: 32px;
+    line-height: 44px;
+  }
+  .optional-button-wrapper{
+    display: flex;
+    padding: 55px 50px;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .optional-button{
+    width: auto!important;
+  }
+  
+  .action-button-block .optional-button {
+    padding: 50px 88px !important;
+    width: 240px !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .optional-container-page{
+    width: 100%;
+    max-width: 614px;
+  }
+  .optional-wrapper{
+    padding: 82px 57px; 
+  }
+  .optional-img{
+    width: 71px;
+    height: 76px;
+  }
+  .optional-wrapper .optional-text{
+    font-size: 28px;
+    line-height: 44px;
+  }
+  .optional-button-wrapper{
+    display: flex;
+    padding: 54px 50px;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .optional-button{
+    width: auto!important;
+  }
+  
+  .action-button-block .optional-button {
+    padding: 34px 71px !important;
+    width: 200px !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .optional-container-page{
+    width: 100%;
+    max-width: 466px;
+  }
+  .optional-wrapper{
+    padding: 67px 47px; 
+  }
+  .optional-img{
+    width: 45px;
+    height: 48px;
+  }
+  .optional-wrapper .optional-text{
+    font-size: 22px;
+    line-height: 44px;
+  }
+  .optional-button-wrapper{
+    display: flex;
+    padding: 43px 30px;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .optional-button{
+    width: auto!important;
+  }
+  
+  .action-button-block .optional-button {
+    padding: 25px 54px !important;
+    width: 152px !important;
+    margin: 5px !important;
+  }
+}
