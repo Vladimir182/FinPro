@@ -11,22 +11,26 @@ import { fetchVoucherLogin } from '../../redux/voucher';
 import { AppState } from '../../redux';
 import { Redirect } from 'react-router-dom';
 
-
 const onlyNumEerrorMessage = 'Здесь можно воодить только цыфры';
 const cantBeEmptyErrorMessage = 'Дрожно быть заполненым';
 const wrongVoucherKeyErrorMessage = 'Ваучер не найден';
+const voucherSessionIsNotClosedMessage = 'Сессия данного ваучера не закрыта';
 
 const VoucherLogin: React.FC = () => {
-  const { isLoading, isError, voucherSessionKey } = useSelector((state: AppState) => state.voucher);
+  const { isLoading, voucherSessionKey, isError, errorMessage } = useSelector((state: AppState) => state.voucher);
   const dispatch = useDispatch();
   const { link, setLink } = useContext(HeaderContext);
-  const [ errorMessage, setErrorMessage ] = useState('');
+  const [ inputErrorMessage, setInputErrorMessage ] = useState('');
   const [ voucherValue, setVoucherValue ] = useState('');
   const voucherValueLength = 10;
 
   useEffect(() => {
     if (isError) {
-      setErrorMessage(wrongVoucherKeyErrorMessage);
+      const errorText = errorMessage?.login === 'Voucher not found.' ? wrongVoucherKeyErrorMessage 
+      : errorMessage?.login === 'Voucher session not closed.' ? voucherSessionIsNotClosedMessage
+      : wrongVoucherKeyErrorMessage;
+
+      setInputErrorMessage(errorText);
     }
   }, [voucherSessionKey, isError])
 
@@ -48,10 +52,10 @@ const VoucherLogin: React.FC = () => {
   const handleChangeInputValue = (value: string) => {
     const contanNotNumbers = /[^0-9]/.test(value);
     if (contanNotNumbers && value.length > voucherValue.length) {
-      setErrorMessage(onlyNumEerrorMessage);
+      setInputErrorMessage(onlyNumEerrorMessage);
     } else {
       if (errorMessage) {
-        setErrorMessage('');
+        setInputErrorMessage('');
       }
     }
 
@@ -59,13 +63,13 @@ const VoucherLogin: React.FC = () => {
   }
 
   const handleSubmit = () => {
-    if (errorMessage) {
+    if (inputErrorMessage) {
       return;
     } else if (
       !voucherValue 
       || voucherValue.length < voucherValueLength
     ) {
-      setErrorMessage(cantBeEmptyErrorMessage)
+      setInputErrorMessage(cantBeEmptyErrorMessage)
       
       return;
     }
@@ -73,9 +77,9 @@ const VoucherLogin: React.FC = () => {
     fetchVoucherLogin(voucherValue)(dispatch);
   }
 
-  const cleanErrorMessage = () => {
+  const cleanInputErrorMessage = () => {
     if (errorMessage) {
-      setErrorMessage('');
+      setInputErrorMessage('');
     }
   }
 
@@ -89,9 +93,9 @@ const VoucherLogin: React.FC = () => {
         <InputMask 
           title="Введите ваш логин" 
           onInputChange={handleChangeInputValue}
-          cleanErrorMessage={cleanErrorMessage}
+          cleanErrorMessage={cleanInputErrorMessage}
           length={voucherValueLength} 
-          errorMessage={errorMessage}
+          errorMessage={inputErrorMessage}
         />      
         <ActionButton 
           title="Далее" 

@@ -182,7 +182,7 @@ export const fetchVoucherLogin = (voucherLogin: string) => (dispatch: any) => {
     const data = res.data;
 
     if (!data.success) {
-      dispatch({ type: REQUEST_VOUCHER_FAILURE, payload: { message: data.error_message } });
+      dispatch({ type: REQUEST_VOUCHER_FAILURE, payload: { message: data.validation_errors ?? data.error_message } });
 
       return;
     }
