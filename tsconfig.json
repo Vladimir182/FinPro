@@ -17,9 +17,12 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "jsx": "react",
+    "isolatedModules": true
   },
   "include": [
     "src"
   ],
-  "exclude": ["src/setupProxy.js"]
+  "exclude": [
+    "src/setupProxy.js"
+  ]
 }
