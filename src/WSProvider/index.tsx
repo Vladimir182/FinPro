@@ -28,8 +28,14 @@ export default ({ children }: { children: any }) => {
     console.log('WS COND !socket && accessToken', !socket ,'&&', accessToken)
     if (!socket && accessToken) {
         console.log('SOCKET CONNECTION')
-        
-        socket = io.connect(`${process.env.REACT_APP_WS_URL}/?token=${accessToken}`);
+        // wss://wss.kiosk-frontend.finpro.pw/socket/?token=${accessToken}
+        socket = io.connect(`/`,{
+            path: `/socket`,
+            query: {
+                token: accessToken
+            },
+            transports: ['websocket']
+        });
         socket.on("ws:newMessage", (msg: any) => {
             console.log('res', msg)
             // const payload = JSON.parse(msg);
