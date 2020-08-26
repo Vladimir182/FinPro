@@ -40,7 +40,6 @@ const VoucherRoads: React.FC = () => {
             className="voucher-button"
             link="/voucher-deposit"
             title={depoistButtonText}
-            // onClick={() => console.log('click')}
             image={deposit}
             style={buttonStyles}
           />

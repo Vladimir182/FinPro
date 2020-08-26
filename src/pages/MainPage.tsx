@@ -12,6 +12,8 @@ import Error from '../comoponents/Error';
 import { AppState } from '../redux';
 import VoucherWithdraw from '../comoponents/VoucherWithdraw';
 import VoucherBalance from '../comoponents/VoucherBalance';
+import VoucherDeposit from '../comoponents/VoucherDeposit';
+import WSProvider from '../WSProvider';
 // import './index.scss'
 
 const MainPage: React.FC = () => {
@@ -64,7 +66,11 @@ const MainPage: React.FC = () => {
           <Route
             exact={true}
             path="/voucher-deposit"
-            // component={VoucherDeposit}
+            component={ () => (
+              <WSProvider>
+                <VoucherDeposit />
+              </WSProvider>
+            )}
           />
           <Route
             exact={true}
