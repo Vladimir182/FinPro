@@ -1,21 +1,20 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import HomeScreen from '../comoponents/HomeScreen';
 import Voucher from '../comoponents/Voucher';
 import VoucherLogin from '../comoponents/VoucherLogin';
 import Header from '../comoponents/Header';
 import { ThemeContext } from '../ThemeContextProvider';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchLogin } from '../redux/authorization';
-import Check from "../comoponents/Checks";
-import Error from '../comoponents/Error';
+import { useSelector } from 'react-redux';
 import { AppState } from '../redux';
 import VoucherWithdraw from '../comoponents/VoucherWithdraw';
 import VoucherBalance from '../comoponents/VoucherBalance';
+import VoucherDeposit from '../comoponents/VoucherDeposit';
+import WSProvider from '../WSProvider';
+import Error from '../comoponents/Error';
 import OptionalCheck from '../comoponents/OptionalCheck';
 import ServerError from '../comoponents/ServerError';
-import Absence from '../comoponents/Absence';
-// import './index.scss'
+import Check from "../comoponents/Checks";
 
 const MainPage: React.FC = () => {
   const { theme } = useContext(ThemeContext);
@@ -52,7 +51,7 @@ const MainPage: React.FC = () => {
           <Route
             exact={true}
             path="/voucher"
-            component={Absence}
+            component={Voucher}
           />
           <Route
             exact={true}
@@ -67,7 +66,11 @@ const MainPage: React.FC = () => {
           <Route
             exact={true}
             path="/voucher-deposit"
-            // component={VoucherDeposit}
+            component={ () => (
+              <WSProvider>
+                <VoucherDeposit />
+              </WSProvider>
+            )}
           />
           <Route
             exact={true}

@@ -6,11 +6,12 @@ type InputMaskItemType = {
   isError?: boolean,
   isMasked?: boolean,
   isInputActive?: boolean,
+  className?: string
 }
 
 const activeInputMaskItemGradient = 'linear-gradient(#FFB800 0%, #FFDA7B 31.77%, #FFB800 62.5%, #FFDA7B 100%, #FFDA7B 100%)';
 
-const InputMaskItem: React.FC<InputMaskItemType> = ({ value, isError, isMasked, isInputActive }) => {
+const InputMaskItem: React.FC<InputMaskItemType> = ({ value, isError, isMasked, isInputActive, className }) => {
   
   const inputMaskItemWrapperStyles = {
     background: (isInputActive && !isError) ? activeInputMaskItemGradient : isError ? '#FF0000' : '#8400BF',
@@ -35,7 +36,7 @@ const InputMaskItem: React.FC<InputMaskItemType> = ({ value, isError, isMasked, 
   } as React.CSSProperties;
 
   return (
-    <div className="input-mask-item-wrapper" style={inputMaskItemWrapperStyles}>
+    <div className={`input-mask-item-wrapper ${className ?? ''}`} style={inputMaskItemWrapperStyles}>
       <div className="input-mask-item" style={inputMaskItemStyles}>
         { value && isMasked ? 
           <div style={maskedValueStyles}></div>

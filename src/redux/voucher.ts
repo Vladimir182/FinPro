@@ -35,6 +35,7 @@ const initialState = {
   pin: '',
   currency: sessionStorage.getItem('finpro-currency') ?? null,
   cassetteInfo: [],
+  depositSum: 0,
   withdrawSum: null,
   availableWithdrawSum: null,
   waitingWithdrawSocket: false,
@@ -59,7 +60,7 @@ function userAbsenceTimeoutPreccess() {
   }
   userAbsenceTimer = setTimeout(function() {
     ShowUserAbsence()
-  }, 10000);
+  }, 120000);
 }
 
 function ShowUserAbsence() {
