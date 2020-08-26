@@ -86,6 +86,11 @@
   margin-right: 0!important;
 }
 
+.action-button-block .absence-button{
+  padding: 55px 100px !important;
+  width: 270px !important;
+}
+
 .absence-button:hover {
   transition: .1s ease-in-out;
   filter: drop-shadow(0px 0px 17px #FFF500);
@@ -134,6 +139,10 @@
     bottom: 88px;
     left: 35px;
   }
+  .action-button-block .absence-button{
+    padding: 55px 100px !important;
+    width: 270px !important;
+  }
 }
 
 @media (max-height: 1024px) and (max-width:1280px){
@@ -180,6 +189,7 @@
   }
   .absence-img-wrapper{
     max-width: 268px;
+    margin-bottom: 24px;
   }
   .absence-message {
     width: 97px;
@@ -210,6 +220,10 @@
     padding: 20px;
     width:198px;
     height:108px;
+  }
+  .action-button-block .absence-button{
+    padding: 37px 100px !important;
+    width: 200px !important;
   }
 }
 
@@ -257,6 +271,10 @@
     width:240px;
     height:134px;
   }
+  .action-button-block .absence-button{
+    padding: 50px 100px !important;
+    width: 240px !important;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -301,6 +319,10 @@
     padding: 20px;
     width:198px;
     height:108px;
+  }
+  .action-button-block .absence-button{
+    padding: 37px 100px !important;
+    width: 199px !important;
   }
 }
 
@@ -349,6 +371,10 @@
     height:70px;
   }
   .absence-button.action-button-wrapper {
-    margin: 1px!important;
+    margin: 2px!important;
+  }
+  .action-button-block .absence-button{
+    padding: 27px 62px !important;
+    width: 162px !important;
   }
 }

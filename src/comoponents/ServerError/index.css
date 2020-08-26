@@ -1,0 +1,295 @@
+.serverError-page-wrapper{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.serverError-container-page{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width:1050px;
+  /* background: #000; */
+}
+.error-message {
+  position: relative;
+  text-align: center;
+  width: 100%;
+  max-width: 848px;
+  padding: 36px 20px;
+  background: #9E2121;
+  box-shadow: 0px 0px 20px rgba(255, 0, 0, 0.4); 
+  margin-bottom: 48px;
+  z-index: 1;
+}
+.error-message span {
+  color: #fff;
+  font-weight: bold;
+  font-size: 34px;
+  line-height: 44px;
+  text-transform: uppercase;  
+}
+
+.serverError-wrapper{
+  position: relative;
+  background: #480081;
+  box-shadow: 0px 4px 30px rgba(174, 130, 225, 0.2);
+  padding: 20px 40px;
+  width: 100%;
+  height: 304px;
+}
+.serverError-image{
+  position: absolute;
+  left: 48%;
+  top: -80%;
+}
+.serverError-image img {
+  width: 916px;
+}
+.error-info {
+  letter-spacing: 0.1em;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 44px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  color: #fff;
+  text-transform: uppercase;
+}
+.terminal-number span,
+.terminal-contact span{
+  color:#B89BCF;
+}
+
+.terminal-phone,
+.terminal-email{
+  margin-left: 50px;
+}
+
+@media (max-width: 1280px) {
+  .serverError-container-page{
+    max-width:1000px;
+  }
+  .error-message {
+    max-width: 679px;
+    padding: 30px 20px;
+    margin-bottom: 37px;
+  }
+  .error-message span {
+    font-size: 34px;
+    line-height: 44px;
+  }
+  .serverError-wrapper{
+    padding: 20px 40px;
+    width: 100%;
+    height: 233px;
+  }
+  .serverError-image{
+    left: 38%;
+    top: -120%;
+  }
+  .serverError-image img {
+    max-width: 750px;
+  }
+  .error-info {
+    letter-spacing: 0.1em;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 44px;
+  }
+  .terminal-phone,
+  .terminal-email{
+    margin-left: 50px;
+  }
+}
+
+@media (max-height: 1024px) and (max-width:1280px){ 
+
+  .serverError-container-page{
+    max-width:1000px;
+  }
+  .error-message {
+    max-width: 679px;
+    padding: 30px 20px;
+    margin-bottom: 37px;
+  }
+  .error-message span {
+    font-size: 34px;
+    line-height: 44px;
+  }
+  .serverError-wrapper{
+    padding: 20px 32px;
+    width: 100%;
+    height: 233px;
+  }
+  .serverError-image{
+    left: 38%;
+    top: -120%;
+  }
+  .serverError-image img {
+    max-width: 750px;
+  }
+  .error-info {
+    letter-spacing: 0.1em;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 44px;
+  }
+  .terminal-phone,
+  .terminal-email{
+    margin-left: 50px;
+  }
+
+}
+
+@media (max-height: 720px) and (max-width:1280px){
+  .serverError-container-page{
+    max-width:900px;
+  }
+  .error-message {
+    max-width: 611px;
+    padding: 20px 20px;
+    margin-bottom: 33px;
+  }
+  .error-message span {
+    font-size: 32px;
+    line-height: 44px;
+  }
+  .serverError-wrapper{
+    padding: 20px 24px;
+    width: 100%;
+    height: 206px;
+  }
+  .serverError-image{
+    left: 42%;
+    top: -125%;
+  }
+  .serverError-image img {
+    max-width: 638px;
+  }
+  .error-info {
+    letter-spacing: 0.1em;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 44px;
+  }
+  .terminal-phone,
+  .terminal-email{
+    margin-left: 50px;
+  }
+}
+
+@media (max-width: 1152px) {
+  .serverError-container-page{
+    max-width:900px;
+  }
+  .error-message {
+    max-width: 622px;
+    padding: 20px 20px;
+    margin-bottom: 33px;
+  }
+  .error-message span {
+    font-size: 32px;
+    line-height: 44px;
+  }
+  .serverError-wrapper{
+    padding: 20px 24px;
+    width: 100%;
+    height: 206px;
+  }
+  .serverError-image{
+    left: 43%;
+    top: -120%;
+  }
+  .serverError-image img {
+    max-width: 638px;
+  }
+  .error-info {
+    letter-spacing: 0.1em;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 44px;
+  }
+  .terminal-phone,
+  .terminal-email{
+    margin-left: 50px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .serverError-container-page{
+    max-width:900px;
+  }
+  .error-message {
+    max-width: 602px;
+    padding: 17px 20px;
+    margin-bottom: 33px;
+  }
+  .error-message span {
+    font-size: 32px;
+    line-height: 44px;
+  }
+  .serverError-wrapper{
+    padding: 20px 20px;
+    width: 100%;
+    height: 206px;
+  }
+  .serverError-image{
+    left: 36%;
+    top: -110%;
+  }
+  .serverError-image img {
+    max-width: 638px;
+  }
+  .error-info {
+    letter-spacing: 0.1em;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 44px;
+  }
+  .terminal-phone,
+  .terminal-email{
+    margin-left: 40px;
+  }
+}
+
+@media (max-width: 800px) {
+  .serverError-container-page{
+    justify-content: flex-start;
+    max-width:900px;
+  }
+  .error-message {
+    max-width: 451px;
+    padding: 10px 20px;
+    margin-bottom: 33px;
+  }
+  .error-message span {
+    font-size: 26px;
+    line-height: 44px;
+  }
+  .serverError-wrapper{
+    padding: 20px 24px;
+    width: 100%;
+    height: 147px;
+  }
+  .serverError-image{
+    left: 34%;
+    top: -130%;
+  }
+  .serverError-image img {
+    max-width: 500px;
+  }
+  .error-info {
+    letter-spacing: 0.1em;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 30px;
+  }
+  .terminal-phone,
+  .terminal-email{
+    margin-left: 30px;
+  }
+
+}

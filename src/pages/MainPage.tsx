@@ -12,7 +12,9 @@ import Error from '../comoponents/Error';
 import { AppState } from '../redux';
 import VoucherWithdraw from '../comoponents/VoucherWithdraw';
 import VoucherBalance from '../comoponents/VoucherBalance';
-import OptionalCheck from '../comoponents/OptionalCheck'
+import OptionalCheck from '../comoponents/OptionalCheck';
+import ServerError from '../comoponents/ServerError';
+import Absence from '../comoponents/Absence';
 // import './index.scss'
 
 const MainPage: React.FC = () => {
@@ -50,7 +52,7 @@ const MainPage: React.FC = () => {
           <Route
             exact={true}
             path="/voucher"
-            component={Voucher}
+            component={Absence}
           />
           <Route
             exact={true}
