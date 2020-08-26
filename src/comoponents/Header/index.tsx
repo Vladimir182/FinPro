@@ -3,11 +3,10 @@ import logo from '../../images/logo.svg';
 import { HeaderContext } from './HeaderContextProvider';
 import { NavLink } from 'react-router-dom';
 import { fetchCloseVoucherSession } from '../../redux/voucher';
-import './Header.module.css';
-import './index.css';
 import Arrow from '../../images/ArrowLeft.svg'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../redux';
+import './index.css';
 
 const Header: React.FC = () => {
   const dispatch = useDispatch(); 
