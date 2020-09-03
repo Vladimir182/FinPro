@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, Suspense, lazy} from 'react';
 import newVoucher from '../../images/icon_new_voucher.svg';
 import existingVoucher from '../../images/icon_voucher.svg';
 import BaseButton from '../Buttons/BaseButton';
@@ -10,6 +10,7 @@ import PrintCheck from '../Checks';
 import {fetchPrintVoucher, resetVoucehrErrors} from "../../redux/voucher";
 import './index.module.css';
 import './index.css';
+// const BaseButton = React.lazy(() => import('../Buttons/BaseButton'));
 
 const HomeScreen: React.FC = () => {
   const dispatch = useDispatch();
@@ -27,18 +28,17 @@ const HomeScreen: React.FC = () => {
     if (isError || errorMessage) {
       dispatch(resetVoucehrErrors());
     }
-  });
+  }, [isError, errorMessage, voucherSessionKey]);
   
   const handlePrintVoucher = () =>{
     fetchPrintVoucher()(dispatch);
   };
 
   const buttonStyles = {};
-
   return (
     <>
       {voucherSessionKey && <Redirect to="/voucher" /> }
-      { isPrintLoading 
+      { isPrintLoading
         ? <PrintCheck />
         : <div className="home-container">
           <BaseButton
@@ -60,4 +60,4 @@ const HomeScreen: React.FC = () => {
   )
 }
 
-export default HomeScreen;
+export default React.memo(HomeScreen);

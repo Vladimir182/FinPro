@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import LoaderModal from '../Loading/LoaderModal';
 import { fetchVoucherPin } from '../../redux/voucher';
 import { AppState } from '../../redux';
+import Absence from '../absence';
 
 const inputTitle = 'Введите ваш пинкод';
 const submitButtonTittle = 'Далее';
@@ -16,7 +17,7 @@ const cantBeEmptyErrorMessage = 'Дрожно быть заполненым';
 const wrongVoucherKeyErrorMessage = 'проверьте правильность пинкода';
 
 const VoucherWithdrawPin: React.FC = () => {
-  const { isLoading, isError, voucherSessionKey } = useSelector((state: AppState) => state.voucher);
+  const { isLoading, isError, voucherSessionKey, showUserAbsence } = useSelector((state: AppState) => state.voucher);
   const dispatch = useDispatch();
   const { setLink,  } = useContext(HeaderContext);
   const [ errorMessage, setErrorMessage ] = useState('');
@@ -92,7 +93,7 @@ const VoucherWithdrawPin: React.FC = () => {
   return (
     <>
       { isLoading && <LoaderModal /> }
-      <div className="voucher-pin-container" style={voucherLoginContainerStyles}>
+      {  showUserAbsence ? <Absence /> : <div className="voucher-pin-container" style={voucherLoginContainerStyles}>
         <InputMask 
           title={inputTitle} 
           onInputChange={handleChangeInputValue}
@@ -109,7 +110,7 @@ const VoucherWithdrawPin: React.FC = () => {
           image={image} 
           style={actionButtonStyles}
         />
-      </div>
+      </div>}
     </>
   )
 }

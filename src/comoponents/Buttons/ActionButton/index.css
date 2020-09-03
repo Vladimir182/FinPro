@@ -52,6 +52,9 @@
     font-size: 32px;
     margin-right: 35px!important;
   }
+  .action-button-wrapper {
+    margin: 6px;
+  }
 }
 
 @media (max-height: 720px) and (max-width: 1280px) { 
@@ -59,9 +62,15 @@
     font-size: 28px;
     margin-right: 12px!important;
   }
+  .action-button-wrapper {
+    margin: 6px;
+  }
 }
 
-@media (max-width: 1152px) { 
+@media (max-width: 1152px) {
+  .action-button-wrapper {
+    margin: 5px;
+  }
   .action-button-title {
     font-size: 28px;
     margin-right: 12px!important;
@@ -69,12 +78,19 @@
 }
 
 @media (max-width: 1024px) { 
+  .action-button-wrapper {
+    margin: 4px;
+  }
+
   .action-button-title {
     font-size: 28px;
   }
 }
 
-@media (max-width: 800px) { 
+@media (max-width: 800px) {
+  .action-button-wrapper {
+    margin: 5px;
+  }
 
   .action-button-title {
     font-size: 24px;

@@ -4,12 +4,21 @@ import ActionButton from '../Buttons/ActionButton';
 import ArrowRight from '../../images/ArrowRight.svg';
 import ArrowRightShort from '../../images/ArrowRightShort.svg';
 import InputMaskItem from '../InputMask/InputMaskItem';
-import './index.css';
 import { useDispatch, useSelector } from 'react-redux';
 import LoaderModal from '../Loading/LoaderModal';
+import { 
+  fetchDepositInit,
+  fetchPrintCheck,
+  fetchCloseVoucherSession,
+  setDepositSum
+} from '../../redux/voucher';
 import { AppState } from '../../redux';
-import { WebSocketContext } from '../../WSProvider';
-// import { Redirect } from 'react-router-dom';
+import { WebSocketContext, WS } from '../../WSProvider';
+import { Redirect } from 'react-router-dom';
+import OptionalCheck from '../OptionalCheck';
+import PrintCheck from '../Checks';
+import './index.css';
+import Absence from '../absence';
 
 const inputBlockStyles = {
   display: 'flex',
@@ -73,31 +82,70 @@ const actionButtonStyles = {
 const inputTitle = 'Внесено';
 const actionButtonTitle = 'Завершить';
 
-const VoucherLogin: React.FC = () => {
+let VoucherLogin: React.FC = () => {
+  //@ts-ignore
+  const ws: WS = useContext(WebSocketContext);
+  const dispatch = useDispatch();
   const { 
     isLoading,
+    isPrintLoading,
     voucherSessionKey,
     depositSum,
+    isBillAccepterReady,
     currency,
     isError,
-    errorMessage
+    errorMessage,
+    showUserAbsence,
   } = useSelector((state: AppState) => state.voucher);
-  const dispatch = useDispatch();
-  const ws = useContext(WebSocketContext);
-  const { setLink } = useContext(HeaderContext);
+  const { 
+    setLink,
+    setStopVoucherSession,
+    setShowOptionalCheck,
+    showOptionalCheck,
+    setShouldFetchDepositInit,
+    // resetDepositSum,
+    // setResetDepositSum
+  } = useContext(HeaderContext);
+
+  const [ isStopVoucherSessionSetted, setStopVoucherSessionSetted ] = useState(false);
   const depositSumInputLength = 10;
   
   useEffect(() => {
-    if (isError) {
+    if (!isBillAccepterReady && !isLoading && !isError) {
+      fetchDepositInit(voucherSessionKey)(dispatch);
     }
-  }, [voucherSessionKey, isError])
-
-  useEffect(() => {
-    setLink('/');
+    if (!isStopVoucherSessionSetted) {
+      setStopVoucherSession(false);
+      setStopVoucherSessionSetted(true);
+    }
+    if (!showOptionalCheck) {
+      setLink('/voucher');
+    }
+    // if (!resetDepositSum) {
+    //   setResetDepositSum(true);
+    // }
   })
 
-  const handleSubmit = () => {
-    
+  const handleActionButton = () => {
+    // if (depositSum && depositSum > 0) {
+      setShowOptionalCheck(true);
+      setShouldFetchDepositInit(true);
+      setLink('/voucher-deposit');
+    // }
+  }
+
+  const handlePrintOptionalCheck = () => {
+    const data = {
+      msid: voucherSessionKey,
+      way: 'deposit'
+    };
+    dispatch(setDepositSum(0));
+    fetchPrintCheck(data)(dispatch);
+  }
+
+  const handleDontPrintOptionalCheck = () => {
+    dispatch(setDepositSum(0));
+    fetchCloseVoucherSession(voucherSessionKey)(dispatch);
   }
 
   const image = window.innerWidth <= 1280 ? ArrowRightShort : ArrowRight;
@@ -105,39 +153,57 @@ const VoucherLogin: React.FC = () => {
   return (
     <>
       {isLoading && <LoaderModal />}
-      <div className="voucher-deposit-container" style={voucherLoginContainerStyles}>
-        <div className="input-block" style={inputBlockStyles}>
-          <p className="input-title" style={titleStyles}>{inputTitle}:</p>
-            <label htmlFor="voucher" style={labelStyles}>
-              <div className="input-mask" style={inputMaskStyles}>
-                {Array(depositSumInputLength).fill("").map((item, index) => {
-                  const depositSumStr = String(depositSum);
-                  let value = '';
+      {isError && <Redirect to="/voucher" />}
+      {!voucherSessionKey && <Redirect to="/" />}
+      { isPrintLoading
+        ? <PrintCheck /> 
+        : showOptionalCheck
+        ? <OptionalCheck 
+          backButtonLink='/voucher-deposit'
+          leftButtonHandle={handlePrintOptionalCheck}
+          rightButtonHandle={handleDontPrintOptionalCheck}
+        /> 
+        : showUserAbsence ? <Absence /> 
+        : <div className="voucher-deposit-container" style={voucherLoginContainerStyles}>
+          <div className="input-block" style={inputBlockStyles}>
+            <p className="input-title" style={titleStyles}>{inputTitle}:</p>
+              <label htmlFor="voucher" style={labelStyles}>
+                <div className="input-mask" style={inputMaskStyles}>
+                  {Array(depositSumInputLength).fill("").map((item, index) => {
+                    const depositSumStr = String(depositSum);
+                    let value = '';
 
-                  if (index >= depositSumInputLength - depositSumStr.length) {
-                    const depositSumIndex = depositSumInputLength - depositSumStr.length - index;
+                    if (index >= depositSumInputLength - depositSumStr.length) {
+                      const depositSumIndex = depositSumInputLength - depositSumStr.length - index;
 
-                    value = depositSumStr[depositSumIndex < 0 ? (-1) * depositSumIndex : depositSumIndex] ?? '0';
-                  }
+                      value = depositSumStr[depositSumIndex < 0 ? (-1) * depositSumIndex : depositSumIndex] ?? '0';
+                    }
 
-                  return <InputMaskItem key={index} className={value ? 'deposit-input-mask-item-filled' : ''} value={value ? value : '0'} isInputActive={false} isError={!!errorMessage} isMasked={false} />
-                })}
-                <p className="input-mask-currency" style={inputMaskCurrencyStyles}>{currency}</p>
-              </div>
-            </label>
-          <p className="input-mask-error" style={inputMaskErrorStyles}>{errorMessage}</p>
+                    return <InputMaskItem 
+                      key={index} 
+                      className={Number(value) > 0 ? 'deposit-input-mask-item-filled' : ''} 
+                      value={value ? value : '0'} 
+                      isInputActive={false} 
+                      isError={!!errorMessage} isMasked={false} 
+                    />
+                  })}
+                  <p className="input-mask-currency" style={inputMaskCurrencyStyles}>{currency}</p>
+                </div>
+              </label>
+            <p className="input-mask-error" style={inputMaskErrorStyles}>{errorMessage}</p>
+          </div>
+          
+          <ActionButton 
+            title={actionButtonTitle} 
+            className="voucher-deposit-button" 
+            handleButtonClick={handleActionButton} 
+            image={image} 
+            style={actionButtonStyles}
+          />
         </div>
-        
-        <ActionButton 
-          title={actionButtonTitle} 
-          className="voucher-deposit-button" 
-          handleButtonClick={handleSubmit} 
-          image={image} 
-          style={actionButtonStyles}
-        />
-      </div>
+      }
     </>
   )
 }
 
-export default VoucherLogin;
+export default VoucherLogin = React.memo(VoucherLogin);

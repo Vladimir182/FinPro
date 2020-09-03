@@ -41,8 +41,8 @@
     line-height: 150%;
 }
 .output-check-text {
-    border-top: 1px dashed #000000;
-    border-bottom: 1px solid #000;
+    /* border-top: 1px dashed #000000; */
+    /* border-bottom: 1px solid #000; */
     display:flex;
     justify-content: space-between;
     padding: 12px 0 1px;

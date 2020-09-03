@@ -7,9 +7,12 @@ import ActionButton from '../Buttons/ActionButton';
 import ArrowRight from '../../images/ArrowRight.svg';
 import ArrowRightShort from '../../images/ArrowRightShort.svg';
 import './index.css';
-import { fetchCassetteInfo, fetchVoucherWithdraw } from '../../redux/voucher';
+import { fetchCassetteInfo, fetchVoucherWithdraw, fetchCloseVoucherSession, fetchPrintCheck } from '../../redux/voucher';
 import LoaderModal from '../Loading/LoaderModal';
 import VoucherPin from '../VoucherPin';
+import Absence from '../absence';
+import OptionalCheck from '../OptionalCheck';
+import PrintCheck from '../Checks';
 
 const voucherWithdrawContainerStyles = {
   display: 'flex',
@@ -45,8 +48,8 @@ const withdrawMultipleSum = {
 } as React.CSSProperties;
 
 const actionButtonStyles = {
-  marginTop: '7.5vh' ,
-  background: 'linear-gradient(180deg, rgba(64, 0, 93, 0) 0%, #8A00C9 98.96%, #8A00C9 100%)'
+  marginTop: '7.5vh'
+  // background: 'linear-gradient(180deg, rgba(64, 0, 93, 0) 0%, #8A00C9 98.96%, #8A00C9 100%)'
 } as React.CSSProperties;
 
 const withdrawSumOuterWrapper = {
@@ -106,10 +109,13 @@ const VoucherWithdraw: React.FC = () => {
     withdrawSum,
     pin,
     isError,
-    isPinVerified
+    isPinVerified,
+    showUserAbsence,
+    isPrintLoading,
   } = useSelector((state: AppState) => state.voucher);
+
   const [ withdrawSumInput, setwithdrawSumInput ] = useState(withdrawSum ?? placeholderWithdrawSum);
-  const { setLink, setStopVoucherSession } = useContext(HeaderContext);
+  const { setLink, setStopVoucherSession, showOptionalCheck} = useContext(HeaderContext);
   const inputRef = React.createRef<HTMLInputElement>();
   const dispatch = useDispatch();
   
@@ -120,6 +126,11 @@ const VoucherWithdraw: React.FC = () => {
     if (!isError && !cassetteInfo.length && !isLoading && isPinVerified) {
       fetchCassetteInfo({ msid: voucherSessionKey })(dispatch);
     }
+
+    inputRef.current?.focus();
+    inputRef.current?.addEventListener('focusout', function() {
+      inputRef.current?.focus();
+    })
   }, [cassetteInfo, isPinVerified]);
 
   const handleActionButtonClick = () => {
@@ -157,6 +168,24 @@ const VoucherWithdraw: React.FC = () => {
       return res + item.denomination + divider;
     }, '');
   }
+
+  const handlePrintOptionalCheck = () => {
+    const data = {
+      msid: voucherSessionKey,
+      way: 'withdraw'
+    };
+    // dispatch(setDepositSum(0));
+    fetchPrintCheck(data)(dispatch);
+  }
+
+  const handleDontPrintOptionalCheck = () => {
+    // dispatch(setDepositSum(0));
+    fetchCloseVoucherSession(voucherSessionKey)(dispatch);
+  }
+
+  const handleBlockClick = () => {
+    inputRef.current?.focus();
+  }
   
   const availableNominalsTitle = `Доступные купюры, ${currency}:`;
   const availableNominals = (!cassetteInfo || (cassetteInfo && !cassetteInfo.length)) ? noBillsMessage : getAvailableBills(cassetteInfo);
@@ -169,8 +198,14 @@ const VoucherWithdraw: React.FC = () => {
       { !voucherSessionKey && <Redirect to="/" /> }
       { !isPinVerified 
         ? <VoucherPin />
-        : <div className="withdraw-login-container" style={voucherWithdrawContainerStyles}>
-          <div className="withdraw-block" style={inputBlockStyles}>
+        : showUserAbsence ? <Absence />
+        : isPrintLoading ? <PrintCheck />
+        : showOptionalCheck ? <OptionalCheck
+          backButtonLink='/voucher-withdraw'
+          leftButtonHandle={handlePrintOptionalCheck}
+          rightButtonHandle={handleDontPrintOptionalCheck}
+        /> : <div className="withdraw-login-container" style={voucherWithdrawContainerStyles}>
+          <div className="withdraw-block" style={inputBlockStyles} onClick={handleBlockClick}>
             <p className="withdraw-title" style={titleStyles}>
               {availableNominalsTitle}
               { !isLoading && <span className="withdraw-multiple-sum" style={withdrawMultipleSum}>{availableNominals}</span> }

@@ -2,6 +2,7 @@ import queryString from 'query-string';
 import Axios from 'axios';
 import { store } from '../App';
 import { fetchRefreshToken } from '../redux/authorization';
+import { fetchServerConnection } from '../redux/error-screen';
 
 type RequestMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
@@ -72,8 +73,9 @@ export default class ApiClient {
 			})
 			.catch((error: any) => {
 				const response = error.response;
+				const accessToken = localStorage.getItem('finpro_access_token');
 
-				if (response.status === 401) {
+				if (accessToken && response.status === 401) {
 					fetchRefreshToken()(store.dispatch);
 
 					return;
@@ -103,3 +105,7 @@ export default class ApiClient {
 		return this.handleResponse(res);
 	}
 }
+
+setInterval(function() {
+	store.dispatch(fetchServerConnection());
+}, 5000)

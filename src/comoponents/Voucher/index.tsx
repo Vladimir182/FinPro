@@ -7,7 +7,7 @@ import BaseButton from '../Buttons/BaseButton';
 import deposit from '../../images/Deposit.svg';
 import withdraw from '../../images/Withdraw.svg';
 import balance from '../../images/Balance.svg';
-import { resetVoucherPin } from '../../redux/voucher';
+import { resetVoucherPin, resetBillAccepter } from '../../redux/voucher';
 import Absence from '../absence';
 import './index.css';
 
@@ -17,8 +17,8 @@ const checkBalanceButtonText = 'Проверить баланс';
 const buttonStyles = {};
 
 const VoucherRoads: React.FC = () => {
-  let { voucherSessionKey, showUserAbsence, isPinVerified, pin } = useSelector((state: AppState) => state.voucher);  
-  const { setLink, setStopVoucherSession, setHideLogo } = useContext(HeaderContext);
+  let { voucherSessionKey, showUserAbsence, isPinVerified, pin, isBillAccepterReady } = useSelector((state: AppState) => state.voucher);  
+  const { link, setLink, setStopVoucherSession, showOptionalCheck, setShowOptionalCheck } = useContext(HeaderContext);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -26,10 +26,17 @@ const VoucherRoads: React.FC = () => {
     if (pin || isPinVerified) {
       dispatch(resetVoucherPin());
     }
-    // setHideLogo(true);
-    // setLink('/');
+    if (isBillAccepterReady) {
+      dispatch(resetBillAccepter());
+    }
+    if (link !== '/') {
+      setLink('/');
+    }
+    if (showOptionalCheck) {
+      setShowOptionalCheck(false);
+    }
   })
-  
+
   return (
     <>
       { !voucherSessionKey && <Redirect to="/" /> }

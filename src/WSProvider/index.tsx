@@ -1,57 +1,139 @@
-import React, { createContext } from 'react'
-import io from 'socket.io-client';
-// import { WS_BASE } from './config';
-import { useDispatch } from 'react-redux';
-// import { updateChatLog } from './actions';
+import React, { createContext, useState, useEffect, useContext } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { setDepositSum, setSocketConnectionStatus, setWithdrawSuccess,  } from '../redux/voucher';
+import { HeaderContext } from '../comoponents/Header/HeaderContextProvider';
+import { AppState } from '../redux';
 
+type Action = 'deposit' | 'withdraw';
+export type WS = {
+  socket: WebSocket | null
+  setWSConnnection: () => void
+  closeWSConnection: () => void
+  sendMessage: (actionType: Action) => void
+}
 
 const WebSocketContext = createContext(null)
 
 export { WebSocketContext }
 
 export default ({ children }: { children: any }) => {
-    let socket;
-    let ws;
+  const [ socket, setSocket ] = useState<WebSocket | null>(null);
+  const { socketConnectionStatus } = useSelector((state: AppState) => state.voucher);
+  const dispatch = useDispatch();
+  const { setShowOptionalCheck, setShouldFetchDepositInit, setLink } = useContext(HeaderContext);
+  let reconnectTimer: any = null;
 
-    const dispatch = useDispatch();
+  useEffect(() => {
+    if (!socket) {
+      setWSConnnection();
+    }
 
-    // const sendMessage = (roomId, message) => {
-    //     const payload = {
-    //         roomId: roomId,
-    //         data: message
-    //     }
-    //     socket.emit("event://send-message", JSON.stringify(payload));
-    //     // dispatch(updateChatLog(payload));
+    // return closeWSConnection();
+  })
+  
+  const setWSConnnection = () => {
+
+    // if (socketConnectionStatus || (socket && socket.readyState)) {
+    //   return;
     // }
 
     const accessToken = localStorage.getItem('finpro_access_token');
-    console.log('WS COND !socket && accessToken', !socket ,'&&', accessToken)
-    if (!socket && accessToken) {
-        console.log('SOCKET CONNECTION')
-        // wss://wss.kiosk-frontend.finpro.pw/socket/?token=${accessToken}
-        socket = io.connect(`/`,{
-            path: `/socket`,
-            query: {
-                token: accessToken
-            },
-            transports: ['websocket']
-        });
-        socket.on("ws:newMessage", (msg: any) => {
-            console.log('res', msg)
-            // const payload = JSON.parse(msg);
-            // dispatch(updateChatLog(payload));
-        })
-
-        ws = {
-            socket: socket,
-            // sendMessage
+    const newSocket = new window.WebSocket(`${process.env.REACT_APP_WS_URL}/socket?token=${accessToken}`);
+    
+    if (!reconnectTimer) {
+      reconnectTimer = setTimeout(function() {
+        if (!newSocket.readyState) {
+          setWSConnnection()
+        } else {
+          clearTimeout(reconnectTimer);
+          reconnectTimer = null;
         }
+      }, 5000)
     }
 
-    return (
-        //@ts-ignore
-        <WebSocketContext.Provider value={ws}>
-            {children}
-        </WebSocketContext.Provider>
-    )
+    setSocket(newSocket);
+
+    newSocket.onopen = (e) => {
+      clearTimeout(reconnectTimer);
+      dispatch(setSocketConnectionStatus(true))
+      newSocket.send(JSON.stringify({
+        action: 'deposit'
+      }));
+      newSocket.send(JSON.stringify({
+        action: 'withdraw'
+      }));
+      newSocket.send(JSON.stringify({
+        action: 'check'
+      }))
+    }
+
+    newSocket.onmessage = (response) => {
+      let res = window.JSON.parse(response.data);
+
+      switch(res.action) {
+        case 'deposit':
+          dispatch(setDepositSum(Math.round(res.amount)));
+
+          break;
+        case 'check': {
+          setShowOptionalCheck(true);
+          setShouldFetchDepositInit(true);
+          setLink('/voucher-deposit');
+
+          break;
+        }
+        case 'withdraw': {
+          dispatch(setWithdrawSuccess());
+          setShowOptionalCheck(true);
+          setLink('/voucher-withdraw');
+        }
+        default: 
+          return undefined;
+      }
+    }
+
+    newSocket.onerror = (error: any) => {
+      console.log('WS Error')
+      setTimeout(function() {
+        setWSConnnection();
+      }, 1000);
+    }
+    
+    newSocket.onclose = () => {
+      setWSConnnection();
+      // dispatch(setSocketConnectionStatus(false));
+    }
+  }
+
+  const sendMessage = (actionType: Action) => {
+    if (!socket || !socket.readyState) {
+      return
+    }
+
+    socket.send(JSON.stringify({
+      action: actionType
+    }))
+  }
+  
+  const closeWSConnection = () => {
+    if (!socket || !socket.readyState) {
+      return;
+    }
+    
+    socket.close();
+  }
+
+  const ws: WS = {
+    socket,
+    setWSConnnection,
+    closeWSConnection,
+    sendMessage
+  }
+
+  return (
+    //@ts-ignore
+    <WebSocketContext.Provider value={ws}>
+        {children}
+    </WebSocketContext.Provider>
+  )
 }

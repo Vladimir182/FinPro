@@ -12,9 +12,6 @@ import VoucherBalance from '../comoponents/VoucherBalance';
 import VoucherDeposit from '../comoponents/VoucherDeposit';
 import WSProvider from '../WSProvider';
 import Error from '../comoponents/Error';
-import OptionalCheck from '../comoponents/OptionalCheck';
-import ServerError from '../comoponents/ServerError';
-import Check from "../comoponents/Checks";
 
 const MainPage: React.FC = () => {
   const { theme } = useContext(ThemeContext);
@@ -66,7 +63,7 @@ const MainPage: React.FC = () => {
           <Route
             exact={true}
             path="/voucher-deposit"
-            component={ () => (
+            component={() => (
               <WSProvider>
                 <VoucherDeposit />
               </WSProvider>
@@ -75,7 +72,11 @@ const MainPage: React.FC = () => {
           <Route
             exact={true}
             path="/voucher-withdraw"
-            component={VoucherWithdraw}
+            component={() => (
+              <WSProvider>
+                <VoucherWithdraw />
+              </WSProvider>
+            )}
           />
         </Switch>
       </div>

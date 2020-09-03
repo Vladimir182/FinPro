@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-type voidFunc = () => void
 
 type HeaderArguments = {
   link: string,
@@ -8,6 +7,12 @@ type HeaderArguments = {
   stopVoucherSession: boolean,
   hideLogo: boolean,
   setHideLogo: (newHideLogo: boolean) => void,
+  showOptionalCheck: boolean,
+  setShowOptionalCheck: (state: boolean) => void,
+  shouldFetchDepositInit: boolean,
+  setShouldFetchDepositInit: (state: boolean) => void,
+  resetDepositSum: boolean,
+  setResetDepositSum: (state: boolean) => void
 }
 
 export const HeaderContext = React.createContext<HeaderArguments>({
@@ -17,11 +22,20 @@ export const HeaderContext = React.createContext<HeaderArguments>({
   setStopVoucherSession: (newStopVoucherSession: boolean): void => {},
   hideLogo: false,
   setHideLogo: (newHideLogo: boolean): void => {},
+  showOptionalCheck: false,
+  setShowOptionalCheck: (state: boolean) : void => {},
+  shouldFetchDepositInit: false,
+  setShouldFetchDepositInit: (state: boolean): void => {},
+  resetDepositSum: false,
+  setResetDepositSum: (state: boolean): void => {}
 });
 
 const HeaderContextProvider: React.FC = props => {
   const [link, setNewLink] = useState<string>('');
   const [ stopVoucherSession, setStopVoucherSession ] = useState<boolean>(false);
+  const [ showOptionalCheck, setShowOptionalCheck ] = useState<boolean>(false);
+  const [ shouldFetchDepositInit, setShouldFetchDepositInit ] = useState<boolean>(false);
+  const [ resetDepositSum, setResetDepositSum ] = useState<boolean>(false);
   const [ hideLogo, setHideLogo ] = useState<boolean>(false);
 
   const setLink = (newLink: string) => {
@@ -32,8 +46,22 @@ const HeaderContextProvider: React.FC = props => {
     sessionStorage.setItem('finpro-backlink', newLink);
     setNewLink(newLink);
   }
+
   return  (
-    <HeaderContext.Provider value={{ link, setLink, stopVoucherSession, setStopVoucherSession, hideLogo, setHideLogo }}>
+    <HeaderContext.Provider value={{ 
+      link,
+      setLink,
+      stopVoucherSession,
+      setStopVoucherSession,
+      hideLogo,
+      setHideLogo,
+      showOptionalCheck,
+      setShowOptionalCheck,
+      shouldFetchDepositInit,
+      setShouldFetchDepositInit,
+      resetDepositSum,
+      setResetDepositSum
+    }}>
       {props.children}
     </HeaderContext.Provider>
   )

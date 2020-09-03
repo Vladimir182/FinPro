@@ -14,8 +14,8 @@
   font-weight: bold;
 }
 
-.deposit-input-mask-item-filled {
-  color: '#FFB800'
+.deposit-input-mask-item-filled .input-mask-item {
+  color: #FFB800!important;
 }
 
 @media (max-width: 1920px) { 

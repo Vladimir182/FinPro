@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import { HeaderContext } from '../Header/HeaderContextProvider';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../../redux';
 import { Redirect } from 'react-router-dom';
 import ActionButton from '../Buttons/ActionButton';
@@ -8,6 +8,9 @@ import WithdrawAction from '../../images/WithdrawAction.svg';
 import DepositAction from '../../images/DepositAction.svg';
 import VoucherPin from '../VoucherPin';
 import './index.css';
+import Absence from '../absence';
+import { fetchShowBalnce } from '../../redux/voucher';
+import LoaderModal from '../Loading/LoaderModal';
 
 const voucherBalanceContainerStyles = {
   display: 'flex',
@@ -68,24 +71,36 @@ const balanceDepositActionButtonTitle = 'Пополнить';
 const balanceWithdrawActionButtonTitle = 'Снять';
 
 const VoucherBalance: React.FC = (props: any) => {
-  const { 
+  const {
+    isLoading,
     voucherSessionKey,
     currency,
     balance,
-    isPinVerified
+    pin,
+    isPinVerified,
+    showUserAbsence
   } = useSelector((state: AppState) => state.voucher);
   const { setLink, setStopVoucherSession } = useContext(HeaderContext);
-  
+  const dispatch = useDispatch();
+
   useEffect(() => {
     setLink('/voucher');
     setStopVoucherSession(false);
-  })
+    if (!isLoading && !balance && pin) {
+      fetchShowBalnce({
+        pin,
+        msid: voucherSessionKey
+      })(dispatch)
+    }
+  }, [balance, pin])
 
   return (
     <>
-      { !voucherSessionKey && <Redirect to="/" /> }
-      { !isPinVerified 
+      {isLoading && <LoaderModal />}
+      {!voucherSessionKey && <Redirect to="/" />}
+      {!isPinVerified
         ? <VoucherPin />
+        : showUserAbsence ? <Absence />
         : <div className="balance-login-container" style={voucherBalanceContainerStyles}>
           <div className="balance-block" style={inputBlockStyles}>
             <p className="balance-title" style={titleStyles}>{balanceTitle}</p>

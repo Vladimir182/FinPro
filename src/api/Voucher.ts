@@ -26,6 +26,22 @@ class Voucher extends Base {
 	pin(body: PinBody) {
 		return this.apiClient.post('/withdraw-pin', body);
 	}
+
+	deposit(body: Body) {
+		return this.apiClient.post('/deposit', body);
+	}
+
+	printCheck(body: Body) {
+		return this.apiClient.post('/print-check', body);
+	}
+
+	showBalance(body: Body) {
+		return this.apiClient.post('/show-balance', body);
+	}
+
+	terminal() {
+		return this.apiClient.post('/terminal');
+	}
 }
 
 export default Voucher;

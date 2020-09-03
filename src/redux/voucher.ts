@@ -3,15 +3,6 @@ import { WithdrawBody, PinBody } from '../api/types';
 import { showError } from './error-screen';
 import { store } from '../App';
 
-window.setInterval(function() {
-  //@ts-ignore
-  if (!window.checkAbsenceTimer && sessionStorage.getItem('finpro-voucher-session-key')) {
-    window.addEventListener('mousemove', userAbsenceTimeoutPreccess);
-    //@ts-ignore
-    window.checkAbsenceTimer = true;
-  }
-}, 1000);
-
 const REQUEST_VOUCHER_START = 'REQUEST_VOUCHER_START';
 const REQUEST_PRINT_LOADER_START = 'REQUEST_PRINT_LOADER_START';
 const REQUEST_VOUCHER_LOGIN_SUCCESS = 'REQUEST_VOUCHER_LOGIN_SUCCESS';
@@ -24,25 +15,33 @@ const SET_VOUCHER_PIN = 'SET_VOUCHER_PIN';
 const RESET_VOUCHER_PIN = 'RESET_VOUCHER_PIN';
 const RESET_VOUCHER_ERROR_STATUS = 'RESET_VOUCHER_ERROR_STATUS';
 const REQUEST_VOUCHER_WITHDRAW_SUCCESS = 'REQUEST_VOUCHER_WITHDRAW_SUCCESS';
-
+const REQUEST_DEPOSIT_INIT_SUCCESS = 'REQUEST_DEPOSIT_INIT_SUCCESS';
+const SET_DEPOSIT_SUM = 'SET_DEPOSIT_SUM';
+const RESET_BILL_ACCEPTER_STATUS = 'RESET_BILL_ACCEPTER_STATUS';
 const SET_SHOW_USER_ABSENCE = 'SET_SHOW_USER_ABSENCE';
+const SET_SOCKET_CONNECTION_STATUS = 'SET_SOCKET_CONNECTION_STATUS';
+const REQUEST_PRINT_CHECK_SUCCESS = 'REQUEST_PRINT_CHECK_SUCCESS';
+const REQUEST_SHOW_BALANCE_SUCCESS = 'REQUEST_SHOW_BALANCE_SUCCESS';
+const REQUEST_TERMINAL_SUCCESS = 'REQUEST_TERMINAL_SUCCESS';
 
 const initialState = {
   isLoading: false,
   isPrintLoading: false,
+  terminalId: null,
   isPinVerified: false,
   balance: 0,
   pin: '',
   currency: sessionStorage.getItem('finpro-currency') ?? null,
   cassetteInfo: [],
   depositSum: 0,
+  isBillAccepterReady: false,
   withdrawSum: null,
   availableWithdrawSum: null,
-  waitingWithdrawSocket: false,
   voucherSessionKey: sessionStorage.getItem('finpro-voucher-session-key') ?? '',
   isError: false,
   errorMessage: '',
-  showUserAbsence: false
+  showUserAbsence: false,
+  socketConnectionStatus: false,
 };
 
 interface Action {
@@ -51,20 +50,47 @@ interface Action {
 }
 
 let userAbsenceTimer: any = null;
+let userAbsenceIntervalTimer: any = null;
 
+setUserAbsenceInterval(true);
 
+function setUserAbsenceInterval(status: boolean) {
+  //@ts-ignore
+  if (status && sessionStorage.getItem('finpro-voucher-session-key') && !window.checkAbsenceTimer) {
+    //@ts-ignore
+    window.checkAbsenceTimer = true;
+    userAbsenceTimeoutPreccess();
+    
+    //@ts-ignore
+    if (!userAbsenceIntervalTimer) {
+      userAbsenceIntervalTimer = window.setInterval(function() {
+        window.addEventListener('mousemove', userAbsenceTimeoutPreccess);
+      }, 1000);
+    }
+
+  } else if (!status) {
+    //@ts-ignore
+    window.checkAbsenceTimer = false;
+    window.removeEventListener('mousemove', userAbsenceTimeoutPreccess);
+    
+    if (userAbsenceTimer) {
+      clearTimeout(userAbsenceTimer);
+      userAbsenceTimer = null;
+    }
+    if (userAbsenceIntervalTimer) {
+      clearInterval(userAbsenceIntervalTimer);
+      userAbsenceIntervalTimer = null;
+    }
+  }
+}
 
 function userAbsenceTimeoutPreccess() {
   if (userAbsenceTimer) {
     clearTimeout(userAbsenceTimer)
   }
   userAbsenceTimer = setTimeout(function() {
-    ShowUserAbsence()
-  }, 120000);
-}
-
-function ShowUserAbsence() {
-  store.dispatch(setShowUserAbsence(true));
+    store.dispatch(setShowUserAbsence(true));
+  }, Number(process.env.REACT_APP_SHOW_USER_ABSENCE_TIMEOUT))
 }
 
 const voucher = (state = initialState, { type, payload }: Action) => {
@@ -85,13 +111,15 @@ const voucher = (state = initialState, { type, payload }: Action) => {
 		case REQUEST_VOUCHER_LOGIN_SUCCESS:
       sessionStorage.setItem('finpro-voucher-session-key', payload.msid);
       sessionStorage.setItem('finpro-currency', payload.currency);
+      setUserAbsenceInterval(true);
 
 			return {
 				...state,
         voucherSessionKey: payload.msid,
         currency: payload.currency,
 				isLoading: false,
-				isError: false,
+        isPrintLoading: false,
+        isError: false,
 				errorMessage: ''
       };
     case REQUEST_CASSETTE_INFO_SUCCESS: 
@@ -103,10 +131,13 @@ const voucher = (state = initialState, { type, payload }: Action) => {
     case CLOSE_VOUCHER_SESSION_SUCCESS:
       window.removeEventListener('mousemove', userAbsenceTimeoutPreccess);
       sessionStorage.removeItem('finpro-voucher-session-key');
-
+      setUserAbsenceInterval(false);
+      
       return {
         ...state,
         voucherSessionKey: '',
+        showUserAbsence: false,
+        depositSum: 0,
         isLoading: false,
 				isError: false,
       }
@@ -120,7 +151,6 @@ const voucher = (state = initialState, { type, payload }: Action) => {
       return {
         ...state,
         isLoading: false,
-        waitingWithdrawSocket: true,
         isError: false,
         errorMessage: ''
       }  
@@ -142,6 +172,25 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         isPinVerified: true,
         isLoading: false
       }
+    case REQUEST_DEPOSIT_INIT_SUCCESS:
+      return {
+        ...state,
+        isBillAccepterReady: true,
+        isError: false,
+        isLoading: false
+      }
+    case SET_DEPOSIT_SUM:
+      const newSum = !payload ? 0 : Number(state.depositSum) + Number(payload);
+
+      return {
+        ...state,
+        depositSum: newSum
+      }  
+    case RESET_BILL_ACCEPTER_STATUS:
+      return {
+        ...state,
+        isBillAccepterReady: false,
+      }  
 		case REQUEST_VOUCHER_FAILURE:
 			return {
 				...state,
@@ -159,6 +208,16 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         ...state,
         showUserAbsence: payload
       }
+    case SET_SOCKET_CONNECTION_STATUS:
+        return {
+          ...state,
+          socketConnectionStatus: payload
+        }
+    case REQUEST_PRINT_CHECK_SUCCESS:
+      return {
+        ...state,
+        isPrintLoading: false
+      }    
     case RESET_VOUCHER_ERROR_STATUS:
       return {
         ...state,
@@ -168,6 +227,19 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         isPrintLoading: false,
         isPinVerified: false,
       }
+    case REQUEST_SHOW_BALANCE_SUCCESS:
+      const balance = Math.round(payload.balance);
+      return {
+        ...state,
+        balance: balance,
+        isLoading: false,
+        isError: false,
+      }
+    case REQUEST_TERMINAL_SUCCESS:
+      return {
+        ...state,
+        terminalId: payload.terminal_id
+      }   
 		default:
 			return state;
 	}
@@ -204,7 +276,7 @@ export const fetchPrintVoucher = () => (dispatch: any) => {
   .printVoucher()
   .then((res: any) => {
     const data = res.data;
-    console.log(data);
+
     if (data.success) {
       dispatch({
         type: REQUEST_VOUCHER_LOGIN_SUCCESS,
@@ -285,22 +357,22 @@ export const fetchVoucherWithdraw = (data: WithdrawBody) => (dispatch: any) => {
   .withdraw(data)
   .then((res: any) => {
     const data = res.data;
-    if (data.success) {
-      dispatch({
-        type: REQUEST_VOUCHER_WITHDRAW_SUCCESS,
-      });
-    } else {
+    
+    if (!data.success) {
       if (data.validation_errors) {
-        dispatch({ 
+        dispatch({
           type: SET_AVAILABLE_WITHDRAW_SUM,
-          payload: data.validation_errors?.cassette_info 
+          payload: data.validation_errors?.cassette_info
         });
         
-        return;
       }
+
+      return;
     }
+
+    // dispatch(setWithdrawSuccess());
   })
-  .catch((error: any) => {
+  .catch((error: any) => {    
     dispatch({type: REQUEST_VOUCHER_FAILURE,
       payload: error
     });
@@ -310,30 +382,112 @@ export const fetchVoucherWithdraw = (data: WithdrawBody) => (dispatch: any) => {
 
 export const fetchCloseVoucherSession = (voucherSessionKey: string) => (dispatch: any) => {
   dispatch({type: REQUEST_VOUCHER_START});
-  
+
   const data = {
     msid: voucherSessionKey
   }
 
   api.voucher.closeSession(data).then((res: any) => {
     const resData = res.data;
-
     if (resData.success === false) {
+      dispatch({type: REQUEST_VOUCHER_FAILURE });
       dispatch(showError());
-      dispatch({type: REQUEST_VOUCHER_FAILURE, payload: resData.message });
       
       return;
     }
 
-    dispatch({ type: CLOSE_VOUCHER_SESSION_SUCCESS })
+    dispatch({ type: CLOSE_VOUCHER_SESSION_SUCCESS });
   }).catch((error: any) => {
-    dispatch(showError());
     dispatch({type: REQUEST_VOUCHER_FAILURE, payload: error });
+    dispatch(showError());
   })
 };
 
+export const fetchDepositInit = (voucherSessionKey: string) => (dispatch: any) => {
+  dispatch({type: REQUEST_VOUCHER_START});
+
+  const data = {
+    msid: voucherSessionKey
+  }
+
+  api.voucher.deposit(data).then((res: any) => {
+    const resData = res.data;
+    
+    if (!resData.success) {
+      dispatch({type: REQUEST_VOUCHER_FAILURE });
+      dispatch(showError());
+    }
+    
+    dispatch({type: REQUEST_DEPOSIT_INIT_SUCCESS });
+  }).catch((error: any) => {
+    dispatch({type: REQUEST_VOUCHER_FAILURE, payload: error });
+    dispatch(showError());
+  })
+}
+
+export const fetchPrintCheck = (data: any) => (dispatch: any) => {
+  // dispatch({type: REQUEST_VOUCHER_START});
+  dispatch({ type: REQUEST_PRINT_LOADER_START });
+
+  api.voucher.printCheck(data).then((res: any) => {
+    const resData = res.data;
+
+    if (!resData.success) {
+      dispatch({type: REQUEST_VOUCHER_FAILURE });
+      dispatch({ type: CLOSE_VOUCHER_SESSION_SUCCESS });
+
+      return;
+    }
+    
+    dispatch({type: REQUEST_PRINT_CHECK_SUCCESS });
+    dispatch({ type: CLOSE_VOUCHER_SESSION_SUCCESS });
+  }).catch((error: any) => {
+    dispatch({type: REQUEST_VOUCHER_FAILURE, payload: error });
+    dispatch({ type: CLOSE_VOUCHER_SESSION_SUCCESS });
+  })
+}
+
+export const fetchShowBalnce = (data: any) => (dispatch: any) => {
+  dispatch({type: REQUEST_VOUCHER_START});
+
+  api.voucher.showBalance(data).then((res: any) => {
+    const resData = res.data;
+
+    if (!resData.success) {
+      dispatch({type: REQUEST_VOUCHER_FAILURE });
+
+      return;
+    }
+    
+    dispatch({type: REQUEST_SHOW_BALANCE_SUCCESS, payload: resData });
+  }).catch((error: any) => {
+    dispatch({type: REQUEST_VOUCHER_FAILURE, payload: error });
+  })
+}
+
+export const fetchTerminal = () => (dispatch: any) => {
+  api.voucher.terminal().then((res: any) => {
+    const resData = res.data;
+
+    if (!resData.success) {
+      dispatch({type: REQUEST_VOUCHER_FAILURE });
+
+      return;
+    }
+    
+    dispatch({type: REQUEST_TERMINAL_SUCCESS, payload: resData });
+  }).catch((error: any) => {
+    dispatch({type: REQUEST_VOUCHER_FAILURE, payload: error });
+  })
+}
+
 export const setShowUserAbsence = (status: boolean) => ({
   type: SET_SHOW_USER_ABSENCE,
+  payload: status
+});
+
+export const setSocketConnectionStatus = (status: boolean) => ({
+  type: SET_SOCKET_CONNECTION_STATUS,
   payload: status
 });
 
@@ -348,6 +502,19 @@ export const resetVoucherPin = () => ({
 
 export const resetVoucehrErrors = () => ({
   type: RESET_VOUCHER_ERROR_STATUS
+});
+
+export const resetBillAccepter = () => ({
+  type: RESET_BILL_ACCEPTER_STATUS
+});
+
+export const setDepositSum = (sum: number) => ({
+  type: SET_DEPOSIT_SUM,
+  payload: sum
+});
+
+export const setWithdrawSuccess = () => ({
+  type: REQUEST_VOUCHER_WITHDRAW_SUCCESS
 });
 
 export default voucher;

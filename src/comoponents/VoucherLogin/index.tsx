@@ -19,7 +19,7 @@ const voucherSessionIsNotClosedMessage = 'Сессия данного вауче
 const VoucherLogin: React.FC = () => {
   const { isLoading, voucherSessionKey, isError, errorMessage } = useSelector((state: AppState) => state.voucher);
   const dispatch = useDispatch();
-  const { link, setLink } = useContext(HeaderContext);
+  const { setLink } = useContext(HeaderContext);
   const [ inputErrorMessage, setInputErrorMessage ] = useState('');
   const [ voucherValue, setVoucherValue ] = useState('');
   const voucherValueLength = 10;
@@ -50,11 +50,11 @@ const VoucherLogin: React.FC = () => {
   } as React.CSSProperties;
   
   const handleChangeInputValue = (value: string) => {
-    const contanNotNumbers = /[^0-9]/.test(value);
-    if (contanNotNumbers && value.length > voucherValue.length) {
+    const containNotNumbers = /[^0-9]/.test(value);
+    if (containNotNumbers && value.length > voucherValue.length) {
       setInputErrorMessage(onlyNumEerrorMessage);
     } else {
-      if (errorMessage) {
+      if (inputErrorMessage) {
         setInputErrorMessage('');
       }
     }
@@ -78,7 +78,7 @@ const VoucherLogin: React.FC = () => {
   }
 
   const cleanInputErrorMessage = () => {
-    if (errorMessage) {
+    if (inputErrorMessage) {
       setInputErrorMessage('');
     }
   }

@@ -3,8 +3,8 @@ import ErrorImage from '../../images/Error.svg';
 import { useDispatch } from 'react-redux';
 import { hideError } from '../../redux/error-screen';
 import { HeaderContext } from '../Header/HeaderContextProvider';
-import './error.module.css';
 import { resetVoucehrErrors } from '../../redux/voucher';
+import './index.css';
 
 const errorMessageTitle = 'УПС';
 const somethisngWrongMessage = 'что-то пошло не так';

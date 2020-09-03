@@ -17,6 +17,7 @@ const ActionButton: React.FC<ActionButton> = ({ title, link, image, handleButton
 
   const buttonBlockStyles = {
     border: '7px solid #EAA900',
+    // background: 'linear-gradient(180deg, rgba(64, 0, 93, 0) 0%, #7400A8 100%)',
     filter: 'drop-shadow(0px 0px 5px #EAA900)',
     WebkitFlter: 'drop-shadow(0px 0px 5px #EAA900)'
   } as React.CSSProperties;
@@ -25,6 +26,7 @@ const ActionButton: React.FC<ActionButton> = ({ title, link, image, handleButton
     display: 'flex',
     justifyContent: 'center',
     background: 'linear-gradient(112deg, #8a00c9 0%, #61088a 33%, #61088a 60%, #8a00c9 100%)',
+    // background: 'linear-gradient(180deg, rgba(255, 0, 245, 0) 0%, #9F10E0 100%)',
     // background: 'linear-gradient(180deg, rgba(64, 0, 93, 0) 0%, #8A00C9 98.96%, #8A00C9 100%)',
     color: '#fff'
   }

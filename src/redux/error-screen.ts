@@ -1,11 +1,15 @@
 import api from '../api';
+import { store } from '../App';
+import { FETCH_AUTH_FAILURE } from './authorization';
 
 const SHOW_ERROR_SCREEN = 'SHOW_ERROR_SCREEN';
 const HIDE_ERROR_SCREEN = 'HIDE_ERROR_SCREEN';
-const LOG_OUT = 'LOG_OUT';
+const REQUEST_SERVER_CONNECTION_SUCCESS = 'REQUEST_SERVER_CONNECTION_SUCCESS';
+const REQUEST_SERVER_CONNECTION_FAILURE = 'REQUEST_SERVER_CONNECTION_FAILURE';
 
 const initialState = {
-	isShowError: false
+	isShowError: false,
+	serverConnectionStatus: true
 };
 
 interface Action {
@@ -17,25 +21,43 @@ const errorScreen = (state = initialState, { type }: Action) => {
 		case SHOW_ERROR_SCREEN:
 			return {
 				...state,
-        isShowError: true
+        		isShowError: true
 			};
 		case HIDE_ERROR_SCREEN:
 			return {
 				...state,
-        isShowError: false
-      };
-
-		case LOG_OUT:            
-			return initialState;
+				isShowError: false
+			};
+		case REQUEST_SERVER_CONNECTION_SUCCESS:
+			return {
+				...state,
+				serverConnectionStatus: true
+			}
+		case REQUEST_SERVER_CONNECTION_FAILURE:
+			return {
+				...state,
+				serverConnectionStatus: false
+			}  
 		default:
 			return state;
 	}
 };
 
-export const logOut = () => (dispatch: any) => {
-	return dispatch({
-		type: LOG_OUT
-	});
+export const fetchServerConnection = () => (dispatch: any) => {
+	const { errorScreen} = store.getState();
+	
+	api.voucher
+		.find({ login: 'check'})
+		.then((res: any) => {
+			if (!errorScreen.serverConnectionStatus) {
+				dispatch({ type: REQUEST_SERVER_CONNECTION_SUCCESS });
+			}
+		}).catch((error: any) => {
+			if (error.status !== 401 && errorScreen.serverConnectionStatus) {
+				dispatch({ type: REQUEST_SERVER_CONNECTION_FAILURE });
+				dispatch({ type: FETCH_AUTH_FAILURE });
+	  		}
+    	})
 };
 
 export const showError = () => ({
