@@ -99,7 +99,7 @@ export default class ApiClient {
 			method: 'POST',
 			url: `/${this.prefix}${url}${query}`,
 			data: method !== 'GET' ? body : null,
-			withCredentials: false,
+			withCredentials: true,
 		});
 
 		return this.handleResponse(res);
