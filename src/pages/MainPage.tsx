@@ -63,20 +63,13 @@ const MainPage: React.FC = () => {
           <Route
             exact={true}
             path="/voucher-deposit"
-            component={() => (
-              <WSProvider>
-                <VoucherDeposit />
-              </WSProvider>
-            )}
+            component={VoucherDeposit}
+
           />
           <Route
             exact={true}
             path="/voucher-withdraw"
-            component={() => (
-              <WSProvider>
-                <VoucherWithdraw />
-              </WSProvider>
-            )}
+            component={VoucherWithdraw}
           />
         </Switch>
       </div>

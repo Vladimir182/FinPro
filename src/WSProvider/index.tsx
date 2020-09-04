@@ -12,38 +12,30 @@ export type WS = {
   sendMessage: (actionType: Action) => void
 }
 
-const WebSocketContext = createContext(null)
-
+const WebSocketContext = createContext(null);
 export { WebSocketContext }
 
 export default ({ children }: { children: any }) => {
+
   const [ socket, setSocket ] = useState<WebSocket | null>(null);
   const { socketConnectionStatus } = useSelector((state: AppState) => state.voucher);
   const dispatch = useDispatch();
   const { setShowOptionalCheck, setShouldFetchDepositInit, setLink } = useContext(HeaderContext);
   let reconnectTimer: any = null;
 
-  useEffect(() => {
-    if (!socket) {
-      setWSConnnection();
-    }
-
-    // return closeWSConnection();
-  })
   
   const setWSConnnection = () => {
-
-    // if (socketConnectionStatus || (socket && socket.readyState)) {
-    //   return;
-    // }
+    if (socketConnectionStatus || (socket && socket.readyState <= 1)) {
+      return;
+    }
 
     const accessToken = localStorage.getItem('finpro_access_token');
     const newSocket = new window.WebSocket(`${process.env.REACT_APP_WS_URL}/socket?token=${accessToken}`);
     
     if (!reconnectTimer) {
       reconnectTimer = setTimeout(function() {
-        if (!newSocket.readyState) {
-          setWSConnnection()
+        if (!newSocket || newSocket.readyState > 1) {
+          setWSConnnection();
         } else {
           clearTimeout(reconnectTimer);
           reconnectTimer = null;
@@ -55,7 +47,8 @@ export default ({ children }: { children: any }) => {
 
     newSocket.onopen = (e) => {
       clearTimeout(reconnectTimer);
-      dispatch(setSocketConnectionStatus(true))
+      dispatch(setSocketConnectionStatus(true));
+      // heartbeat(newSocket)
       newSocket.send(JSON.stringify({
         action: 'deposit'
       }));
@@ -71,10 +64,11 @@ export default ({ children }: { children: any }) => {
       let res = window.JSON.parse(response.data);
 
       switch(res.action) {
-        case 'deposit':
+        case 'deposit': {
           dispatch(setDepositSum(Math.round(res.amount)));
 
           break;
+        }
         case 'check': {
           setShowOptionalCheck(true);
           setShouldFetchDepositInit(true);
@@ -87,26 +81,43 @@ export default ({ children }: { children: any }) => {
           setShowOptionalCheck(true);
           setLink('/voucher-withdraw');
         }
+        // case 'pong': {
+        //   console.log('WS PONG')
+        // }
         default: 
           return undefined;
       }
     }
 
     newSocket.onerror = (error: any) => {
-      console.log('WS Error')
       setTimeout(function() {
         setWSConnnection();
       }, 1000);
     }
     
     newSocket.onclose = () => {
-      setWSConnnection();
-      // dispatch(setSocketConnectionStatus(false));
+      dispatch(setSocketConnectionStatus(false));
+      // if (socket) {
+      //   // setSocket(null);
+      //   console.log('WS CONNECT ON CLOSE')
+      //   setWSConnnection();
+      // }
     }
   }
 
+  // const heartbeat = (newSocket: any) => {
+  //   if (!newSocket || !newSocket.readyState) {
+  //     console.log('socket invalid')
+  //     return;
+  //   }
+  //   newSocket.send("ping");
+  //   setTimeout(function() {
+  //     heartbeat(newSocket) 
+  //   }, 500);
+  // }
+
   const sendMessage = (actionType: Action) => {
-    if (!socket || !socket.readyState) {
+    if (!socket || socket.readyState !== 1) {
       return
     }
 
@@ -116,10 +127,10 @@ export default ({ children }: { children: any }) => {
   }
   
   const closeWSConnection = () => {
-    if (!socket || !socket.readyState) {
+    if (!socket || socket.readyState !== 1) {
       return;
     }
-    
+    setSocket(null);
     socket.close();
   }
 

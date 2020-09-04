@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-
-import './index.css';
+import React, { useState, useEffect, useContext } from 'react';
 import imgAbsenec from '../../images/absence.svg';
 import absenceMessage from '../../images/absence_img.svg';
 import Loader from '../Loading/index';
@@ -8,9 +6,13 @@ import ActionButton from '../Buttons/ActionButton';
 import { fetchCloseVoucherSession, setShowUserAbsence } from '../../redux/voucher';
 import { AppState } from '../../redux';
 import { useSelector, useDispatch } from 'react-redux';
+import { WebSocketContext, WS } from '../../WSProvider';
+import './index.css';
 
 const absenceMessageTitle = 'ВЫ ЕЩЕ ЗДЕСЬ?';
 const Absence: React.FC = () => {
+  //@ts-ignore
+  const ws: WS = useContext(WebSocketContext);
   const { voucherSessionKey } = useSelector((state: AppState) => state.voucher);
   const [ timer, setTimer ] = useState<number>(30);
   const dispatch = useDispatch();
@@ -23,7 +25,8 @@ const Absence: React.FC = () => {
       }, 1000)
     }
     if (timer <= 0) {
-      fetchCloseVoucherSession(voucherSessionKey)(dispatch);
+      fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
+
       dispatch(setShowUserAbsence(false));
       clearInterval(intervalTimer);
     }

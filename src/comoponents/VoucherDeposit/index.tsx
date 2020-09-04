@@ -121,17 +121,20 @@ let VoucherLogin: React.FC = () => {
     if (!showOptionalCheck) {
       setLink('/voucher');
     }
+    if (!ws.socket || ws.socket.readyState > 1) {
+      ws.setWSConnnection();
+    }
     // if (!resetDepositSum) {
     //   setResetDepositSum(true);
     // }
   })
 
   const handleActionButton = () => {
-    // if (depositSum && depositSum > 0) {
+    if (depositSum && depositSum > 0) {
       setShowOptionalCheck(true);
       setShouldFetchDepositInit(true);
       setLink('/voucher-deposit');
-    // }
+    }
   }
 
   const handlePrintOptionalCheck = () => {
@@ -145,7 +148,7 @@ let VoucherLogin: React.FC = () => {
 
   const handleDontPrintOptionalCheck = () => {
     dispatch(setDepositSum(0));
-    fetchCloseVoucherSession(voucherSessionKey)(dispatch);
+    fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
   }
 
   const image = window.innerWidth <= 1280 ? ArrowRightShort : ArrowRight;

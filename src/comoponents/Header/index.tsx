@@ -6,6 +6,7 @@ import { fetchCloseVoucherSession, fetchDepositInit, setDepositSum } from '../..
 import Arrow from '../../images/ArrowLeft.svg'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../redux';
+import { WebSocketContext, WS } from '../../WSProvider';
 import './index.css';
 
 const rootStyles = {
@@ -37,6 +38,8 @@ const layer = {
 } as React.CSSProperties;
 
 const Header: React.FC = () => {
+  //@ts-ignore
+  const ws: WS = useContext(WebSocketContext);
   const dispatch = useDispatch(); 
   let {
     link, 
@@ -58,7 +61,7 @@ const Header: React.FC = () => {
     sessionStorage.removeItem('finpro-backlink');
     
     if (stopVoucherSession && voucherSessionKey) {
-      fetchCloseVoucherSession(voucherSessionKey)(dispatch);
+      fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
       setStopVoucherSession(false);
     }
     if (shouldFetchDepositInit) {
