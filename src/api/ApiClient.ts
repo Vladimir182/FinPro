@@ -105,7 +105,7 @@ export default class ApiClient {
 		return this.handleResponse(res);
 	}
 }
-
+ 
 setInterval(function() {
 	store.dispatch(fetchServerConnection());
 }, 5000)
