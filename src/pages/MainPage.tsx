@@ -10,13 +10,13 @@ import { AppState } from '../redux';
 import VoucherWithdraw from '../comoponents/VoucherWithdraw';
 import VoucherBalance from '../comoponents/VoucherBalance';
 import VoucherDeposit from '../comoponents/VoucherDeposit';
-import WSProvider from '../WSProvider';
 import Error from '../comoponents/Error';
 import WeCountBills from '../comoponents/WeCountBills';
 
 const MainPage: React.FC = () => {
   const { theme } = useContext(ThemeContext);
   const { isShowError } = useSelector((state: AppState) => state.errorScreen);
+
   const rootStyles = { 
     background: theme.background,
     color: theme.color,
@@ -24,7 +24,7 @@ const MainPage: React.FC = () => {
     padding: '0 4%',
     overflow: 'hidden'
   };
-
+  
   const contentStyles = {
     display: 'flex',
     justifyContent: 'center'
@@ -45,7 +45,7 @@ const MainPage: React.FC = () => {
           <Route
             exact={true}
             path="/"
-            component={WeCountBills}
+            component={HomeScreen}
           />
           <Route
             exact={true}
