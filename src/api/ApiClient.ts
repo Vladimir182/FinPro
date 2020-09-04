@@ -99,7 +99,7 @@ export default class ApiClient {
 			method: 'POST',
 			url: `${process.env.REACT_APP_URL}/${this.prefix}${url}${query}`,
 			data: method !== 'GET' ? body : null,
-			withCredentials: false,
+			withCredentials: true,
 		});
 
 		return this.handleResponse(res);
