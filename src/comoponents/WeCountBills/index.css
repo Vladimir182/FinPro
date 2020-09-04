@@ -1,0 +1,177 @@
+.weCountBills-page-wrapper {
+  width: 1600px;
+  display: flex;
+  justify-content: center;
+}
+.weCountBills-page-wrapper img {
+  animation: money-animation infinite 6s linear;
+  width: 1600px;
+  position: absolute;
+  background-position: center center;
+  background-repeat: no-repeat;
+  top: -130px;
+  left: 0;
+}
+@keyframes money-animation {
+  0%{
+    transform: rotate(0deg);
+  }
+  20%{
+    transform: rotate(2deg);
+  }
+  70%{
+    transform: rotate(-2deg);
+  }
+ 100%{
+  transform: rotate(0deg);
+ }
+}
+.weCountBills-container-page{
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 1600px;
+}
+.weCountBills-wrapper{
+  z-index: 2;
+  width: 100%;
+  margin-top: 390px;
+  max-width: 894px;
+  background: #480081;
+  box-shadow: 0px 4px 30px rgba(174, 130, 225, 0.2);
+  text-align: center;
+  padding: 65px 20px;
+}
+.weCountBills-wrapper span {
+  text-align: center;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 44px;
+}
+
+@media (max-width: 1280px){
+  .weCountBills-page-wrapper {
+    width: 1280px;
+  }
+  .weCountBills-page-wrapper img {
+    width: 1280px;
+    position: absolute;
+    top: -100px;
+    left: 0;
+  }
+  .weCountBills-container-page{
+    position: relative;
+    width: 1280px;
+  }
+  .weCountBills-wrapper{
+    margin-top: 310px;
+    max-width: 770px;
+    padding: 53px 20px;
+  }
+  .weCountBills-wrapper span {
+    font-size: 32px;
+    line-height: 44px;
+  }
+}
+
+@media(max-height:720px) and (max-width: 1280px){
+  .weCountBills-page-wrapper {
+    width: 948px;
+  }
+  .weCountBills-page-wrapper img {
+    width: 948px;
+    position: absolute;
+    top: -70px;
+    left: 0;
+  }
+  .weCountBills-container-page{
+    position: relative;
+    width: 948px;
+  }
+  .weCountBills-wrapper{
+    margin-top: 235px;
+    max-width: 636px;
+    padding: 40px 20px;
+  }
+  .weCountBills-wrapper span {
+    font-size: 28px;
+    line-height: 44px;
+  }
+}
+
+@media (max-width: 1152px){
+  .weCountBills-page-wrapper {
+    width: 1152px;
+  }
+  .weCountBills-page-wrapper img {
+    width: 1152px;
+    position: absolute;
+    top: -120px;
+    left: 0;
+  }
+  .weCountBills-container-page{
+    position: relative;
+    width: 1152px;
+  }
+  .weCountBills-wrapper{
+    margin-top: 240px;
+    max-width: 711px;
+    padding: 47px 20px;
+  }
+  .weCountBills-wrapper span {
+    font-size: 30px;
+    line-height: 44px;
+  }
+}
+
+@media (max-height: 768px) and (max-width: 1024px){
+  .weCountBills-page-wrapper {
+    width: 1024px;
+  }
+  .weCountBills-page-wrapper img {
+    width: 1024px;
+    position: absolute;
+    top: -90px;
+    left: 0;
+  }
+  .weCountBills-container-page{
+    position: relative;
+    width: 1024px;
+  }
+  .weCountBills-wrapper{
+    margin-top: 235px;
+    max-width: 636px;
+    padding: 40px 20px;
+  }
+  .weCountBills-wrapper span {
+    font-size: 26px;
+    line-height: 44px;
+  }
+}
+
+@media (max-width: 800px){
+  .weCountBills-page-wrapper {
+    width: 765px;
+  }
+  .weCountBills-page-wrapper img {
+    width: 765px;
+    position: absolute;
+    top: -60px;
+    left: 0;
+  }
+  .weCountBills-container-page{
+    position: relative;
+    width: 765px;
+  }
+  .weCountBills-wrapper{
+    margin-top: 180px;
+    max-width: 530px;
+    padding: 30px 20px;
+  }
+  .weCountBills-wrapper span {
+    font-size: 24px;
+    line-height: 44px;
+  }
+}
