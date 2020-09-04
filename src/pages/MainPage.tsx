@@ -12,6 +12,7 @@ import VoucherBalance from '../comoponents/VoucherBalance';
 import VoucherDeposit from '../comoponents/VoucherDeposit';
 import WSProvider from '../WSProvider';
 import Error from '../comoponents/Error';
+import WeCountBills from '../comoponents/WeCountBills';
 
 const MainPage: React.FC = () => {
   const { theme } = useContext(ThemeContext);
@@ -20,7 +21,8 @@ const MainPage: React.FC = () => {
     background: theme.background,
     color: theme.color,
     height: '100%',
-    padding: '0 4%'
+    padding: '0 4%',
+    overflow: 'hidden'
   };
 
   const contentStyles = {
@@ -43,7 +45,7 @@ const MainPage: React.FC = () => {
           <Route
             exact={true}
             path="/"
-            component={HomeScreen}
+            component={WeCountBills}
           />
           <Route
             exact={true}
