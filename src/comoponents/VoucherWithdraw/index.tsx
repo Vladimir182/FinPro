@@ -13,6 +13,7 @@ import VoucherPin from '../VoucherPin';
 import Absence from '../absence';
 import OptionalCheck from '../OptionalCheck';
 import PrintCheck from '../Checks';
+import { WebSocketContext, WS } from '../../WSProvider';
 
 const voucherWithdrawContainerStyles = {
   display: 'flex',
@@ -100,6 +101,8 @@ const invalidSumMessage = 'Не можем выдать такую сумму'
 const image = window.innerWidth <= 1280 ? ArrowRightShort : ArrowRight;
 
 const VoucherWithdraw: React.FC = () => {
+  //@ts-ignore
+  const ws: WS = useContext(WebSocketContext);
   let { 
     voucherSessionKey,
     currency,
@@ -126,7 +129,9 @@ const VoucherWithdraw: React.FC = () => {
     if (!isError && !cassetteInfo.length && !isLoading && isPinVerified) {
       fetchCassetteInfo({ msid: voucherSessionKey })(dispatch);
     }
-
+    if (!ws.socket || ws.socket.readyState === 3) {
+      ws.setWSConnnection();
+    }
     inputRef.current?.focus();
     inputRef.current?.addEventListener('focusout', function() {
       inputRef.current?.focus();
@@ -180,7 +185,7 @@ const VoucherWithdraw: React.FC = () => {
 
   const handleDontPrintOptionalCheck = () => {
     // dispatch(setDepositSum(0));
-    fetchCloseVoucherSession(voucherSessionKey)(dispatch);
+    fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
   }
 
   const handleBlockClick = () => {

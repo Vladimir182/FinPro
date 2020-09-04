@@ -380,7 +380,7 @@ export const fetchVoucherWithdraw = (data: WithdrawBody) => (dispatch: any) => {
   });
 };
 
-export const fetchCloseVoucherSession = (voucherSessionKey: string) => (dispatch: any) => {
+export const fetchCloseVoucherSession = (voucherSessionKey: string, closeWSConnection: () => void) => (dispatch: any) => {
   dispatch({type: REQUEST_VOUCHER_START});
 
   const data = {
@@ -394,6 +394,10 @@ export const fetchCloseVoucherSession = (voucherSessionKey: string) => (dispatch
       dispatch(showError());
       
       return;
+    }
+
+    if (closeWSConnection) {
+      closeWSConnection()
     }
 
     dispatch({ type: CLOSE_VOUCHER_SESSION_SUCCESS });

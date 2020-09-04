@@ -24,7 +24,9 @@ const App = () => {
       <BrowserRouter>
         <ThemeContextProvider>
           <HeaderContextProvider>
-            <Roads />
+            <WSProvider>
+              <Roads />
+            </WSProvider>  
           </HeaderContextProvider>
         </ThemeContextProvider>
       </BrowserRouter>
