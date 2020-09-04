@@ -75,13 +75,15 @@ export default class ApiClient {
 				const response = error.response;
 				const accessToken = localStorage.getItem('finpro_access_token');
 
-				if (accessToken && response.status === 401) {
+				if (accessToken && (response && response.status === 401)) {
 					fetchRefreshToken()(store.dispatch);
 
 					return;
 				}
 
-				throw response;
+				if (response) {
+					throw response;
+				}
 			});
   }
     
