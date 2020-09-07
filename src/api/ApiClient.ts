@@ -98,7 +98,6 @@ export default class ApiClient {
 
 		const res = Axios({
 			// ${process.env.REACT_APP_URL}
-			//${process.env.REACT_APP_CORS_ANYWHERE}/
 			method: 'POST',
 			url: `${process.env.REACT_APP_URL2}/${this.prefix}${url}${query}`,
 			data: method !== 'GET' ? body : null,
