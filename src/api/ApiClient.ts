@@ -101,7 +101,6 @@ export default class ApiClient {
 			method: 'POST',
 			url: `${process.env.REACT_APP_URL2}/${this.prefix}${url}${query}`,
 			data: method !== 'GET' ? body : null,
-			withCredentials: false,
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 				'Access-Control-Allow-Origin':  '*',
