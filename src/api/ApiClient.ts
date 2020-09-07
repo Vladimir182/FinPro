@@ -106,7 +106,7 @@ export default class ApiClient {
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 				'Access-Control-Allow-Origin':  '*',
-				'Access-Control-Allow-Headers': 'Content-Type', 'Authorization'
+				'Access-Control-Allow-Headers': 'Content-Type'
 			}
 		});
 
