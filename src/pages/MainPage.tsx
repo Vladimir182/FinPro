@@ -45,7 +45,7 @@ const MainPage: React.FC = () => {
           <Route
             exact={true}
             path="/"
-            component={WeCountBills}
+            component={HomeScreen}
           />
           <Route
             exact={true}
