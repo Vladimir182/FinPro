@@ -14,6 +14,7 @@ import Absence from '../absence';
 import OptionalCheck from '../OptionalCheck';
 import PrintCheck from '../Checks';
 import { WebSocketContext, WS } from '../../WSProvider';
+import WeCountBills from '../WeCountBills';
 
 const voucherWithdrawContainerStyles = {
   display: 'flex',
@@ -115,6 +116,7 @@ const VoucherWithdraw: React.FC = () => {
     isPinVerified,
     showUserAbsence,
     isPrintLoading,
+    showWeCountBills
   } = useSelector((state: AppState) => state.voucher);
 
   const [ withdrawSumInput, setwithdrawSumInput ] = useState(withdrawSum ?? placeholderWithdrawSum);
@@ -203,6 +205,7 @@ const VoucherWithdraw: React.FC = () => {
       { !voucherSessionKey && <Redirect to="/" /> }
       { !isPinVerified 
         ? <VoucherPin />
+        : showWeCountBills ? <WeCountBills/>
         : showUserAbsence ? <Absence />
         : isPrintLoading ? <PrintCheck />
         : showOptionalCheck ? <OptionalCheck
