@@ -23,6 +23,9 @@ const SET_SOCKET_CONNECTION_STATUS = 'SET_SOCKET_CONNECTION_STATUS';
 const REQUEST_PRINT_CHECK_SUCCESS = 'REQUEST_PRINT_CHECK_SUCCESS';
 const REQUEST_SHOW_BALANCE_SUCCESS = 'REQUEST_SHOW_BALANCE_SUCCESS';
 const REQUEST_TERMINAL_SUCCESS = 'REQUEST_TERMINAL_SUCCESS';
+const SET_WE_COUNT_BILLS_START = 'SET_WE_COUNT_BILLS_START';
+const SET_WE_COUNT_BILLS_REMOVE = 'SET_WE_COUNT_BILLS_REMOVE';
+
 
 const initialState = {
   isLoading: false,
@@ -42,6 +45,7 @@ const initialState = {
   errorMessage: '',
   showUserAbsence: false,
   socketConnectionStatus: false,
+  showWeCountBills: false,
 };
 
 interface Action {
@@ -145,7 +149,8 @@ const voucher = (state = initialState, { type, payload }: Action) => {
       return {
         ...state,
         availableWithdrawSum: payload,
-        isLoading: false
+        isLoading: false,
+        showWeCountBills: false
       }
     case REQUEST_VOUCHER_WITHDRAW_SUCCESS:
       return {
@@ -170,7 +175,8 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         ...state,
         pin: payload.pin,
         isPinVerified: true,
-        isLoading: false
+        isLoading: false,
+        showWeCountBills: false
       }
     case REQUEST_DEPOSIT_INIT_SUCCESS:
       return {
@@ -239,7 +245,12 @@ const voucher = (state = initialState, { type, payload }: Action) => {
       return {
         ...state,
         terminalId: payload.terminal_id
-      }   
+      }
+    case SET_WE_COUNT_BILLS_START: 
+      return {
+        ...state,
+        showWeCountBills: true
+      }
 		default:
 			return state;
 	}
@@ -351,8 +362,8 @@ export const fetchVoucherPin = (data: PinBody) => (dispatch: any) => {
 }
 
 export const fetchVoucherWithdraw = (data: WithdrawBody) => (dispatch: any) => {
-  dispatch({type: REQUEST_VOUCHER_START});
-
+  // dispatch({type: REQUEST_VOUCHER_START});
+  dispatch({type: SET_WE_COUNT_BILLS_START})
   api.voucher
   .withdraw(data)
   .then((res: any) => {
