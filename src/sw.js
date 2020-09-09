@@ -4,7 +4,11 @@ self.addEventListener('install', event => {
   //@ts-ignore
   event.waitUntil(
     caches.open(CACHE_NAME)
-    .then(cache => cache.addAll(urlsToCache))
+    .then(cache => cache.addAll([
+      './',
+      './*',
+      'favicon.png',
+    ]))
   )
 });
 
