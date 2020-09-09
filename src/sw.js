@@ -26,6 +26,9 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', (event) => {
+  if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
+    return;
+  }
   console.log('EVENT REQUEST', event.request)
   event.respondWith(
     caches.match(event.request).then((response) => {
