@@ -96,7 +96,7 @@ export function register(config) {
         })
       )
     });
-
+    console.log("ON FETCH")
     window.addEventListener('fetch', (event) => {
       console.log('SW FETCH')
       event.respondWith(
