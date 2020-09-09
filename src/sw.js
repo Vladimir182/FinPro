@@ -4,12 +4,15 @@ self.addEventListener('install', event => {
   //@ts-ignore
   event.waitUntil(
     caches.open(CACHE_NAME)
-    .then(cache => cache.addAll([
-      './',
-      './index.html',
-      'favicon.ico',
-      'manifest.json'
-    ]))
+    .then(cache => {
+      console.log('INSTALL CACHE ADD ALL')
+      return cache.addAll([
+        './',
+        './index.html',
+        'favicon.ico',
+        'manifest.json'
+      ])
+    }
   )
 });
 
@@ -23,8 +26,10 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', (event) => {
+  console.log('EVENT REQUEST', event.request)
   event.respondWith(
     caches.match(event.request).then((response) => {
+      console.log('RESPONSE', response)
       if (response) {
         return response;
       }
