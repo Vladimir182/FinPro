@@ -17,31 +17,9 @@ const urlsToCache = [
   '/asset-manifest.json',
   '/index.html',
   '/service-worker.js',
-  '/static/css/main.62ccc8ee.chunk.css',
-  '/static/js/2.72faf3fd.chunk.js',
-  '/static/js/main.5f587384.chunk.js',
-  '/static/js/runtime-main.6741a0d1.js',
-  // '/static/media/absence_img.85c6a9b5.svg',
-  // '/static/media/absence.65e456ed.svg',
-  // '/static/media/ArrowLeft.152537a5.svg',
-  // '/static/media/ArrowRight.d6326620.svg',
-  // '/static/media/ArrowRightShort.4d2648d1.svg',
-  // '/static/media/Balance.05e544d2.svg',
-  // '/static/media/check_img.f4852129.svg',
-  // '/static/media/Deposit.ee17c615.svg',
-  // '/static/media/DepositAction.4b9d013b.svg',
-  // '/static/media/Error.fbf932dd.svg',
-  // '/static/media/icon_new_voucher.92f39728.svg',
-  // '/static/media/icon_voucher.c07af7a0.svg',
-  // '/static/media/logo.ca41249f.svg',
-  // '/static/media/paper_check.4ee29de4.svg',
-  // '/static/media/Roboto-Black.5ebb24ee.ttf',
-  // '/static/media/Roboto-Bold.e07df86c.ttf',
-  // '/static/media/Roboto-Regular.11eabca2.ttf',
-  '/static/media/serverError.2584541a.svg',
-  // '/static/media/Withdraw.0016fafd.svg',
-  // '/static/media/WithdrawAction.fcf72ed3.svg'
 ];
+
+let self = Window.self;
 
 export function register(config) {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
@@ -76,51 +54,51 @@ export function register(config) {
         // Is not localhost. Just register service worker
         registerValidSW(swUrl, config);
       }
-    });
 
-    window.addEventListener('install', event => {
-      console.log('SW INSTALL')
-      //@ts-ignore
-      event.waitUntil(
-        caches.open(CACHE_NAME)
-          .then(cache => cache.addAll(urlsToCache))
-      )
-    });
+      self.addEventListener('install', event => {
+        console.log('SW INSTALL')
+        //@ts-ignore
+        event.waitUntil(
+          caches.open(CACHE_NAME)
+            .then(cache => cache.addAll(urlsToCache))
+        )
+      });
 
-    window.addEventListener('activate', event => {
-      console.log('SW ACTIVATE')
-      //@ts-ignore
-      event.waitUntil(
-        caches.keys().then(function(cacheNames) {
-          return Promise.all(cacheNames.filter(cacheName => cacheName).map(cacheName => caches.delete(cacheName)))
-        })
-      )
-    });
-    console.log("ON FETCH")
-    window.addEventListener('fetch', (event) => {
-      console.log('SW FETCH')
-      event.respondWith(
-        caches.match(event.request).then((response) => {
-          console.log('SERVICE-WORCKER RESPONSE', response)
-          if (response) {
-            return response;
-          }
+      self.addEventListener('activate', event => {
+        console.log('SW ACTIVATE')
+        //@ts-ignore
+        event.waitUntil(
+          caches.keys().then(function(cacheNames) {
+            return Promise.all(cacheNames.filter(cacheName => cacheName).map(cacheName => caches.delete(cacheName)))
+          })
+        )
+      });
 
-          return fetch(event.request).then(response => {
-            if(!response || response.status !== 200 || response.type !== 'basic') {
+      self.addEventListener('fetch', (event) => {
+        console.log('SW FETCH')
+        event.respondWith(
+          caches.match(event.request).then((response) => {
+            console.log('SERVICE-WORCKER RESPONSE', response)
+            if (response) {
               return response;
             }
-  
-            let clonedResponse = response.clone();
-  
-            caches.open(CACHE_NAME).then(cache => {
-              cache.put(event.request, clonedResponse)
+
+            return fetch(event.request).then(response => {
+              if(!response || response.status !== 200 || response.type !== 'basic') {
+                return response;
+              }
+    
+              let clonedResponse = response.clone();
+    
+              caches.open(CACHE_NAME).then(cache => {
+                cache.put(event.request, clonedResponse)
+              })
+    
+              return response;
             })
-  
-            return response;
           })
-        })
-      )
+        )
+      });
     });
   }
 }
@@ -131,6 +109,7 @@ function registerValidSW(swUrl, config) {
     .then(registration => {
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
+        console.log('INSTALL WORKER', installingWorker)
         if (installingWorker == null) {
           return;
         }
