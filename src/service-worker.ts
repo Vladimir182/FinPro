@@ -98,23 +98,26 @@ export function register(config?: Config) {
       )
     });
 
-    self.addEventListener('fetch', async event => {
-      //@ts-ignore
+    self.addEventListener('fetch', (event: any) => {
       event.respondWith(
-        //@ts-ignore
-        caches.match(event.response).then((response) => {
-          if(!response || response.status !== 200 || response.type !== 'basic') {
+        caches.match(event.response).then((response: any) => {
+          if (response) {
             return response;
           }
 
-          let clonedResponse = response.clone();
-
-          caches.open(CACHE_NAME).then(cache => {
-            //@ts-ignore
-            cache.put(event.request, clonedResponse)
+          return fetch(event.request).then(response => {
+            if(!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+  
+            let clonedResponse = response.clone();
+  
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(event.request, clonedResponse)
+            })
+  
+            return response;
           })
-
-          return response;
         })
       )
     });
