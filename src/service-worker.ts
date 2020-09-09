@@ -100,7 +100,8 @@ export function register(config?: Config) {
 
     self.addEventListener('fetch', (event: any) => {
       event.respondWith(
-        caches.match(event.response).then((response: any) => {
+        caches.match(event.request).then((response: any) => {
+          console.log('SERVICE-WORCKER RESPONSE', response)
           if (response) {
             return response;
           }
