@@ -157,6 +157,7 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         ...state,
         isLoading: false,
         isError: false,
+        showWeCountBills: false,
         errorMessage: ''
       }  
     case SET_VOUCHER_PIN:
@@ -235,6 +236,11 @@ const voucher = (state = initialState, { type, payload }: Action) => {
       }
     case REQUEST_SHOW_BALANCE_SUCCESS:
       const balance = Math.round(payload.balance);
+
+      if (String(balance) === 'NaN') {
+        throw { message: 'Invalid sum formatte' }
+      }
+
       return {
         ...state,
         balance: balance,
@@ -477,6 +483,7 @@ export const fetchShowBalnce = (data: any) => (dispatch: any) => {
     dispatch({type: REQUEST_SHOW_BALANCE_SUCCESS, payload: resData });
   }).catch((error: any) => {
     dispatch({type: REQUEST_VOUCHER_FAILURE, payload: error });
+    // dispatch(showError());
   })
 }
 
