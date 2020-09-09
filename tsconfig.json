@@ -19,11 +19,10 @@
     "jsx": "react",
     "isolatedModules": true
   },
+  "exclude": [
+    "src/setupProxy.js"
+  ],
   "include": [
     "src"
-  ],
-  "exclude": [
-    "src/setupProxy.js",
-    "src/sw*"
   ]
 }
