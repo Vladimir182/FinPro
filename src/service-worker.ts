@@ -63,7 +63,7 @@ export function register(config?: Config) {
     }
 
     window.addEventListener('load', () => {
-      const swUrl = `/service-worker.js`;
+      const swUrl = `./static/js/service-worker.js`;
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.
         checkValidServiceWorker(swUrl, config);
@@ -82,6 +82,7 @@ export function register(config?: Config) {
     });
 
     window.addEventListener('install', event => {
+      console.log('SW INSTALL')
       //@ts-ignore
       event.waitUntil(
         caches.open(CACHE_NAME)
@@ -90,6 +91,7 @@ export function register(config?: Config) {
     });
 
     window.addEventListener('activate', event => {
+      console.log('SW ACTIVATE')
       //@ts-ignore
       event.waitUntil(
         caches.keys().then(function(cacheNames) {
@@ -99,6 +101,7 @@ export function register(config?: Config) {
     });
 
     window.addEventListener('fetch', (event: any) => {
+      console.log('SW FETCH')
       event.respondWith(
         caches.match(event.request).then((response: any) => {
           console.log('SERVICE-WORCKER RESPONSE', response)
