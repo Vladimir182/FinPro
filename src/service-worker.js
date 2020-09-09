@@ -9,18 +9,6 @@ const isLocalhost = Boolean(
     )
 );
 
-const CACHE_NAME = 'finpro-cache';
-const urlsToCache = [
-  '/',
-  '/favicon.ico',
-  '/manifest.json',
-  '/asset-manifest.json',
-  '/index.html',
-  '/service-worker.js',
-];
-
-let self = Window.self;
-
 export function register(config) {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
@@ -36,9 +24,8 @@ export function register(config) {
     }
 
     window.addEventListener('load', () => {
-      // const swUrl = `./static/js/service-worker.js`;
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
-      console.log('URL JS', swUrl)
+
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.
         checkValidServiceWorker(swUrl, config);
@@ -54,51 +41,6 @@ export function register(config) {
         // Is not localhost. Just register service worker
         registerValidSW(swUrl, config);
       }
-
-      self.addEventListener('install', event => {
-        console.log('SW INSTALL')
-        //@ts-ignore
-        event.waitUntil(
-          caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(urlsToCache))
-        )
-      });
-
-      self.addEventListener('activate', event => {
-        console.log('SW ACTIVATE')
-        //@ts-ignore
-        event.waitUntil(
-          caches.keys().then(function(cacheNames) {
-            return Promise.all(cacheNames.filter(cacheName => cacheName).map(cacheName => caches.delete(cacheName)))
-          })
-        )
-      });
-
-      self.addEventListener('fetch', (event) => {
-        console.log('SW FETCH')
-        event.respondWith(
-          caches.match(event.request).then((response) => {
-            console.log('SERVICE-WORCKER RESPONSE', response)
-            if (response) {
-              return response;
-            }
-
-            return fetch(event.request).then(response => {
-              if(!response || response.status !== 200 || response.type !== 'basic') {
-                return response;
-              }
-    
-              let clonedResponse = response.clone();
-    
-              caches.open(CACHE_NAME).then(cache => {
-                cache.put(event.request, clonedResponse)
-              })
-    
-              return response;
-            })
-          })
-        )
-      });
     });
   }
 }
@@ -109,7 +51,6 @@ function registerValidSW(swUrl, config) {
     .then(registration => {
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
-        console.log('INSTALL WORKER', installingWorker)
         if (installingWorker == null) {
           return;
         }

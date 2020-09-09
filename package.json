@@ -30,11 +30,12 @@
     "redux-thunk": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "spin": "0.0.1",
+    "sw-precache": "^5.2.1",
     "typescript": "^3.7.5"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && cat src/sw.js >> build/service-worker.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build-sw": "node ./src/sw-build.js"
