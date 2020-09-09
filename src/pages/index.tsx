@@ -13,7 +13,7 @@ const Pages: React.FC = (props) => {
   useEffect(() => {
     window.addEventListener('beforeunload', onUnload);
 
-    return window.removeEventListener('beforeunload', onUnload);
+    // return window.removeEventListener('beforeunload', onUnload);
   })
 
  const onUnload = () => {
