@@ -12,7 +12,7 @@ self.addEventListener('install', event => {
         'favicon.ico',
         'manifest.json'
       ])
-    }
+    })
   )
 });
 
