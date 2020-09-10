@@ -72,6 +72,10 @@ export default class ApiClient {
 				return res;
 			})
 			.catch((error: any) => {
+				if (!error.response) {
+					throw error;
+				}
+
 				const response = error.response;
 				const accessToken = localStorage.getItem('finpro_access_token');
 

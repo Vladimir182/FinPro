@@ -45,7 +45,6 @@ const errorScreen = (state = initialState, { type }: Action) => {
 
 export const fetchServerConnection = () => (dispatch: any) => {
 	const { errorScreen} = store.getState();
-	console.log('fetchServerConnection')
 	api.voucher
 		.find({ login: 'check'})
 		.then((res: any) => {
@@ -53,7 +52,6 @@ export const fetchServerConnection = () => (dispatch: any) => {
 				dispatch({ type: REQUEST_SERVER_CONNECTION_SUCCESS });
 			}
 		}).catch((error: any) => {
-			console.log('error.status !== 401 && errorScreen.serverConnectionStatus', error.status !== 401 ,'&&', errorScreen.serverConnectionStatus)
 			if (error.status !== 401 && errorScreen.serverConnectionStatus) {
 				dispatch({ type: REQUEST_SERVER_CONNECTION_FAILURE });
 				dispatch({ type: FETCH_AUTH_FAILURE });
