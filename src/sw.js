@@ -29,7 +29,15 @@ self.addEventListener('fetch', (event) => {
   if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
     return;
   }
-  console.log('EVENT REQUEST', event.request)
+  if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept').includes('text/html'))) {
+    event.respondWith(
+      fetch(event.request.url).catch(error => {
+          // Return the offline page
+          // return caches.match(offlineUrl);
+          return ('<p>Offline</p>')
+      })
+    );
+  }
   event.respondWith(
     caches.match(event.request).then((response) => {
       console.log('RESPONSE', response)
@@ -50,8 +58,7 @@ self.addEventListener('fetch', (event) => {
 
         return response;
       }).catch(() => {
-        // caches.match(event.request).then(cachedResponse => cachedResponse)
-        return ('<p>Offline</p>')
+        caches.match(event.request).then(cachedResponse => cachedResponse)
       })
     })
   )
