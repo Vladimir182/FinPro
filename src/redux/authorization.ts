@@ -4,6 +4,7 @@ import { fetchTerminal } from './voucher';
 const FETCH_AUTH_START = 'FETCH_AUTH_START';
 const FETCH_LOGIN_SUCCESS = 'FETCH_LOGIN_SUCCESS';
 export const FETCH_AUTH_FAILURE = 'FETCH_AUTH_FAILURE';
+const FETCH_LOGIN_FAILURE = 'FETCH_LOGIN_FAILURE';
 const LOG_OUT = 'LOG_OUT';
 
 const initialState = {
@@ -33,6 +34,13 @@ const authorization = (state = initialState, { type, payload }: Action) => {
 				isLoading: false,
 				errorMessage: ''
 			};
+		case FETCH_LOGIN_FAILURE:
+			return {
+				...state,
+				isAuth: false,
+				isLoading: false,
+				errorMessage: ''
+			};	
 		case FETCH_AUTH_FAILURE:
 			return {
 				...state,
@@ -64,6 +72,8 @@ export const fetchCheckAuth = () => (dispatch: any) => {
 		.find({ login: 'check'})
 		.then((res: any) => {
 			dispatch({ type: FETCH_LOGIN_SUCCESS });
+		}).catch((error: any) => {
+			dispatch({ type: FETCH_LOGIN_FAILURE });
 		})
 };
 
