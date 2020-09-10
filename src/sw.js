@@ -18,11 +18,11 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
   //@ts-ignore
-  event.waitUntil(
-    caches.keys().then(function(cacheNames) {
-      return Promise.all(cacheNames.filter(cacheName => cacheName).map(cacheName => caches.delete(cacheName)))
-    })
-  )
+  // event.waitUntil(
+  //   caches.keys().then(function(cacheNames) {
+  //     return Promise.all(cacheNames.filter(cacheName => cacheName).map(cacheName => caches.delete(cacheName)))
+  //   })
+  // )
 });
 
 self.addEventListener('fetch', (event) => {
