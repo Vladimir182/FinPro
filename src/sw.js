@@ -9,7 +9,7 @@ self.addEventListener('install', event => {
       console.log('INSTALL CACHE ADD ALL')
       return cache.addAll([
         '/',
-        './offline.html'
+        '/offline.html'
       ])
     })
   )
