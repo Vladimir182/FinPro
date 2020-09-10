@@ -14,7 +14,7 @@ self.addEventListener('install', event => {
   )
 });
 
-self.addEventListener('activate', event => {
+self.addEventListener('activate', async event => {
   //@ts-ignore
   event.waitUntil(() => {
     if ('navigationPreload' in self.registration) {
