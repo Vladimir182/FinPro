@@ -1,5 +1,5 @@
 const CACHE_NAME = 'sw';
-const OFFLINE_URL = 'offline.html';
+const OFFLINE_URL = './offline.html';
 
 self.addEventListener('install', event => {
   //@ts-ignore
@@ -17,14 +17,14 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   //@ts-ignore
   event.waitUntil(async () => {
-    if ('navigationPreload' in self.registration) {
-      await self.registration.navigationPreload.enable();
-    }
-  }  
+  //   if ('navigationPreload' in self.registration) {
+  //     await self.registration.navigationPreload.enable();
+  //   }
+  // }  
   //   caches.keys().then(function(cacheNames) {
   //     return Promise.all(cacheNames.filter(cacheName => cacheName).map(cacheName => caches.delete(cacheName)))
   //   })
-  )
+  })
 });
 
 self.addEventListener('fetch', (event) => {
@@ -36,10 +36,10 @@ self.addEventListener('fetch', (event) => {
   if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept').includes('text/html'))) {
     event.respondWith(async () => {
       try {
-        const preloadResponse = await event.preloadResponse;
-        if (preloadResponse) {
-          return preloadResponse;
-        }
+        // const preloadResponse = await event.preloadResponse;
+        // if (preloadResponse) {
+        //   return preloadResponse;
+        // }
 
         const networkResponse = await fetch(event.request);
         
