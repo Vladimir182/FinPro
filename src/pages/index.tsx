@@ -10,17 +10,6 @@ import ServerError from '../comoponents/ServerError';
 const Pages: React.FC = (props) => {
   const { serverConnectionStatus } = useSelector((state: AppState) => state.errorScreen);
 
-  useEffect(() => {
-    window.addEventListener('beforeunload', onUnload);
-
-    // return window.removeEventListener('beforeunload', onUnload);
-  })
-
- const onUnload = () => {
-   //@ts-ignore
-   props.history.push('/');
- }
-
   return (
     <>
       <Switch>

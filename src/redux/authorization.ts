@@ -7,7 +7,7 @@ export const FETCH_AUTH_FAILURE = 'FETCH_AUTH_FAILURE';
 const LOG_OUT = 'LOG_OUT';
 
 const initialState = {
-	isLoading: false,
+	isLoading: true,
 	isAuth: false,
 	isError: false,
 	errorMessage: '',
