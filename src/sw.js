@@ -7,7 +7,7 @@ self.addEventListener('install', event => {
     .then(cache => {
       console.log('INSTALL CACHE ADD ALL')
       return cache.addAll([
-        '/',
+        './',
         '/index.html',
         '/favicon.ico',
         '/manifest.json'
@@ -49,6 +49,8 @@ self.addEventListener('fetch', (event) => {
         })
 
         return response;
+      }).catch(() => {
+        caches.match(event.request).then(cachedResponse => cachedResponse)
       })
     })
   )
