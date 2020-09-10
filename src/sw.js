@@ -1,4 +1,5 @@
 const CACHE_NAME = 'sw';
+const OFFLINE_URL = 'offline.html';
 
 self.addEventListener('install', event => {
   //@ts-ignore
@@ -7,10 +8,7 @@ self.addEventListener('install', event => {
     .then(cache => {
       console.log('INSTALL CACHE ADD ALL')
       return cache.addAll([
-        './',
-        '/index.html',
-        '/favicon.ico',
-        '/manifest.json'
+        OFFLINE_URL
       ])
     })
   )
@@ -18,26 +16,49 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
   //@ts-ignore
-  // event.waitUntil(
+  event.waitUntil(() => {
+    if ('navigationPreload' in self.registration) {
+      await self.registration.navigationPreload.enable();
+    }
+  }  
   //   caches.keys().then(function(cacheNames) {
   //     return Promise.all(cacheNames.filter(cacheName => cacheName).map(cacheName => caches.delete(cacheName)))
   //   })
-  // )
+  )
 });
 
 self.addEventListener('fetch', (event) => {
+  
   if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
     return;
   }
+  
   if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept').includes('text/html'))) {
-    event.respondWith(
-      fetch(event.request.url).catch(error => {
-          // Return the offline page
-          // return caches.match(offlineUrl);
-          return ('<p>Offline</p>')
-      })
-    );
+    event.respondWith(async () => {
+      try {
+        const preloadResponse = await event.preloadResponse;
+        if (preloadResponse) {
+          return preloadResponse;
+        }
+
+        const networkResponse = await fetch(event.request);
+        
+        return networkResponse;
+      } catch (error) {
+        // catch is only triggered if an exception is thrown, which is likely
+        // due to a network error.
+        // If fetch() returns a valid HTTP response with a response code in
+        // the 4xx or 5xx range, the catch() will NOT be called.
+
+        console.log('Fetch failed; returning offline page instead.', error);
+
+        const cache = await caches.open(CACHE_NAME);
+        const cachedResponse = await cache.match(OFFLINE_URL);
+        return cachedResponse;
+      }
+    });
   }
+
   event.respondWith(
     caches.match(event.request).then((response) => {
       console.log('RESPONSE', response)
