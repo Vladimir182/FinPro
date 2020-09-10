@@ -55,7 +55,9 @@ export const fetchServerConnection = () => (dispatch: any) => {
 			if (error.status !== 401 && errorScreen.serverConnectionStatus) {
 				dispatch({ type: REQUEST_SERVER_CONNECTION_FAILURE });
 				dispatch({ type: FETCH_AUTH_FAILURE });
-	  		}
+	  		} else if (error.status === 401 && !errorScreen.serverConnectionStatus) {
+				dispatch({ type: REQUEST_SERVER_CONNECTION_SUCCESS });
+			}
     	})
 };
 
