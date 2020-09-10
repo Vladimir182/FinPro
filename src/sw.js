@@ -6,11 +6,9 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
     .then(cache => {
-      console.log('INSTALL CACHE ADD ALL')
       return cache.addAll([
         '/',
         '/index.html',
-        '/offline.html'
       ])
     })
   )
@@ -35,35 +33,22 @@ self.addEventListener('fetch', (event) => {
     return;
   }
   
-  if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept').includes('text/html'))) {
-    event.respondWith(async () => {
-      try {
-        // const preloadResponse = await event.preloadResponse;
-        // if (preloadResponse) {
-        //   return preloadResponse;
-        // }
-
-        const networkResponse = await fetch(event.request);
+  // if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept').includes('text/html'))) {
+  //   event.respondWith(async () => {
+  //     try {
+  //       const networkResponse = await fetch(event.request);
         
-        return networkResponse;
-      } catch (error) {
-        // catch is only triggered if an exception is thrown, which is likely
-        // due to a network error.
-        // If fetch() returns a valid HTTP response with a response code in
-        // the 4xx or 5xx range, the catch() will NOT be called.
-
-        console.log('Fetch failed; returning offline page instead.', error);
-
-        const cache = await caches.open(CACHE_NAME);
-        const cachedResponse = await cache.match('./offline.html');
-        return cachedResponse;
-      }
-    });
-  }
+  //       return networkResponse;
+  //     } catch (error) {
+  //       const cache = await caches.open(CACHE_NAME);
+  //       const cachedResponse = await cache.match('./offline.html');
+  //       return cachedResponse;
+  //     }
+  //   });
+  // }
 
   event.respondWith(
     caches.match(event.request).then((response) => {
-      console.log('RESPONSE', response)
       if (response) {
         return response;
       }
