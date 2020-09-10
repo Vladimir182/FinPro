@@ -3,7 +3,7 @@ import { Redirect, withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../../redux';
 import Pages from '../../pages';
-import { fetchCheckAuth } from '../../redux/authorization';
+import { fetchCheckAuth, FETCH_LOGIN_FAILURE } from '../../redux/authorization';
 import LoaderModal from '../Loading/LoaderModal';
 
 const Authorized: React.FC = (props) => {
@@ -11,8 +11,12 @@ const Authorized: React.FC = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!isAuth && accessToken)
-      fetchCheckAuth()(dispatch)
+    if (!isAuth && accessToken) {
+      fetchCheckAuth()(dispatch);
+    } else if (!accessToken) {
+      dispatch({ type: FETCH_LOGIN_FAILURE });
+    }
+      
   }, [isAuth]);
 
   //@ts-ignore

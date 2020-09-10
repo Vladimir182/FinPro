@@ -4,7 +4,7 @@ import { fetchTerminal } from './voucher';
 const FETCH_AUTH_START = 'FETCH_AUTH_START';
 const FETCH_LOGIN_SUCCESS = 'FETCH_LOGIN_SUCCESS';
 export const FETCH_AUTH_FAILURE = 'FETCH_AUTH_FAILURE';
-const FETCH_LOGIN_FAILURE = 'FETCH_LOGIN_FAILURE';
+export const FETCH_LOGIN_FAILURE = 'FETCH_LOGIN_FAILURE';
 const LOG_OUT = 'LOG_OUT';
 
 const initialState = {
@@ -32,7 +32,8 @@ const authorization = (state = initialState, { type, payload }: Action) => {
 				...state,
 				isAuth: true,
 				isLoading: false,
-				errorMessage: ''
+				errorMessage: '',
+				accessToken: payload
 			};
 		case FETCH_LOGIN_FAILURE:
 			return {
@@ -71,7 +72,7 @@ export const fetchCheckAuth = () => (dispatch: any) => {
 	api.voucher
 		.find({ login: 'check'})
 		.then((res: any) => {
-			dispatch({ type: FETCH_LOGIN_SUCCESS });
+			dispatch({ type: FETCH_LOGIN_SUCCESS, payload: access_token });
 		}).catch((error: any) => {
 			dispatch({ type: FETCH_LOGIN_FAILURE });
 		})
@@ -101,7 +102,7 @@ export const fetchRefreshToken = () => (dispatch: any) => {
 			localStorage.setItem('finpro_access_token', access_token);
       localStorage.setItem('finpro_refresh_token', refresh_token);
       
-      dispatch({ type: FETCH_LOGIN_SUCCESS });
+      dispatch({ type: FETCH_LOGIN_SUCCESS, payload: access_token });
 		})
 		.catch((error: any) => {
       dispatch({ type: FETCH_AUTH_FAILURE });
@@ -127,7 +128,7 @@ export const fetchLogin = ({ username, password }: any) => (dispatch: any) => {
 			localStorage.setItem('finpro_access_token', access_token);
 			localStorage.setItem('finpro_refresh_token', refresh_token);
 
-			dispatch({ type: FETCH_LOGIN_SUCCESS });
+			dispatch({ type: FETCH_LOGIN_SUCCESS, payload: access_token });
 			fetchTerminal()(dispatch);
 		})
 		.catch((error: any) => {
