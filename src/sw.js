@@ -8,6 +8,7 @@ self.addEventListener('install', event => {
     .then(cache => {
       console.log('INSTALL CACHE ADD ALL')
       return cache.addAll([
+        '/',
         './offline.html'
       ])
     })
