@@ -14,9 +14,9 @@ self.addEventListener('install', event => {
   )
 });
 
-self.addEventListener('activate', async event => {
+self.addEventListener('activate', event => {
   //@ts-ignore
-  event.waitUntil(() => {
+  event.waitUntil(async () => {
     if ('navigationPreload' in self.registration) {
       await self.registration.navigationPreload.enable();
     }
