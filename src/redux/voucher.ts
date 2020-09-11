@@ -235,7 +235,10 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         isPinVerified: false,
       }
     case REQUEST_SHOW_BALANCE_SUCCESS:
-      const balance = Math.round(payload.balance);
+      let balance = typeof payload.balance === 'string'
+        ? payload.balance.replace(',', '') 
+        : payload.balance;
+      balance = Math.round(balance);
 
       if (String(balance) === 'NaN') {
         throw { message: 'Invalid sum formatte' }

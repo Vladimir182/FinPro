@@ -10,15 +10,16 @@ type ActionButton = {
   width?: string,
   height?: string,
   style?: { [x: string]: any },
-  className?: string
+  className?: string,
+  disable?: boolean
 }
 
-const ActionButton: React.FC<ActionButton> = ({ title, link, image, handleButtonClick, width, height, style, className }) => {
+const ActionButton: React.FC<ActionButton> = ({ title, link, image, handleButtonClick, width, height, style, className, disable }) => {
 
   const buttonBlockStyles = {
-    border: '7px solid #EAA900',
+    border: `7px solid ${disable ? '#BEBEBE' : '#EAA900'}`,
     // background: 'linear-gradient(180deg, rgba(64, 0, 93, 0) 0%, #7400A8 100%)',
-    filter: 'drop-shadow(0px 0px 5px #EAA900)',
+    filter: disable ? '' : 'drop-shadow(0px 0px 5px #EAA900)',
     WebkitFlter: 'drop-shadow(0px 0px 5px #EAA900)'
   } as React.CSSProperties;
 
@@ -56,7 +57,7 @@ const ActionButton: React.FC<ActionButton> = ({ title, link, image, handleButton
   } as React.CSSProperties;
 
   return (
-    <div className={`action-button-block`}  onClick={handleButtonClick} style={{...buttonBlockStyles, ...style}}>
+    <div className={`action-button-block`}  onClick={!disable ? handleButtonClick: () => {}} style={{...buttonBlockStyles, ...style}}>
       <div className={`action-button-wrapper ${className ?? ''}`} style={buttonWrapperStyles}>
         {
           link ? (

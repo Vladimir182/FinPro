@@ -9,14 +9,15 @@ import { AppState } from '../../redux';
 
 type OptionalCheckProps = {
   backButtonLink?: string,
+  disableLeftButton?: boolean,
   leftButtonHandle?: () => void,
-  rightButtonHandle?: () => void
+  rightButtonHandle?: () => void,
 }
 
 const optionalCheckText = 'ЖЕЛАЕТЕ НАПЕЧАТАТЬ ЧЕК?';
 const leftButtonText = 'Да';
 const rightButtonText = 'Нет';
-const OptionalCheck: React.FC<OptionalCheckProps> = ({ backButtonLink, leftButtonHandle, rightButtonHandle }) => {
+const OptionalCheck: React.FC<OptionalCheckProps> = ({ backButtonLink, leftButtonHandle, rightButtonHandle, disableLeftButton }) => {
   const { showUserAbsence } = useSelector((state: AppState) => state.voucher);
   const { setLink } = useContext(HeaderContext);
 
@@ -24,7 +25,7 @@ const OptionalCheck: React.FC<OptionalCheckProps> = ({ backButtonLink, leftButto
     if (backButtonLink) {
       setLink(backButtonLink)
     }
-  })
+  }) 
 
   return (
     <>
@@ -37,7 +38,7 @@ const OptionalCheck: React.FC<OptionalCheckProps> = ({ backButtonLink, leftButto
               <div className="optional-text">{optionalCheckText}</div>
           </div>
           <div className="optional-button-wrapper">
-            <ActionButton className="optional-button" title={leftButtonText} handleButtonClick={leftButtonHandle} />
+            <ActionButton className="optional-button" disable={disableLeftButton} title={leftButtonText} handleButtonClick={leftButtonHandle} />
             <ActionButton className="optional-button" title={rightButtonText} handleButtonClick={rightButtonHandle} /> 
           </div>
         </div>

@@ -165,6 +165,7 @@ let VoucherLogin: React.FC = () => {
           backButtonLink='/voucher-deposit'
           leftButtonHandle={handlePrintOptionalCheck}
           rightButtonHandle={handleDontPrintOptionalCheck}
+          disableLeftButton={!depositSum}
         /> 
         : showUserAbsence ? <Absence /> 
         : <div className="voucher-deposit-container" style={voucherLoginContainerStyles}>
