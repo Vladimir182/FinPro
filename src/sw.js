@@ -1,9 +1,4 @@
-
-
 const CACHE_NAME = 'sw';
-const OFFLINE_URL = './offline.html';
-
-console.log('assetManifest', self.__precacheManifest)
 
 self.addEventListener('install', event => {
   //@ts-ignore
@@ -11,9 +6,7 @@ self.addEventListener('install', event => {
     caches.open(CACHE_NAME)
     .then(cache => {
       return cache.addAll([
-        '/',
-        '/index.html',
-        '/static/media/serverError.svg'
+        '/'
       ])
     })
   )
@@ -33,10 +26,7 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', (event) => {
-  console.log('EVENT', event)
-  console.log('REQUEST', event.request)
   if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
-    cosnoel.log('RETURN AT COND')
     return;
   }
   
@@ -56,8 +46,7 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(
     caches.match(event.request).then((response) => {
-
-      console.log('SW response', response)
+      
       if (response) {
         return response;
       }
