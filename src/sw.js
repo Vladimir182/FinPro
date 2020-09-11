@@ -1,9 +1,9 @@
-import assetManifest from './asset-manifest.json';
+
 
 const CACHE_NAME = 'sw';
 const OFFLINE_URL = './offline.html';
 
-console.log('assetManifest', assetManifest)
+console.log('assetManifest', self.__precacheManifest)
 
 self.addEventListener('install', event => {
   //@ts-ignore
