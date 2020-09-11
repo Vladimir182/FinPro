@@ -9,6 +9,7 @@ self.addEventListener('install', event => {
       return cache.addAll([
         '/',
         '/index.html',
+        '/static/js/images/serverError.svg'
       ])
     })
   )
