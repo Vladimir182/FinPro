@@ -9,7 +9,7 @@ type RequestMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 type RequestParams = {
   url: string;
   method: RequestMethods;
-  params?: { [x: string]: any }; 
+  params?: { [x: string]: any };
   body?: { [x: string]: any };
 };
 
@@ -103,7 +103,7 @@ export default class ApiClient {
 		const res = Axios({
 			// ${process.env.REACT_APP_URL}
 			method: 'POST',
-			url: `${process.env.REACT_APP_URL}/${this.prefix}${url}${query}`,
+			url: `${this.prefix}${url}${query}`,
 			data: method !== 'GET' ? body : null,
 			withCredentials: true,
 			timeout: 10000

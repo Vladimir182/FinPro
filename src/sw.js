@@ -49,19 +49,20 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(
     caches.match(event.request).then((response) => {
+      console.log('SW response', response)
       if (response) {
         return response;
       }
 
       return fetch(event.request).then(response => {
         if(!response || response.status !== 200 || response.type !== 'basic') {
-        return response;
+          return response;
         }
 
         let clonedResponse = response.clone();
 
         caches.open(CACHE_NAME).then(cache => {
-        cache.put(event.request, clonedResponse)
+          cache.put(event.request, clonedResponse)
         })
 
         return response;
