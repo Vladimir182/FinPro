@@ -28,8 +28,10 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', (event) => {
-  
+  console.log('EVENT', event)
+  console.log('REQUEST', event.request)
   if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
+    cosnoel.log('RETURN AT COND')
     return;
   }
   
@@ -49,8 +51,7 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(
     caches.match(event.request).then((response) => {
-      console.log('EVENT', event)
-      console.log('REQUEST', event.request)
+
       console.log('SW response', response)
       if (response) {
         return response;
@@ -61,7 +62,7 @@ self.addEventListener('fetch', (event) => {
           return response;
         }
 
-        let clonedResponse = response.clone();
+        let clonedResponse = response.clone();  
 
         caches.open(CACHE_NAME).then(cache => {
           cache.put(event.request, clonedResponse)
