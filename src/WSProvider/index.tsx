@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { setDepositSum, setSocketConnectionStatus, setWithdrawSuccess,  } from '../redux/voucher';
+import { setDepositSum, setSocketConnectionStatus, setWithdrawSuccess, hideWeCountBillsScreen } from '../redux/voucher';
 import { HeaderContext } from '../comoponents/Header/HeaderContextProvider';
 import { AppState } from '../redux';
 
@@ -78,6 +78,7 @@ export default ({ children }: { children: any }) => {
         }
         case 'withdraw': {
           dispatch(setWithdrawSuccess());
+          dispatch(hideWeCountBillsScreen());
           setShowOptionalCheck(true);
           setLink('/voucher-withdraw');
         }

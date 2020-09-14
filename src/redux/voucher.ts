@@ -157,7 +157,6 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         ...state,
         isLoading: false,
         isError: false,
-        showWeCountBills: false,
         errorMessage: ''
       }  
     case SET_VOUCHER_PIN:
@@ -204,7 +203,7 @@ const voucher = (state = initialState, { type, payload }: Action) => {
 				isLoading: false,
 				isError: true,
         errorMessage: payload.message,
-        isPrintLoading: false
+        isPrintLoading: false,
       };
     case SET_SHOW_USER_ABSENCE:
       if (!payload) {
@@ -260,6 +259,11 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         ...state,
         showWeCountBills: true
       }
+    case SET_WE_COUNT_BILLS_REMOVE:  
+      return {
+        ...state,
+        showWeCountBills: false
+      }  
 		default:
 			return state;
 	}
@@ -384,7 +388,6 @@ export const fetchVoucherWithdraw = (data: WithdrawBody) => (dispatch: any) => {
           type: SET_AVAILABLE_WITHDRAW_SUM,
           payload: data.validation_errors?.cassette_info
         });
-        
       }
 
       return;
@@ -393,9 +396,8 @@ export const fetchVoucherWithdraw = (data: WithdrawBody) => (dispatch: any) => {
     // dispatch(setWithdrawSuccess());
   })
   .catch((error: any) => {    
-    dispatch({type: REQUEST_VOUCHER_FAILURE,
-      payload: error
-    });
+    dispatch({ type: REQUEST_VOUCHER_FAILURE, payload: error });
+    dispatch({ type: SET_WE_COUNT_BILLS_REMOVE });
     dispatch(showError());
   });
 };
@@ -540,6 +542,10 @@ export const setDepositSum = (sum: number) => ({
 
 export const setWithdrawSuccess = () => ({
   type: REQUEST_VOUCHER_WITHDRAW_SUCCESS
+});
+
+export const hideWeCountBillsScreen = () => ({
+  type: SET_WE_COUNT_BILLS_REMOVE
 });
 
 export default voucher;
