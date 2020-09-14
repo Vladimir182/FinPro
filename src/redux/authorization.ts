@@ -73,6 +73,7 @@ export const fetchCheckAuth = () => (dispatch: any) => {
 		.find({ login: 'check'})
 		.then((res: any) => {
 			dispatch({ type: FETCH_LOGIN_SUCCESS, payload: access_token });
+			fetchTerminal()(dispatch);
 		}).catch((error: any) => {
 			dispatch({ type: FETCH_LOGIN_FAILURE });
 		})
