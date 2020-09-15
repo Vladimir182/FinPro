@@ -11,11 +11,11 @@ import VoucherWithdraw from '../comoponents/VoucherWithdraw';
 import VoucherBalance from '../comoponents/VoucherBalance';
 import VoucherDeposit from '../comoponents/VoucherDeposit';
 import Error from '../comoponents/Error';
-import WeCountBills from '../comoponents/WeCountBills';
+import PaperOut from '../comoponents/PaperOut';
 
 const MainPage: React.FC = () => {
   const { theme } = useContext(ThemeContext);
-  const { isShowError } = useSelector((state: AppState) => state.errorScreen);
+  const { isShowError, isShowPrinterError } = useSelector((state: AppState) => state.errorScreen);
 
   const rootStyles = { 
     background: theme.background,
@@ -40,6 +40,13 @@ const MainPage: React.FC = () => {
             <Route
               path="/"
               component={Error}
+            />           
+          }
+          { 
+            isShowPrinterError &&
+            <Route
+              path="/"
+              component={PaperOut}
             />           
           }
           <Route

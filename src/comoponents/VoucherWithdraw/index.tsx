@@ -67,16 +67,6 @@ const withdrawSumMiddleWrapper = {
   padding: '4px'
 } as React.CSSProperties;
 
-const withdrawSumStyles = {
-  background: '#67219E',
-  display: 'flex',
-  alignItems: 'center',
-  textTransform: 'uppercase',
-  fontStyle: 'normal',
-  fontWeight: 'bold',
-  color: '#7E7E7E'
-} as React.CSSProperties;
-
 const inputStyles = {
   width: 'auto',
   position: 'absolute',
@@ -197,6 +187,15 @@ const VoucherWithdraw: React.FC = () => {
   const availableNominalsTitle = `Доступные купюры, ${currency}:`;
   const availableNominals = (!cassetteInfo || (cassetteInfo && !cassetteInfo.length)) ? noBillsMessage : getAvailableBills(cassetteInfo);
   const availableSumMessage = `Доступная сумма:`;
+  const withdrawSumStyles = {
+    background: '#67219E',
+    display: 'flex',
+    alignItems: 'center',
+    textTransform: 'uppercase',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    color: withdrawSumInput === placeholderWithdrawSum ?'#7E7E7E' : '#FFB800'
+  } as React.CSSProperties;
 
   return (
     <>

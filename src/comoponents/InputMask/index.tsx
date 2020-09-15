@@ -10,7 +10,8 @@ type InputMaskType = {
   errorMessage?: string,
   cleanErrorMessage?: () => void,
   style?: { [key: string]: any },
-  isMasked?: boolean
+  inputMaskItemStyles?: { [key: string]: any },
+  isMasked?: boolean,
 }
 
 const inputBlockStyles = {
@@ -60,7 +61,7 @@ const inputMaskErrorStyles = {
   margin: 0
 } as React.CSSProperties;
 
-const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessage, onInputChange, cleanErrorMessage, style, isMasked }) => {
+const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessage, onInputChange, cleanErrorMessage, style, isMasked, inputMaskItemStyles }) => {
   const [ inputValue, setInputValue ] = useState('');
   const [ isInputActive, setInputActive ] = useState(false);
   
@@ -101,7 +102,7 @@ const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessa
             {Array(length).fill("").map((item, index) => {
               const value = inputValue[index] ?? '';
 
-              return <InputMaskItem key={index} value={value} isInputActive={isInputActive} isError={!!errorMessage} isMasked={isMasked} />
+              return <InputMaskItem key={index} value={value} isInputActive={isInputActive} isError={!!errorMessage} isMasked={isMasked} style={inputMaskItemStyles}/>
             })}
           </div>
           <input id="voucher" ref={inputRef} style={inputStyles} value={inputValue} onChange={e => handleChangeInputValue(e.target.value)}/>

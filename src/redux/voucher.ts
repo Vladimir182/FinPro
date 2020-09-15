@@ -1,6 +1,6 @@
 import api from '../api';
 import { WithdrawBody, PinBody } from '../api/types';
-import { showError } from './error-screen';
+import { showError, showPrinterError } from './error-screen';
 import { store } from '../App';
 
 const REQUEST_VOUCHER_START = 'REQUEST_VOUCHER_START';
@@ -25,7 +25,6 @@ const REQUEST_SHOW_BALANCE_SUCCESS = 'REQUEST_SHOW_BALANCE_SUCCESS';
 const REQUEST_TERMINAL_SUCCESS = 'REQUEST_TERMINAL_SUCCESS';
 const SET_WE_COUNT_BILLS_START = 'SET_WE_COUNT_BILLS_START';
 const SET_WE_COUNT_BILLS_REMOVE = 'SET_WE_COUNT_BILLS_REMOVE';
-
 
 const initialState = {
   isLoading: false,
@@ -307,9 +306,14 @@ export const fetchPrintVoucher = () => (dispatch: any) => {
         payload: data
       });
     } else {
-      dispatch(showError());
-      dispatch({type: REQUEST_VOUCHER_FAILURE,
-        payload: data.messages_error
+      if(data && data.message_error === 'Printer is not active.') {
+        dispatch(showPrinterError());
+      } else {
+        dispatch(showError());
+      }
+      dispatch({
+        type: REQUEST_VOUCHER_FAILURE,
+        payload: data.message_error
       });
     }
   })
@@ -317,6 +321,7 @@ export const fetchPrintVoucher = () => (dispatch: any) => {
     dispatch({type: REQUEST_VOUCHER_FAILURE,
       payload: error
     });
+
     dispatch(showError());
   });
 };
@@ -459,13 +464,17 @@ export const fetchPrintCheck = (data: any) => (dispatch: any) => {
     const resData = res.data;
 
     if (!resData.success) {
-      dispatch({type: REQUEST_VOUCHER_FAILURE });
+      if (data && data.message_error === 'Printer is not active.') {
+        dispatch(showPrinterError());
+      }
+
+      dispatch({ type: REQUEST_VOUCHER_FAILURE });
       dispatch({ type: CLOSE_VOUCHER_SESSION_SUCCESS });
 
       return;
     }
     
-    dispatch({type: REQUEST_PRINT_CHECK_SUCCESS });
+    dispatch({ type: REQUEST_PRINT_CHECK_SUCCESS });
     dispatch({ type: CLOSE_VOUCHER_SESSION_SUCCESS });
   }).catch((error: any) => {
     dispatch({type: REQUEST_VOUCHER_FAILURE, payload: error });
@@ -527,7 +536,7 @@ export const resetVoucherPin = () => ({
   type: RESET_VOUCHER_PIN
 });
 
-export const resetVoucehrErrors = () => ({
+export const resetVoucherErrors = () => ({
   type: RESET_VOUCHER_ERROR_STATUS
 });
 

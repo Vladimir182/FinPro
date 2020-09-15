@@ -48,6 +48,10 @@ const VoucherLogin: React.FC = () => {
   const actionButtonStyles = { 
     marginTop: '7.5vh' 
   } as React.CSSProperties;
+
+  const inputMaskItemStyles = {
+    color: '#FFB800'
+  } as React.CSSProperties;
   
   const handleChangeInputValue = (value: string) => {
     const containNotNumbers = /[^0-9]/.test(value);
@@ -96,6 +100,7 @@ const VoucherLogin: React.FC = () => {
           cleanErrorMessage={cleanInputErrorMessage}
           length={voucherValueLength} 
           errorMessage={inputErrorMessage}
+          inputMaskItemStyles={inputMaskItemStyles}
         />      
         <ActionButton 
           title="Далее" 

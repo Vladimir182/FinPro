@@ -3,7 +3,7 @@ import ErrorImage from '../../images/Error.svg';
 import { useDispatch } from 'react-redux';
 import { hideError } from '../../redux/error-screen';
 import { HeaderContext } from '../Header/HeaderContextProvider';
-import { resetVoucehrErrors } from '../../redux/voucher';
+import { resetVoucherErrors } from '../../redux/voucher';
 import './index.css';
 
 const errorMessageTitle = 'УПС';
@@ -19,7 +19,7 @@ const Error: React.FC = () => {
 
   useEffect(() => {
     setTimeout(function() {
-      dispatch(resetVoucehrErrors());
+      dispatch(resetVoucherErrors());
       dispatch(hideError());
     }, Number(process.env.REACT_APP_REQUEST_ERROR_TIMEOUT))
   });

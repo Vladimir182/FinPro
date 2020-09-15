@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {HeaderContext} from '../Header/HeaderContextProvider';
 import {AppState} from '../../redux';
 import PrintCheck from '../Checks';
-import {fetchPrintVoucher, resetVoucehrErrors} from "../../redux/voucher";
+import {fetchPrintVoucher, resetVoucherErrors} from "../../redux/voucher";
 import './index.module.css';
 import './index.css';
 // const BaseButton = React.lazy(() => import('../Buttons/BaseButton'));
@@ -26,7 +26,7 @@ const HomeScreen: React.FC = () => {
     setLink('');
     setStopVoucherSession(false);
     if (isError || errorMessage) {
-      dispatch(resetVoucehrErrors());
+      dispatch(resetVoucherErrors());
     }
   }, [isError, errorMessage, voucherSessionKey]);
   

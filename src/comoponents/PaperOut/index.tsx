@@ -1,13 +1,25 @@
-import React from 'react';
-
-import './index.css';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { hidePrinterError } from '../../redux/error-screen';
+import { resetVoucherErrors } from '../../redux/voucher';
 import PaperOutImg from '../../images/checkPaperOut.svg'
 import PaperOutMessage from '../../images/absence_img.svg';
+import './index.css';
 
-const paperOfMessageTitle = 'Извините, закончилась бумага';
+const paperOfMessageTitle = 'Проблемы в работе принтера';
 const paperOfMessage = 'ОЙ(';
+const paperOfSubmessage = 'Обратитесь за технической поддрежкой!';
 
 const PaperOut: React.FC = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setTimeout(function() {
+      dispatch(resetVoucherErrors());
+      dispatch(hidePrinterError());
+    }, Number(process.env.REACT_APP_REQUEST_ERROR_TIMEOUT))
+  });
+
   return (
     <>
      <div className="paperOut-page-wrapper">
@@ -27,7 +39,7 @@ const PaperOut: React.FC = () => {
               </div> 
               <div className="paperOutImg-text-wrapper">
                 <div className="paperOutImg-text">
-                  Здесь будет информация в будущем
+                  {paperOfSubmessage}
                 </div>
               </div>
             </div>  

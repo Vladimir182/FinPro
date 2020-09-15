@@ -6,9 +6,12 @@ const SHOW_ERROR_SCREEN = 'SHOW_ERROR_SCREEN';
 const HIDE_ERROR_SCREEN = 'HIDE_ERROR_SCREEN';
 const REQUEST_SERVER_CONNECTION_SUCCESS = 'REQUEST_SERVER_CONNECTION_SUCCESS';
 const REQUEST_SERVER_CONNECTION_FAILURE = 'REQUEST_SERVER_CONNECTION_FAILURE';
+const SHOW_PRINTER_ERROR_SCREEN = 'SHOW_PRINTER_ERROR_SCREEN';
+const HIDE_PRINTER_ERROR_SCREEN = 'HIDE_PRINTER_ERROR_SCREEN';
 
 const initialState = {
 	isShowError: false,
+	isShowPrinterError: false,
 	serverConnectionStatus: true
 };
 
@@ -28,6 +31,16 @@ const errorScreen = (state = initialState, { type }: Action) => {
 				...state,
 				isShowError: false
 			};
+		case SHOW_PRINTER_ERROR_SCREEN:
+			return {
+				...state,
+				isShowPrinterError: true
+			};
+		case HIDE_PRINTER_ERROR_SCREEN:
+			return {
+				...state,
+				isShowPrinterError: false
+			};	
 		case REQUEST_SERVER_CONNECTION_SUCCESS:
 			return {
 				...state,
@@ -69,4 +82,12 @@ export const hideError = () => ({
   type: HIDE_ERROR_SCREEN
 });
 
+export const showPrinterError = () => ({
+	type: SHOW_PRINTER_ERROR_SCREEN
+});
+
+export const hidePrinterError = () => ({
+	type: HIDE_PRINTER_ERROR_SCREEN
+});
+  
 export default errorScreen;
