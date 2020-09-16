@@ -91,10 +91,10 @@
   width: 270px !important;
 }
 
-.absence-button:hover {
+/* .absence-button:hover {
   transition: .1s ease-in-out;
   filter: drop-shadow(0px 0px 17px #FFF500);
-}
+} */
 
 /* @media (max-width: 1921px) {
   .absence-page-wrapper{
