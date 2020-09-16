@@ -557,4 +557,9 @@ export const hideWeCountBillsScreen = () => ({
   type: SET_WE_COUNT_BILLS_REMOVE
 });
 
+export const setAvailableWithdrawSum = (availableWithdrawSum: string | number | null) => ({
+  type: SET_AVAILABLE_WITHDRAW_SUM,
+  payload: availableWithdrawSum
+});
+
 export default voucher;

@@ -97,6 +97,7 @@ let VoucherLogin: React.FC = () => {
     errorMessage,
     showUserAbsence,
   } = useSelector((state: AppState) => state.voucher);
+
   const { 
     setLink,
     setStopVoucherSession,
@@ -176,16 +177,17 @@ let VoucherLogin: React.FC = () => {
                   {Array(depositSumInputLength).fill("").map((item, index) => {
                     const depositSumStr = String(depositSum);
                     let value = '';
+                    let inputMaskItemClassName = '';
 
                     if (index >= depositSumInputLength - depositSumStr.length) {
                       const depositSumIndex = depositSumInputLength - depositSumStr.length - index;
-
+                      inputMaskItemClassName = depositSumIndex <= 0 ? 'deposit-input-mask-item-filled' : '';
                       value = depositSumStr[depositSumIndex < 0 ? (-1) * depositSumIndex : depositSumIndex] ?? '0';
                     }
 
                     return <InputMaskItem 
                       key={index} 
-                      className={Number(value) > 0 ? 'deposit-input-mask-item-filled' : ''} 
+                      className={inputMaskItemClassName ?? ''} 
                       value={value ? value : '0'} 
                       isInputActive={false} 
                       isError={!!errorMessage} isMasked={false} 

@@ -7,7 +7,13 @@ import ActionButton from '../Buttons/ActionButton';
 import ArrowRight from '../../images/ArrowRight.svg';
 import ArrowRightShort from '../../images/ArrowRightShort.svg';
 import './index.css';
-import { fetchCassetteInfo, fetchVoucherWithdraw, fetchCloseVoucherSession, fetchPrintCheck } from '../../redux/voucher';
+import { 
+  fetchCassetteInfo, 
+  fetchVoucherWithdraw, 
+  fetchCloseVoucherSession, 
+  fetchPrintCheck, 
+  setAvailableWithdrawSum 
+} from '../../redux/voucher';
 import LoaderModal from '../Loading/LoaderModal';
 import VoucherPin from '../VoucherPin';
 import Absence from '../absence';
@@ -155,6 +161,7 @@ const VoucherWithdraw: React.FC = () => {
       value = placeholderWithdrawSum;
     }
     
+    dispatch(setAvailableWithdrawSum(null));
     setwithdrawSumInput(value);
   }
 
@@ -200,7 +207,7 @@ const VoucherWithdraw: React.FC = () => {
   return (
     <>
       { isLoading && <LoaderModal /> }
-      { isError && <Redirect to="/voucher" /> }
+      {/* { isError && <Redirect to="/voucher" /> } */}
       { !voucherSessionKey && <Redirect to="/" /> }
       { !isPinVerified 
         ? <VoucherPin />

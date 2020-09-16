@@ -7,7 +7,7 @@ import BaseButton from '../Buttons/BaseButton';
 import deposit from '../../images/Deposit.svg';
 import withdraw from '../../images/Withdraw.svg';
 import balance from '../../images/Balance.svg';
-import { resetVoucherPin, resetBillAccepter } from '../../redux/voucher';
+import { resetVoucherPin, resetBillAccepter, resetVoucherErrors } from '../../redux/voucher';
 import Absence from '../absence';
 import './index.css';
 
@@ -17,13 +17,21 @@ const checkBalanceButtonText = 'Проверить баланс';
 const buttonStyles = {};
 
 const VoucherRoads: React.FC = () => {
-  let { voucherSessionKey, showUserAbsence, isPinVerified, pin, isBillAccepterReady } = useSelector((state: AppState) => state.voucher);  
+  let { 
+    voucherSessionKey, 
+    showUserAbsence, 
+    isPinVerified, 
+    pin, 
+    isBillAccepterReady, 
+    isError 
+  } = useSelector((state: AppState) => state.voucher);  
   const { link, setLink, setStopVoucherSession, showOptionalCheck, setShowOptionalCheck } = useContext(HeaderContext);
   const dispatch = useDispatch();
 
   useEffect(() => {
     setStopVoucherSession(true);
-    if (pin || isPinVerified) {
+    // pin || isPinVerified
+    if (pin) {
       dispatch(resetVoucherPin());
     }
     if (isBillAccepterReady) {
@@ -34,6 +42,9 @@ const VoucherRoads: React.FC = () => {
     }
     if (showOptionalCheck) {
       setShowOptionalCheck(false);
+    }
+    if (isError) {
+      dispatch(resetVoucherErrors());
     }
   })
 
