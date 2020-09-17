@@ -10,30 +10,35 @@ import { WebSocketContext, WS } from '../../WSProvider';
 import './index.css';
 
 const absenceMessageTitle = 'ВЫ ЕЩЕ ЗДЕСЬ?';
+
 const Absence: React.FC = () => {
   //@ts-ignore
   const ws: WS = useContext(WebSocketContext);
   const { voucherSessionKey } = useSelector((state: AppState) => state.voucher);
-  const [ timer, setTimer ] = useState<number>(30);
+  const [ timer, setTimer ] = useState<number>(Number(process.env.REACT_APP_CLOSE_SESSION_USER_ABSENCE_TIMEOUT_SECONDS));
+  const [ intervalTimer, setIntervalTimer ] = useState<any>(null);
   const dispatch = useDispatch();
-  let intervalTimer: any = null;
- 
+
   useEffect(() => {
     if (!intervalTimer) {
-      intervalTimer = setInterval(function() {
-        setTimer( timer => timer - 1);
+      const interval = setInterval(() => {
+        setTimer(timer => timer - 1);
       }, 1000)
-    }
-    if (timer <= 0) {
-      fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
 
-      dispatch(setShowUserAbsence(false));
-      clearInterval(intervalTimer);
+      setIntervalTimer(interval)
     }
-    return () => clearInterval(intervalTimer);
-  });
+
+    if (timer <= 0) {
+      clearInterval(intervalTimer);
+      dispatch(setShowUserAbsence(false));
+      fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
+      setTimer(Number(process.env.REACT_APP_CLOSE_SESSION_USER_ABSENCE_TIMEOUT_SECONDS));
+    }
+
+  },[timer]);
 
   const handleActionButtonClick = () => {
+    clearInterval(intervalTimer)
     dispatch(setShowUserAbsence(false));
   }
 

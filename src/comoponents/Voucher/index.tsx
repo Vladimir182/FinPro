@@ -7,7 +7,7 @@ import BaseButton from '../Buttons/BaseButton';
 import deposit from '../../images/Deposit.svg';
 import withdraw from '../../images/Withdraw.svg';
 import balance from '../../images/Balance.svg';
-import { resetVoucherPin, resetBillAccepter, resetVoucherErrors } from '../../redux/voucher';
+import { resetVoucherPin, resetBillAccepter, resetVoucherErrors, setCassetteInfo } from '../../redux/voucher';
 import Absence from '../absence';
 import './index.css';
 
@@ -20,6 +20,7 @@ const VoucherRoads: React.FC = () => {
   let { 
     voucherSessionKey, 
     showUserAbsence, 
+    cassetteInfo,
     isPinVerified, 
     pin, 
     isBillAccepterReady, 
@@ -45,6 +46,9 @@ const VoucherRoads: React.FC = () => {
     }
     if (isError) {
       dispatch(resetVoucherErrors());
+    }
+    if (cassetteInfo) {
+      dispatch(setCassetteInfo(null));
     }
   })
 

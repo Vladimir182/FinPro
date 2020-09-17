@@ -124,7 +124,7 @@ const VoucherWithdraw: React.FC = () => {
     setLink('/voucher');
     setStopVoucherSession(false);
     
-    if (!isError && !cassetteInfo.length && !isLoading && isPinVerified) {
+    if (!isError && !cassetteInfo && !cassetteInfo?.length && !isLoading && isPinVerified) {
       fetchCassetteInfo({ msid: voucherSessionKey })(dispatch);
     }
     if (!ws.socket || ws.socket.readyState === 3) {

@@ -181,7 +181,7 @@ let VoucherLogin: React.FC = () => {
 
                     if (index >= depositSumInputLength - depositSumStr.length) {
                       const depositSumIndex = depositSumInputLength - depositSumStr.length - index;
-                      inputMaskItemClassName = depositSumIndex <= 0 ? 'deposit-input-mask-item-filled' : '';
+                      inputMaskItemClassName = Number(depositSum) > 0 && depositSumIndex <= 0 ? 'deposit-input-mask-item-filled' : '';
                       value = depositSumStr[depositSumIndex < 0 ? (-1) * depositSumIndex : depositSumIndex] ?? '0';
                     }
 

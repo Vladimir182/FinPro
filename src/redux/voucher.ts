@@ -34,7 +34,7 @@ const initialState = {
   balance: 0,
   pin: '',
   currency: sessionStorage.getItem('finpro-currency') ?? null,
-  cassetteInfo: [],
+  cassetteInfo: null,
   depositSum: 0,
   isBillAccepterReady: false,
   withdrawSum: null,
@@ -87,7 +87,7 @@ function setUserAbsenceInterval(status: boolean) {
   }
 }
 
-function userAbsenceTimeoutPreccess() {
+export function userAbsenceTimeoutPreccess() {
   if (userAbsenceTimer) {
     clearTimeout(userAbsenceTimer)
   }
@@ -209,6 +209,7 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         //@ts-ignore
         window.checkAbsenceTimer = false;
       }
+
       return {
         ...state,
         showUserAbsence: payload
@@ -561,5 +562,10 @@ export const setAvailableWithdrawSum = (availableWithdrawSum: string | number | 
   type: SET_AVAILABLE_WITHDRAW_SUM,
   payload: availableWithdrawSum
 });
+
+export const setCassetteInfo = (cassetteInfo: [] | null) => ({
+  type: REQUEST_CASSETTE_INFO_SUCCESS,
+  payload: { cassette_info: cassetteInfo }
+})
 
 export default voucher;
