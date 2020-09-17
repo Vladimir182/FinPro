@@ -20,7 +20,7 @@ const Pages: React.FC = (props) => {
             path="/"
             component={() => (
               <Page
-                caption="Login"
+                caption="Server error"
                 component={<ServerError />}
               />
             )}

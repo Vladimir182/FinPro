@@ -5,12 +5,11 @@ module.exports = function(app) {
     target: process.env.REACT_APP_URL,
     changeOrigin: true,
     secure:false
-  })
-  );
+  }));
   app.use('/', createProxyMiddleware('/socket', { 
     target: process.env.REACT_APP_WS_URL,
     changeOrigin: true,
     secure: false,
     ws: true 
-  }))
+  }));
 };

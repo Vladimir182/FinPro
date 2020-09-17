@@ -77,9 +77,9 @@ export default class ApiClient {
 				}
 
 				const response = error.response;
-				const accessToken = localStorage.getItem('finpro_access_token');
+				const refreshToken = localStorage.getItem('finpro_refresh_token');
 
-				if (accessToken && (response && response.status === 401)) {
+				if (refreshToken && (response && response.status === 401)) {
 					fetchRefreshToken()(store.dispatch);
 
 					return;
@@ -98,7 +98,7 @@ export default class ApiClient {
 			? `?${queryString.stringify(params)}`
       : '';
 
-    query += token ? `?accessToken=${token}` : '';
+	    query += token ? `?accessToken=${token}` : '';
 
 		const res = Axios({
 			// ${process.env.REACT_APP_URL}
