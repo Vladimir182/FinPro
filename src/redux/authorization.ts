@@ -52,7 +52,10 @@ const authorization = (state = initialState, { type, payload }: Action) => {
 				accessToken: null
 			};
 		case LOG_OUT:            
-			return initialState;
+			return {
+				...initialState,
+				isLoading: false
+			};
 		default:
 			return state;
 	}
@@ -141,9 +144,9 @@ export const logOut = () => (dispatch: any) => {
 	localStorage.removeItem('finpro-token');
 	localStorage.removeItem('finpro-refreshToken');
   
-	  return dispatch({
-		  type: LOG_OUT
-	  });
+	return dispatch({
+		type: LOG_OUT
+	});
   };
 
 export default authorization;

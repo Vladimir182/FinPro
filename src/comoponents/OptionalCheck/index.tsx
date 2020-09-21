@@ -22,9 +22,10 @@ const OptionalCheck: React.FC<OptionalCheckProps> = ({ backButtonLink, leftButto
   const { setLink } = useContext(HeaderContext);
 
   useEffect(() => {
-    if (backButtonLink) {
-      setLink(backButtonLink)
-    }
+    // if (backButtonLink) {
+    //   // setLink(backButtonLink)
+    // }
+    setLink('')
   }) 
 
   return (

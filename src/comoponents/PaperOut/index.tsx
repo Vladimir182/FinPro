@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { hidePrinterError } from '../../redux/error-screen';
 import { resetVoucherErrors } from '../../redux/voucher';
 import PaperOutImg from '../../images/checkPaperOut.svg'
 import PaperOutMessage from '../../images/absence_img.svg';
 import './index.css';
+import { HeaderContext } from '../Header/HeaderContextProvider';
 
 const paperOfMessageTitle = 'Проблемы в работе принтера';
 const paperOfMessage = 'ОЙ(';
@@ -12,12 +13,15 @@ const paperOfSubmessage = 'Обратитесь за технической по
 
 const PaperOut: React.FC = () => {
   const dispatch = useDispatch();
+  const { setLink } = useContext(HeaderContext);
 
   useEffect(() => {
     setTimeout(function() {
       dispatch(resetVoucherErrors());
       dispatch(hidePrinterError());
-    }, Number(process.env.REACT_APP_REQUEST_ERROR_TIMEOUT))
+    }, Number(process.env.REACT_APP_REQUEST_ERROR_TIMEOUT));
+    
+    setLink('');
   });
 
   return (

@@ -131,11 +131,11 @@ let VoucherLogin: React.FC = () => {
   })
 
   const handleActionButton = () => {
-    if (depositSum && depositSum > 0) {
+    // if (depositSum && depositSum > 0) {
       setShowOptionalCheck(true);
       setShouldFetchDepositInit(true);
       setLink('/voucher-deposit');
-    }
+    // }
   }
 
   const handlePrintOptionalCheck = () => {
@@ -205,6 +205,7 @@ let VoucherLogin: React.FC = () => {
             handleButtonClick={handleActionButton} 
             image={image} 
             style={actionButtonStyles}
+            disable={!depositSum}
           />
         </div>
       }

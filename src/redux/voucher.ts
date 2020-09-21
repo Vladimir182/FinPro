@@ -22,6 +22,7 @@ const SET_SHOW_USER_ABSENCE = 'SET_SHOW_USER_ABSENCE';
 const SET_SOCKET_CONNECTION_STATUS = 'SET_SOCKET_CONNECTION_STATUS';
 const REQUEST_PRINT_CHECK_SUCCESS = 'REQUEST_PRINT_CHECK_SUCCESS';
 const REQUEST_SHOW_BALANCE_SUCCESS = 'REQUEST_SHOW_BALANCE_SUCCESS';
+const RESET_BALANCE = 'RESET_BALANCE';
 const REQUEST_TERMINAL_SUCCESS = 'REQUEST_TERMINAL_SUCCESS';
 const SET_WE_COUNT_BILLS_START = 'SET_WE_COUNT_BILLS_START';
 const SET_WE_COUNT_BILLS_REMOVE = 'SET_WE_COUNT_BILLS_REMOVE';
@@ -31,7 +32,7 @@ const initialState = {
   isPrintLoading: false,
   terminalId: null,
   isPinVerified: false,
-  balance: 0,
+  balance: null,
   pin: '',
   currency: sessionStorage.getItem('finpro-currency') ?? null,
   cassetteInfo: null,
@@ -249,6 +250,11 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         isLoading: false,
         isError: false,
       }
+    case RESET_BALANCE:
+      return {
+        ...state,
+        balance: null
+      }  
     case REQUEST_TERMINAL_SUCCESS:
       return {
         ...state,
@@ -307,7 +313,8 @@ export const fetchPrintVoucher = () => (dispatch: any) => {
         payload: data
       });
     } else {
-      if(data && data.message_error === 'Printer is not active.') {
+      console.log('data', data)
+      if(data && (data.message_error === 'Printer is not active.' || data.message_error === '"Printer not responding"')) {
         dispatch(showPrinterError());
       } else {
         dispatch(showError());
@@ -567,5 +574,9 @@ export const setCassetteInfo = (cassetteInfo: [] | null) => ({
   type: REQUEST_CASSETTE_INFO_SUCCESS,
   payload: { cassette_info: cassetteInfo }
 })
+
+export const resetBalnce = () => ({
+  type: RESET_BALANCE
+});
 
 export default voucher;

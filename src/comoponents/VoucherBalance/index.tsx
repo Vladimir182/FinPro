@@ -86,7 +86,7 @@ const VoucherBalance: React.FC = (props: any) => {
   useEffect(() => {
     setLink('/voucher');
     setStopVoucherSession(false);
-    if (!isLoading && !balance && pin) {
+    if (!isLoading && balance === null && pin) {
       fetchShowBalnce({
         pin,
         msid: voucherSessionKey

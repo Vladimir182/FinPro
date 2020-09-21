@@ -6,8 +6,8 @@ import { HeaderContext } from '../Header/HeaderContextProvider';
 import BaseButton from '../Buttons/BaseButton';
 import deposit from '../../images/Deposit.svg';
 import withdraw from '../../images/Withdraw.svg';
-import balance from '../../images/Balance.svg';
-import { resetVoucherPin, resetBillAccepter, resetVoucherErrors, setCassetteInfo } from '../../redux/voucher';
+import balanceImage from '../../images/Balance.svg';
+import { resetVoucherPin, resetBillAccepter, resetVoucherErrors, setCassetteInfo, resetBalnce } from '../../redux/voucher';
 import Absence from '../absence';
 import './index.css';
 
@@ -23,7 +23,8 @@ const VoucherRoads: React.FC = () => {
     cassetteInfo,
     isPinVerified, 
     pin, 
-    isBillAccepterReady, 
+    isBillAccepterReady,
+    balance,
     isError 
   } = useSelector((state: AppState) => state.voucher);  
   const { link, setLink, setStopVoucherSession, showOptionalCheck, setShowOptionalCheck } = useContext(HeaderContext);
@@ -49,6 +50,9 @@ const VoucherRoads: React.FC = () => {
     }
     if (cassetteInfo) {
       dispatch(setCassetteInfo(null));
+    }
+    if (balance !== null) {
+      dispatch(resetBalnce());
     }
   })
 
@@ -76,7 +80,7 @@ const VoucherRoads: React.FC = () => {
             className="voucher-button"
             title={checkBalanceButtonText}
             link="/voucher-balance"
-            image={balance}
+            image={balanceImage}
             style={{
               ...buttonStyles,
               marginRight: '0'

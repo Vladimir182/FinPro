@@ -1,7 +1,7 @@
 import queryString from 'query-string';
 import Axios from 'axios';
 import { store } from '../App';
-import { fetchRefreshToken } from '../redux/authorization';
+import { fetchRefreshToken, logOut } from '../redux/authorization';
 import { fetchServerConnection } from '../redux/error-screen';
 
 type RequestMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -76,6 +76,7 @@ export default class ApiClient {
 					throw error;
 				}
 
+				const state = store.getState();
 				const response = error.response;
 				const refreshToken = localStorage.getItem('finpro_refresh_token');
 
@@ -83,6 +84,8 @@ export default class ApiClient {
 					fetchRefreshToken()(store.dispatch);
 
 					return;
+				} else if (!refreshToken && response.status === 401 && state.authorization.isAuth) {
+					logOut()(store.dispatch);
 				}
 
 				if (response) {
@@ -106,7 +109,7 @@ export default class ApiClient {
 			url: `${process.env.REACT_APP_URL}/${this.prefix}${url}${query}`,
 			data: method !== 'GET' ? body : null,
 			withCredentials: true,
-			timeout: 10000
+			timeout: 90000 
 		});
 
 		return this.handleResponse(res);
