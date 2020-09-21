@@ -156,9 +156,9 @@ let VoucherLogin: React.FC = () => {
 
   return (
     <>
-      {isLoading && <LoaderModal />}
-      {isError && <Redirect to="/voucher" />}
-      {!voucherSessionKey && <Redirect to="/" />}
+      { isLoading && <LoaderModal /> }
+      { isError && <Redirect to="/voucher" /> }
+      { !voucherSessionKey && <Redirect to="/" /> }
       { isPrintLoading
         ? <PrintCheck /> 
         : showOptionalCheck

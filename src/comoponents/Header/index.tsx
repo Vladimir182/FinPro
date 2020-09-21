@@ -52,7 +52,7 @@ const Header: React.FC = () => {
     shouldFetchDepositInit,
     setShouldFetchDepositInit,
     resetDepositSum,
-    setResetDepositSum
+    setResetDepositSum,
   } = useContext(HeaderContext);
   const { voucherSessionKey, showUserAbsence } = useSelector((state: AppState) => state.voucher);
   link = !link ? (sessionStorage.getItem('finpro-backlink') ?? '') : link;
@@ -70,7 +70,7 @@ const Header: React.FC = () => {
     if (resetDepositSum) {
       dispatch(setDepositSum(0));
     }
-    
+
     setResetDepositSum(false);
     setShowOptionalCheck(false);
     setShouldFetchDepositInit(false);
@@ -87,11 +87,20 @@ const Header: React.FC = () => {
     <div className="header" style={rootStyles}>
       <div>
         <span style={{ visibility: 'hidden' }}>hidden</span>
-        { (!showUserAbsence && (link || stopVoucherSession)) && <div style={layer} className='layer'>
-	        <NavLink to={link} style={backButton} className='backButton' onClick={handleButtonClick}>
-		        <img src={Arrow} alt=""/>
-		        Назад</NavLink> 
-        </div> }
+          {
+            (!showUserAbsence && (link || stopVoucherSession)) && 
+            (<div style={layer} className='layer'>
+              <NavLink 
+                to={link} 
+                style={backButton} 
+                className='backButton' 
+                onClick={handleButtonClick}
+              >
+                <img src={Arrow} alt=""/>
+                Назад
+              </NavLink> 
+            </div>)
+          }
       </div>
       { hideLogo 
         ? <div><span style={{ visibility: 'hidden' }}> hidden</span></div>

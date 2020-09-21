@@ -115,7 +115,7 @@ const VoucherWithdraw: React.FC = () => {
     showWeCountBills
   } = useSelector((state: AppState) => state.voucher);
 
-  const [ withdrawSumInput, setwithdrawSumInput ] = useState(withdrawSum ?? placeholderWithdrawSum);
+  const [ withdrawSumInput, setwithdrawSumInput ] = useState<any>(withdrawSum ?? placeholderWithdrawSum);
   const { setLink, setStopVoucherSession, showOptionalCheck} = useContext(HeaderContext);
   const inputRef = React.createRef<HTMLInputElement>();
   const dispatch = useDispatch();
@@ -154,15 +154,20 @@ const VoucherWithdraw: React.FC = () => {
     if (
       String(value).length > 0 && String(Number(value)) === 'NaN' 
       || String(value).length > 12
-    ) {  
-      return;
-    }
-    if (!String(value).length) {
-      value = placeholderWithdrawSum;
-    }
+      ) {  
+        return;
+      }
+      if (!String(value).length || !value.trim()) {
+        value = placeholderWithdrawSum;
+      }
     
-    dispatch(setAvailableWithdrawSum(null));
-    setwithdrawSumInput(value);
+      dispatch(setAvailableWithdrawSum(null));
+
+    const parsedValue = value !== placeholderWithdrawSum 
+      ? parseInt(value) 
+      : value; 
+
+    setwithdrawSumInput(parsedValue);
   }
 
   const getAvailableBills = (cassetteInfo: Array<{ denomination: number }>) => {
@@ -194,6 +199,8 @@ const VoucherWithdraw: React.FC = () => {
   const availableNominalsTitle = `Доступные купюры, ${currency}:`;
   const availableNominals = (!cassetteInfo || (cassetteInfo && !cassetteInfo.length)) ? noBillsMessage : getAvailableBills(cassetteInfo);
   const availableSumMessage = `Доступная сумма:`;
+  const isActionButtonDisabled = !withdrawSumInput || withdrawSumInput === placeholderWithdrawSum;
+
   const withdrawSumStyles = {
     background: '#67219E',
     display: 'flex',
@@ -255,6 +262,7 @@ const VoucherWithdraw: React.FC = () => {
             handleButtonClick={handleActionButtonClick}
             image={image}
             style={actionButtonStyles}
+            disable={isActionButtonDisabled}
           />
         </div>
       }
