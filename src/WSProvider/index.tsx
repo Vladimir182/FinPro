@@ -6,7 +6,8 @@ import {
   setWithdrawSuccess, 
   hideWeCountBillsScreen, 
   userAbsenceTimeoutPreccess, 
-  fetchDepositInit
+  fetchDepositInit,
+  resetWeCountBillsTimer
 } from '../redux/voucher';
 import { showOptionalCheck } from '../redux/screens';
 import { AppState } from '../redux';
@@ -24,9 +25,8 @@ const WebSocketContext = createContext(null);
 export { WebSocketContext }
 
 export default ({ children }: { children: any }) => {
-
   const [ socket, setSocket ] = useState<WebSocket | null>(null);
-  const { socketConnectionStatus, depositSum, voucherSessionKey } = useSelector((state: AppState) => state.voucher);
+  const { socketConnectionStatus, depositSum, voucherSessionKey, weCountBillsTimer } = useSelector((state: AppState) => state.voucher);
   const dispatch = useDispatch();
   let reconnectTimer: any = null;
 
@@ -86,6 +86,9 @@ export default ({ children }: { children: any }) => {
           break;
         }
         case 'withdraw': {
+          if (weCountBillsTimer) {
+            dispatch(resetWeCountBillsTimer(weCountBillsTimer));
+          }
           dispatch(setWithdrawSuccess());
           dispatch(hideWeCountBillsScreen());
           dispatch(showOptionalCheck())

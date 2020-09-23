@@ -26,6 +26,8 @@ const RESET_BALANCE = 'RESET_BALANCE';
 const REQUEST_TERMINAL_SUCCESS = 'REQUEST_TERMINAL_SUCCESS';
 const SET_WE_COUNT_BILLS_START = 'SET_WE_COUNT_BILLS_START';
 const SET_WE_COUNT_BILLS_REMOVE = 'SET_WE_COUNT_BILLS_REMOVE';
+const SET_WE_COUNT_BILLS_TIMER = 'SET_WE_COUNT_BILLS_TIMER';
+const RESET_WE_COUNT_BILLS_TIMER = 'RESET_WE_COUNT_BILLS_TIMER';
 
 const initialState = {
   isLoading: false,
@@ -46,6 +48,7 @@ const initialState = {
   showUserAbsence: false,
   socketConnectionStatus: false,
   showWeCountBills: false,
+  weCountBillsTimer: null
 };
 
 interface Action {
@@ -269,7 +272,18 @@ const voucher = (state = initialState, { type, payload }: Action) => {
       return {
         ...state,
         showWeCountBills: false
-      }  
+      }
+    case SET_WE_COUNT_BILLS_TIMER:
+      return {
+        ...state,
+        weCountBillsTimer: payload
+      }
+    case RESET_WE_COUNT_BILLS_TIMER:
+      clearTimeout(payload);
+      return {
+        ...state,
+        weCountBillsTimer: null
+      }
 		default:
 			return state;
 	}
@@ -389,7 +403,20 @@ export const fetchVoucherPin = (data: PinBody) => (dispatch: any) => {
 
 export const fetchVoucherWithdraw = (data: WithdrawBody) => (dispatch: any) => {
   // dispatch({type: REQUEST_VOUCHER_START});
-  dispatch({type: SET_WE_COUNT_BILLS_START})
+  dispatch({ type: SET_WE_COUNT_BILLS_START });
+
+  const weCountBillsTimer = setTimeout(() => {
+    const state = store.getState();
+
+    if (state.voucher.showWeCountBills) {
+      dispatch(showError());
+      dispatch({ type: SET_WE_COUNT_BILLS_REMOVE });
+      dispatch(resetWeCountBillsTimer(weCountBillsTimer));
+    }
+  }, Number(process.env.REACT_APP_SOCKET_WITHDRAW_WAIT_TIMER));
+
+  dispatch(setweCountBillsTimer(weCountBillsTimer));
+
   api.voucher
   .withdraw(data)
   .then((res: any) => {
@@ -416,7 +443,7 @@ export const fetchVoucherWithdraw = (data: WithdrawBody) => (dispatch: any) => {
 };
 
 export const fetchCloseVoucherSession = (voucherSessionKey: string, closeWSConnection: () => void) => (dispatch: any) => {
-  dispatch({type: REQUEST_VOUCHER_START});
+  dispatch({ type: REQUEST_VOUCHER_START });
 
   const data = {
     msid: voucherSessionKey
@@ -577,6 +604,16 @@ export const setCassetteInfo = (cassetteInfo: [] | null) => ({
 
 export const resetBalnce = () => ({
   type: RESET_BALANCE
+});
+
+export const setweCountBillsTimer = (timer: any) => ({
+  type: SET_WE_COUNT_BILLS_TIMER,
+  payload: timer
+});
+
+export const resetWeCountBillsTimer = (timer: any) => ({
+  type: RESET_WE_COUNT_BILLS_TIMER,
+  payload: timer
 });
 
 export default voucher;
