@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React from 'react';
 import './index.css'
 import ActionButton from '../Buttons/ActionButton';
 import chackImg from '../../images/check_img.svg'
-import { HeaderContext } from '../Header/HeaderContextProvider';
 import Absence from '../absence';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../redux';
@@ -19,14 +18,6 @@ const leftButtonText = 'Да';
 const rightButtonText = 'Нет';
 const OptionalCheck: React.FC<OptionalCheckProps> = ({ backButtonLink, leftButtonHandle, rightButtonHandle, disableLeftButton }) => {
   const { showUserAbsence } = useSelector((state: AppState) => state.voucher);
-  const { setLink } = useContext(HeaderContext);
-
-  useEffect(() => {
-    // if (backButtonLink) {
-    //   // setLink(backButtonLink)
-    // }
-    setLink('')
-  }) 
 
   return (
     <>
@@ -43,7 +34,6 @@ const OptionalCheck: React.FC<OptionalCheckProps> = ({ backButtonLink, leftButto
             <ActionButton className="optional-button" title={rightButtonText} handleButtonClick={rightButtonHandle} /> 
           </div>
         </div>
-       
       </div>}
     </>
   )

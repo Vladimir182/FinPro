@@ -8,7 +8,7 @@ import LoaderModal from '../Loading/LoaderModal';
 
 const Authorized: React.FC = (props) => {
   const { isAuth, isLoading, accessToken } = useSelector((state: AppState) => state.authorization);
-  const { serverConnectionStatus } = useSelector((state: AppState) => state.errorScreen);
+  const { serverConnectionStatus } = useSelector((state: AppState) => state.screens);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -17,11 +17,11 @@ const Authorized: React.FC = (props) => {
     } else if (!accessToken && serverConnectionStatus) {
       dispatch({ type: FETCH_LOGIN_FAILURE });
     }
-      
   }, [isAuth]);
 
   //@ts-ignore
   const isLoginPage = props.location.pathname === '/login';
+
   return (
     <>
       { 

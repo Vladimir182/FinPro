@@ -1,6 +1,6 @@
 import api from '../api';
 import { WithdrawBody, PinBody } from '../api/types';
-import { showError, showPrinterError } from './error-screen';
+import { showError, showPrinterError } from './screens';
 import { store } from '../App';
 
 const REQUEST_VOUCHER_START = 'REQUEST_VOUCHER_START';

@@ -1,10 +1,18 @@
-import React, { createContext, useState, useEffect, useContext } from 'react'
+import React, { createContext, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDepositSum, setSocketConnectionStatus, setWithdrawSuccess, hideWeCountBillsScreen, userAbsenceTimeoutPreccess } from '../redux/voucher';
-import { HeaderContext } from '../comoponents/Header/HeaderContextProvider';
+import { 
+  setDepositSum, 
+  setSocketConnectionStatus, 
+  setWithdrawSuccess, 
+  hideWeCountBillsScreen, 
+  userAbsenceTimeoutPreccess, 
+  fetchDepositInit
+} from '../redux/voucher';
+import { showOptionalCheck } from '../redux/screens';
 import { AppState } from '../redux';
 
 type Action = 'deposit' | 'withdraw';
+
 export type WS = {
   socket: WebSocket | null
   setWSConnnection: () => void
@@ -18,12 +26,10 @@ export { WebSocketContext }
 export default ({ children }: { children: any }) => {
 
   const [ socket, setSocket ] = useState<WebSocket | null>(null);
-  const { socketConnectionStatus } = useSelector((state: AppState) => state.voucher);
+  const { socketConnectionStatus, depositSum, voucherSessionKey } = useSelector((state: AppState) => state.voucher);
   const dispatch = useDispatch();
-  const { setShowOptionalCheck, setShouldFetchDepositInit, setLink } = useContext(HeaderContext);
   let reconnectTimer: any = null;
 
-  
   const setWSConnnection = () => {
     if (socketConnectionStatus || (socket && socket.readyState <= 1)) {
       return;
@@ -71,17 +77,18 @@ export default ({ children }: { children: any }) => {
           break;
         }
         case 'check': {
-          setShowOptionalCheck(true);
-          setShouldFetchDepositInit(true);
-          setLink('/voucher-deposit');
+          if (depositSum) {
+            dispatch(showOptionalCheck())
+          } else {
+            fetchDepositInit(voucherSessionKey)(dispatch);
+          }
 
           break;
         }
         case 'withdraw': {
           dispatch(setWithdrawSuccess());
           dispatch(hideWeCountBillsScreen());
-          setShowOptionalCheck(true);
-          setLink('/voucher-withdraw');
+          dispatch(showOptionalCheck())
         }
         // case 'pong': {
         //   console.log('WS PONG')

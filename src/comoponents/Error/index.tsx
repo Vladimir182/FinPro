@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import ErrorImage from '../../images/Error.svg';
 import { useDispatch } from 'react-redux';
-import { hideError } from '../../redux/error-screen';
+import { hideError } from '../../redux/screens';
 import { HeaderContext } from '../Header/HeaderContextProvider';
 import { resetVoucherErrors } from '../../redux/voucher';
 import './index.css';
@@ -11,11 +11,6 @@ const somethisngWrongMessage = 'что-то пошло не так';
 
 const Error: React.FC = () => {
   const dispatch = useDispatch();
-  const { setLink } = useContext(HeaderContext);
-
-  useEffect(() => {
-    setLink('');
-  })
 
   useEffect(() => {
     setTimeout(function() {

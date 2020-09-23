@@ -1,5 +1,4 @@
-import React, { useEffect, useContext } from 'react';
-import { HeaderContext } from '../Header/HeaderContextProvider';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../../redux';
 import { Redirect } from 'react-router-dom';
@@ -7,10 +6,11 @@ import ActionButton from '../Buttons/ActionButton';
 import WithdrawAction from '../../images/WithdrawAction.svg';
 import DepositAction from '../../images/DepositAction.svg';
 import VoucherPin from '../VoucherPin';
-import './index.css';
 import Absence from '../absence';
 import { fetchShowBalnce } from '../../redux/voucher';
 import LoaderModal from '../Loading/LoaderModal';
+import BackButton from '../Buttons/BackButton';
+import './index.css';
 
 const voucherBalanceContainerStyles = {
   display: 'flex',
@@ -80,12 +80,9 @@ const VoucherBalance: React.FC = (props: any) => {
     isPinVerified,
     showUserAbsence
   } = useSelector((state: AppState) => state.voucher);
-  const { setLink, setStopVoucherSession } = useContext(HeaderContext);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setLink('/voucher');
-    setStopVoucherSession(false);
     if (!isLoading && balance === null && pin) {
       fetchShowBalnce({
         pin,
@@ -101,30 +98,37 @@ const VoucherBalance: React.FC = (props: any) => {
       {!isPinVerified
         ? <VoucherPin />
         : showUserAbsence ? <Absence />
-        : <div className="balance-login-container" style={voucherBalanceContainerStyles}>
-          <div className="balance-block" style={inputBlockStyles}>
-            <p className="balance-title" style={titleStyles}>{balanceTitle}</p>
-            <div className="balance-sum-wrapper" style={balanceSumWrapper}>
-              <div className="balance-sum" style={balanceSumStyles}>{ balance } { currency }</div>
+        : (
+          <>
+            <BackButton
+              link="/voucher"
+            />
+            <div className="balance-login-container" style={voucherBalanceContainerStyles}>
+              <div className="balance-block" style={inputBlockStyles}>
+                <p className="balance-title" style={titleStyles}>{balanceTitle}</p>
+                <div className="balance-sum-wrapper" style={balanceSumWrapper}>
+                  <div className="balance-sum" style={balanceSumStyles}>{ balance } { currency }</div>
+                </div>
+              </div>
+              <div className="balance-action-wrapper" style={balanceActionWrapperStyles}>
+                <ActionButton
+                  title={balanceDepositActionButtonTitle}
+                  className="voucher-balance-button"
+                  link="/voucher-deposit"
+                  image={DepositAction}
+                  style={actionButtonStyles}
+                />
+                <ActionButton
+                  title={balanceWithdrawActionButtonTitle} 
+                  className="voucher-balance-button" 
+                  link="/voucher-withdraw" 
+                  image={WithdrawAction} 
+                  style={{ ...actionButtonStyles, marginRight: 0 }}
+                />
+              </div>
             </div>
-          </div>
-          <div className="balance-action-wrapper" style={balanceActionWrapperStyles}>
-            <ActionButton
-              title={balanceDepositActionButtonTitle}
-              className="voucher-balance-button"
-              link="/voucher-deposit"
-              image={DepositAction}
-              style={actionButtonStyles}
-            />
-            <ActionButton
-              title={balanceWithdrawActionButtonTitle} 
-              className="voucher-balance-button" 
-              link="/voucher-withdraw" 
-              image={WithdrawAction} 
-              style={{ ...actionButtonStyles, marginRight: 0 }}
-            />
-          </div>
-        </div>
+          </>
+        )
       }  
     </>
   )  

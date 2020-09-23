@@ -5,12 +5,10 @@ import Loading from "../Loading";
 import './index.css';
 
 const Check: React.FC = () => {
-  const { setHideLogo, setLink } = useContext(HeaderContext);
+  const { setHideLogo, } = useContext(HeaderContext);
 
   useEffect(() => {
     setHideLogo(true);
-
-    setLink('');
   })
   return (
     <>

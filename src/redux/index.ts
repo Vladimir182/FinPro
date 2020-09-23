@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 import authorization from './authorization';
 import voucher from './voucher';
-import errorScreen from './error-screen';
+import screens from './screens';
 
 const rootReducer = combineReducers({
   authorization,
   voucher,
-  errorScreen
+  screens
 });
 
 type RootReducer = typeof rootReducer

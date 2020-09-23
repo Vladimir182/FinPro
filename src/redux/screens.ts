@@ -1,6 +1,5 @@
 import api from '../api';
 import { store } from '../App';
-import { FETCH_AUTH_FAILURE } from './authorization';
 
 const SHOW_ERROR_SCREEN = 'SHOW_ERROR_SCREEN';
 const HIDE_ERROR_SCREEN = 'HIDE_ERROR_SCREEN';
@@ -8,10 +7,13 @@ const REQUEST_SERVER_CONNECTION_SUCCESS = 'REQUEST_SERVER_CONNECTION_SUCCESS';
 const REQUEST_SERVER_CONNECTION_FAILURE = 'REQUEST_SERVER_CONNECTION_FAILURE';
 const SHOW_PRINTER_ERROR_SCREEN = 'SHOW_PRINTER_ERROR_SCREEN';
 const HIDE_PRINTER_ERROR_SCREEN = 'HIDE_PRINTER_ERROR_SCREEN';
+const SHOW_OPTIONAL_CHECK_SCREEN = 'SHOW_OPTIONAL_CHECK_SCREEN';
+const HIDE_OPTIONAL_CHECK_SCREEN = 'HIDE_OPTIONAL_CHECK_SCREEN';
 
 const initialState = {
 	isShowError: false,
 	isShowPrinterError: false,
+	isShowOptionalCheck: false,
 	serverConnectionStatus: true
 };
 
@@ -50,26 +52,36 @@ const errorScreen = (state = initialState, { type }: Action) => {
 			return {
 				...state,
 				serverConnectionStatus: false
-			}  
+			}
+		case SHOW_OPTIONAL_CHECK_SCREEN:
+			return {
+				...state,
+				isShowOptionalCheck: true
+			}
+		case HIDE_OPTIONAL_CHECK_SCREEN:
+			return {
+				...state,
+				isShowOptionalCheck: false
+			}	
 		default:
 			return state;
 	}
 };
 
 export const fetchServerConnection = () => (dispatch: any) => {
-	const { errorScreen} = store.getState();
+	const { screens } = store.getState();
 
 	api.voucher
 		.find({ login: 'check'})
 		.then((res: any) => {
-			if (!errorScreen.serverConnectionStatus) {
+			if (!screens.serverConnectionStatus) {
 				dispatch({ type: REQUEST_SERVER_CONNECTION_SUCCESS });
 			}
 		}).catch((error: any) => {
-			if (error.status !== 401 && errorScreen.serverConnectionStatus) {
+			if (error.status !== 401 && screens.serverConnectionStatus) {
 				dispatch({ type: REQUEST_SERVER_CONNECTION_FAILURE });
 				// dispatch({ type: FETCH_AUTH_FAILURE });
-	  		} else if (error.status === 401 && !errorScreen.serverConnectionStatus) {
+	  		} else if (error.status === 401 && !screens.serverConnectionStatus) {
 				dispatch({ type: REQUEST_SERVER_CONNECTION_SUCCESS });
 			}
     	})
@@ -89,6 +101,14 @@ export const showPrinterError = () => ({
 
 export const hidePrinterError = () => ({
 	type: HIDE_PRINTER_ERROR_SCREEN
+});
+
+export const showOptionalCheck = () => ({
+	type: SHOW_OPTIONAL_CHECK_SCREEN
+});
+
+export const hideOptionalCheck = () => ({
+	type: HIDE_OPTIONAL_CHECK_SCREEN
 });
   
 export default errorScreen;

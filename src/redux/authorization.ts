@@ -145,7 +145,7 @@ export const logOut = () => (dispatch: any) => {
 	localStorage.removeItem('finpro-refreshToken');
   
 	return dispatch({
-		type: LOG_OUT
+	  type: LOG_OUT
 	});
   };
 

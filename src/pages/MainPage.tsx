@@ -15,7 +15,7 @@ import PaperOut from '../comoponents/PaperOut';
 
 const MainPage: React.FC = () => {
   const { theme } = useContext(ThemeContext);
-  const { isShowError, isShowPrinterError } = useSelector((state: AppState) => state.errorScreen);
+  const { isShowError, isShowPrinterError } = useSelector((state: AppState) => state.screens);
 
   const rootStyles = { 
     background: theme.background,

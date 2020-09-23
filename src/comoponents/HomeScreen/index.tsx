@@ -1,10 +1,9 @@
-import React, {useContext, useEffect, Suspense, lazy} from 'react';
+import React, { useEffect, Suspense, lazy} from 'react';
 import newVoucher from '../../images/icon_new_voucher.svg';
 import existingVoucher from '../../images/icon_voucher.svg';
 import BaseButton from '../Buttons/BaseButton';
 import {Redirect} from 'react-router-dom';
 import {useDispatch, useSelector} from "react-redux";
-import {HeaderContext} from '../Header/HeaderContextProvider';
 import {AppState} from '../../redux';
 import PrintCheck from '../Checks';
 import {fetchPrintVoucher, resetVoucherErrors} from "../../redux/voucher";
@@ -20,11 +19,8 @@ const HomeScreen: React.FC = () => {
     isError,
     errorMessage
    } = useSelector((state: AppState) => state.voucher);
-  const { setLink, setStopVoucherSession } = useContext(HeaderContext);
   
   useEffect(() => {
-    setLink('');
-    setStopVoucherSession(false);
     if (isError || errorMessage) {
       dispatch(resetVoucherErrors());
     }
@@ -34,7 +30,6 @@ const HomeScreen: React.FC = () => {
     fetchPrintVoucher()(dispatch);
   };
 
-  const buttonStyles = {};
   return (
     <>
       {voucherSessionKey && <Redirect to="/voucher" /> }
@@ -46,14 +41,14 @@ const HomeScreen: React.FC = () => {
             title="Новый ваучер"
             onClick={handlePrintVoucher}
             image={newVoucher}
-            style={buttonStyles}
           />
           <BaseButton
             className="home-screen-button"
             title="Войти с ваучером"
             link="/voucher-login"
             image={existingVoucher}
-            style={{...buttonStyles, marginRight: '0'}}/>
+            style={{ marginRight: '0' }}
+          />
         </div>
       }
     </>

@@ -1,5 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { HeaderContext } from '../Header/HeaderContextProvider';
+import React, { useState, useEffect } from 'react';
 import ActionButton from '../Buttons/ActionButton';
 import ArrowRight from '../../images/ArrowRight.svg';
 import ArrowRightShort from '../../images/ArrowRightShort.svg';
@@ -10,6 +9,7 @@ import LoaderModal from '../Loading/LoaderModal';
 import { fetchVoucherLogin } from '../../redux/voucher';
 import { AppState } from '../../redux';
 import { Redirect } from 'react-router-dom';
+import BackButton from '../Buttons/BackButton';
 
 const onlyNumEerrorMessage = 'Здесь можно воодить только цыфры';
 const cantBeEmptyErrorMessage = 'Дрожно быть заполненым';
@@ -19,7 +19,6 @@ const voucherSessionIsNotClosedMessage = 'Сессия данного вауче
 const VoucherLogin: React.FC = () => {
   const { isLoading, voucherSessionKey, isError, errorMessage } = useSelector((state: AppState) => state.voucher);
   const dispatch = useDispatch();
-  const { setLink } = useContext(HeaderContext);
   const [ inputErrorMessage, setInputErrorMessage ] = useState('');
   const [ voucherValue, setVoucherValue ] = useState('');
   const voucherValueLength = 10;
@@ -33,10 +32,6 @@ const VoucherLogin: React.FC = () => {
       setInputErrorMessage(errorText);
     }
   }, [voucherSessionKey, isError])
-
-  useEffect(() => {
-    setLink('/');
-  })
 
   const voucherLoginContainerStyles = {
     display: 'flex',
@@ -93,6 +88,7 @@ const VoucherLogin: React.FC = () => {
     <>
       {voucherSessionKey && <Redirect to="/voucher" /> }
       {isLoading && <LoaderModal />}
+      <BackButton link="/" />
       <div className="voucher-login-container" style={voucherLoginContainerStyles}>
         <InputMask 
           title="Введите ваш логин" 

@@ -8,6 +8,7 @@ import { AppState } from '../../redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { WebSocketContext, WS } from '../../WSProvider';
 import './index.css';
+import { hideOptionalCheck } from '../../redux/screens';
 
 const absenceMessageTitle = 'ВЫ ЕЩЕ ЗДЕСЬ?';
 
@@ -25,13 +26,13 @@ const Absence: React.FC = () => {
         setTimer(timer => timer - 1);
       }, 1000)
 
-      setIntervalTimer(interval)
+      setIntervalTimer(interval);
     }
-
     if (timer <= 0) {
       clearInterval(intervalTimer);
       dispatch(setShowUserAbsence(false));
       fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
+      dispatch(hideOptionalCheck());
       setTimer(Number(process.env.REACT_APP_CLOSE_SESSION_USER_ABSENCE_TIMEOUT_SECONDS));
     }
 

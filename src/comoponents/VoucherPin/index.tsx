@@ -1,5 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { HeaderContext } from '../Header/HeaderContextProvider';
+import React, { useState, useEffect } from 'react';
 import ActionButton from '../Buttons/ActionButton';
 import ArrowRight from '../../images/ArrowRight.svg';
 import ArrowRightShort from '../../images/ArrowRightShort.svg';
@@ -10,6 +9,7 @@ import LoaderModal from '../Loading/LoaderModal';
 import { fetchVoucherPin } from '../../redux/voucher';
 import { AppState } from '../../redux';
 import Absence from '../absence';
+import BackButton from '../Buttons/BackButton';
 
 const inputTitle = 'Введите ваш пинкод';
 const submitButtonTittle = 'Далее';
@@ -19,7 +19,6 @@ const wrongVoucherKeyErrorMessage = 'проверьте правильность
 const VoucherWithdrawPin: React.FC = () => {
   const { isLoading, isError, voucherSessionKey, showUserAbsence } = useSelector((state: AppState) => state.voucher);
   const dispatch = useDispatch();
-  const { setLink,  } = useContext(HeaderContext);
   const [ errorMessage, setErrorMessage ] = useState('');
   const [ voucherPin, setVoucherPin ] = useState('');
   const voucherPinLength = 4;
@@ -29,10 +28,6 @@ const VoucherWithdrawPin: React.FC = () => {
       setErrorMessage(wrongVoucherKeyErrorMessage);
     }
   }, [voucherSessionKey, isError])
-
-  useEffect(() => {
-    setLink('/voucher');
-  })
 
   const voucherLoginContainerStyles = {
     display: 'flex',
@@ -93,24 +88,33 @@ const VoucherWithdrawPin: React.FC = () => {
   return (
     <>
       { isLoading && <LoaderModal /> }
-      {  showUserAbsence ? <Absence /> : <div className="voucher-pin-container" style={voucherLoginContainerStyles}>
-        <InputMask 
-          title={inputTitle} 
-          onInputChange={handleChangeInputValue}
-          cleanErrorMessage={cleanErrorMessage}
-          length={voucherPinLength} 
-          errorMessage={errorMessage}
-          isMasked={true}
-          style={InputMaskStyles}
-        />
-        <ActionButton
-          title={submitButtonTittle}
-          className="voucher-pin-button" 
-          handleButtonClick={handleSubmit} 
-          image={image} 
-          style={actionButtonStyles}
-        />
-      </div>}
+      {  showUserAbsence ? <Absence /> 
+        : (
+          <>
+            <BackButton
+              link="/voucher"
+            />
+            <div className="voucher-pin-container" style={voucherLoginContainerStyles}>
+              <InputMask 
+                title={inputTitle} 
+                onInputChange={handleChangeInputValue}
+                cleanErrorMessage={cleanErrorMessage}
+                length={voucherPinLength} 
+                errorMessage={errorMessage}
+                isMasked={true}
+                style={InputMaskStyles}
+              />
+              <ActionButton
+                title={submitButtonTittle}
+                className="voucher-pin-button" 
+                handleButtonClick={handleSubmit} 
+                image={image} 
+                style={actionButtonStyles}
+              />
+            </div>
+          </>
+        )
+      }
     </>
   )
 }

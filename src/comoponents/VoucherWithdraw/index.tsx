@@ -1,12 +1,10 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { HeaderContext } from '../Header/HeaderContextProvider';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../../redux';
 import { Redirect } from 'react-router-dom';
 import ActionButton from '../Buttons/ActionButton';
 import ArrowRight from '../../images/ArrowRight.svg';
 import ArrowRightShort from '../../images/ArrowRightShort.svg';
-import './index.css';
 import { 
   fetchCassetteInfo, 
   fetchVoucherWithdraw, 
@@ -21,6 +19,9 @@ import OptionalCheck from '../OptionalCheck';
 import PrintCheck from '../Checks';
 import { WebSocketContext, WS } from '../../WSProvider';
 import WeCountBills from '../WeCountBills';
+import BackButton from '../Buttons/BackButton';
+import { hideOptionalCheck } from '../../redux/screens';
+import './index.css';
 
 const voucherWithdrawContainerStyles = {
   display: 'flex',
@@ -114,30 +115,26 @@ const VoucherWithdraw: React.FC = () => {
     isPrintLoading,
     showWeCountBills
   } = useSelector((state: AppState) => state.voucher);
-
+  const { isShowOptionalCheck } = useSelector((state: AppState) => state.screens);
   const [ withdrawSumInput, setwithdrawSumInput ] = useState<any>(withdrawSum ?? placeholderWithdrawSum);
-  const { setLink, setStopVoucherSession, showOptionalCheck} = useContext(HeaderContext);
   const inputRef = React.createRef<HTMLInputElement>();
   const dispatch = useDispatch();
   
   useEffect(() => {
-    setLink('/voucher');
-    setStopVoucherSession(false);
-    
     if (!isError && !cassetteInfo && !cassetteInfo?.length && !isLoading && isPinVerified) {
       fetchCassetteInfo({ msid: voucherSessionKey })(dispatch);
     }
     if (!ws.socket || ws.socket.readyState === 3) {
       ws.setWSConnnection();
     }
+
     inputRef.current?.focus();
     inputRef.current?.addEventListener('focusout', function() {
       inputRef.current?.focus();
-    })
+    });
   }, [cassetteInfo, isPinVerified]);
 
   const handleActionButtonClick = () => {
-    
     const data = {
       amount: Number(withdrawSumInput),
       msid: voucherSessionKey,
@@ -183,13 +180,13 @@ const VoucherWithdraw: React.FC = () => {
       msid: voucherSessionKey,
       way: 'withdraw'
     };
-    // dispatch(setDepositSum(0));
     fetchPrintCheck(data)(dispatch);
+    dispatch(hideOptionalCheck());
   }
 
   const handleDontPrintOptionalCheck = () => {
-    // dispatch(setDepositSum(0));
     fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
+    dispatch(hideOptionalCheck());
   }
 
   const handleBlockClick = () => {
@@ -213,7 +210,7 @@ const VoucherWithdraw: React.FC = () => {
 
   return (
     <>
-      { isLoading && <LoaderModal /> }
+      { (isLoading && !isPrintLoading) && <LoaderModal /> }
       {/* { isError && <Redirect to="/voucher" /> } */}
       { !voucherSessionKey && <Redirect to="/" /> }
       { !isPinVerified 
@@ -221,50 +218,56 @@ const VoucherWithdraw: React.FC = () => {
         : showWeCountBills ? <WeCountBills/>
         : showUserAbsence ? <Absence />
         : isPrintLoading ? <PrintCheck />
-        : showOptionalCheck ? <OptionalCheck
-          backButtonLink='/voucher-withdraw'
+        : isShowOptionalCheck ? <OptionalCheck
           leftButtonHandle={handlePrintOptionalCheck}
           rightButtonHandle={handleDontPrintOptionalCheck}
-        /> : <div className="withdraw-login-container" style={voucherWithdrawContainerStyles}>
-          <div className="withdraw-block" style={inputBlockStyles} onClick={handleBlockClick}>
-            <p className="withdraw-title" style={titleStyles}>
-              {availableNominalsTitle}
-              { !isLoading && <span className="withdraw-multiple-sum" style={withdrawMultipleSum}>{availableNominals}</span> }
-            </p>
-            <div className="withdraw-sum-outer-wrapper" style={withdrawSumOuterWrapper}>
-              <div className="withdraw-sum-outer-middle-wrapper" style={withdrawSumMiddleWrapper}>
-                <div className="withdraw-sum-wrapper" style={withdrawSumWrapper}>
-                  <label>
-                    <div className="withdraw-sum" style={withdrawSumStyles}>{withdrawSumInput}</div>
-                    <input 
-                      id="voucher" 
-                      ref={inputRef}  
-                      style={inputStyles} 
-                      value={withdrawSumInput} 
-                      onChange={e => handleChangeWithdrawSum(e.target.value)}
-                    />
-                  </label>
+        /> : (
+          <>
+            <BackButton
+              link="/voucher"
+            />
+            <div className="withdraw-login-container" style={voucherWithdrawContainerStyles}>
+              <div className="withdraw-block" style={inputBlockStyles} onClick={handleBlockClick}>
+                <p className="withdraw-title" style={titleStyles}>
+                  {availableNominalsTitle}
+                  { !isLoading && <span className="withdraw-multiple-sum" style={withdrawMultipleSum}>{availableNominals}</span> }
+                </p>
+                <div className="withdraw-sum-outer-wrapper" style={withdrawSumOuterWrapper}>
+                  <div className="withdraw-sum-outer-middle-wrapper" style={withdrawSumMiddleWrapper}>
+                    <div className="withdraw-sum-wrapper" style={withdrawSumWrapper}>
+                      <label>
+                        <div className="withdraw-sum" style={withdrawSumStyles}>{withdrawSumInput}</div>
+                        <input 
+                          id="voucher" 
+                          ref={inputRef}  
+                          style={inputStyles} 
+                          value={withdrawSumInput} 
+                          onChange={e => handleChangeWithdrawSum(e.target.value)}
+                        />
+                      </label>
+                    </div>
+                  </div>
                 </div>
+                { availableWithdrawSum !== null  && (
+                  <p className="input-subtitle" style={inputSubtitleStyles}>
+                    { (availableWithdrawSum && availableWithdrawSum > 0) 
+                      ? (<>{availableSumMessage}<span className="withdraw-multiple-sum" style={withdrawMultipleSum}>{availableWithdrawSum}</span></>)
+                      : <span style={{ color: 'red' }}>{invalidSumMessage}</span>
+                    }
+                  </p>
+                )}
               </div>
+              <ActionButton
+                title={withdrawButtonText}
+                className="voucher-withdraw-button"
+                handleButtonClick={handleActionButtonClick}
+                image={image}
+                style={actionButtonStyles}
+                disable={isActionButtonDisabled}
+              />
             </div>
-            { availableWithdrawSum !== null  && (
-              <p className="input-subtitle" style={inputSubtitleStyles}>
-                { (availableWithdrawSum && availableWithdrawSum > 0) 
-                  ? (<>{availableSumMessage}<span className="withdraw-multiple-sum" style={withdrawMultipleSum}>{availableWithdrawSum}</span></>)
-                  : <span style={{ color: 'red' }}>{invalidSumMessage}</span>
-                }
-              </p>
-            )}
-          </div>
-          <ActionButton
-            title={withdrawButtonText}
-            className="voucher-withdraw-button"
-            handleButtonClick={handleActionButtonClick}
-            image={image}
-            style={actionButtonStyles}
-            disable={isActionButtonDisabled}
-          />
-        </div>
+          </>
+        )
       }
     </>
   )

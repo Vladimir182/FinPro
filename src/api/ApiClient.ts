@@ -2,7 +2,7 @@ import queryString from 'query-string';
 import Axios from 'axios';
 import { store } from '../App';
 import { fetchRefreshToken, logOut } from '../redux/authorization';
-import { fetchServerConnection } from '../redux/error-screen';
+import { fetchServerConnection } from '../redux/screens';
 
 type RequestMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
@@ -95,18 +95,18 @@ export default class ApiClient {
   }
     
 	request: Request = async ({ url, method, params = {}, body }) => {
-    const token = localStorage.getItem('finpro_access_token');
+    	const token = localStorage.getItem('finpro_access_token');
 
 		let query = Object.keys(params).length
 			? `?${queryString.stringify(params)}`
-      : '';
+      		: '';
 
 	    query += token ? `?accessToken=${token}` : '';
 
 		const res = Axios({
 			// ${process.env.REACT_APP_URL}
 			method: 'POST',
-			url: `${process.env.REACT_APP_URL}/${this.prefix}${url}${query}`,
+			url: `${this.prefix}${url}${query}`,
 			data: method !== 'GET' ? body : null,
 			withCredentials: true,
 			timeout: 90000 

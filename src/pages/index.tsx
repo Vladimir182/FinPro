@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Switch, withRouter, Route } from 'react-router-dom';
 import Page from './Page';
 import Login from './Login';
@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import ServerError from '../comoponents/ServerError';
 
 const Pages: React.FC = (props) => {
-  const { serverConnectionStatus } = useSelector((state: AppState) => state.errorScreen);
+  const { serverConnectionStatus } = useSelector((state: AppState) => state.screens);
 
   return (
     <>
