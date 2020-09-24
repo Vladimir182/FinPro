@@ -61,7 +61,9 @@ const VoucherLogin: React.FC = () => {
     setVoucherValue(value);
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+
     if (inputErrorMessage) {
       return;
     } else if (
@@ -89,23 +91,25 @@ const VoucherLogin: React.FC = () => {
       {voucherSessionKey && <Redirect to="/voucher" /> }
       {isLoading && <LoaderModal />}
       <BackButton link="/" />
-      <div className="voucher-login-container" style={voucherLoginContainerStyles}>
-        <InputMask 
-          title="Введите ваш логин" 
-          onInputChange={handleChangeInputValue}
-          cleanErrorMessage={cleanInputErrorMessage}
-          length={voucherValueLength} 
-          errorMessage={inputErrorMessage}
-          inputMaskItemStyles={inputMaskItemStyles}
-        />      
-        <ActionButton 
-          title="Далее" 
-          className="voucher-login-button" 
-          handleButtonClick={handleSubmit} 
-          image={image} 
-          style={actionButtonStyles}
-        />
-      </div>
+      <form onSubmit={handleSubmit}>
+        <div className="voucher-login-container" style={voucherLoginContainerStyles}>
+          <InputMask 
+            title="Введите ваш логин"
+            onInputChange={handleChangeInputValue}
+            cleanErrorMessage={cleanInputErrorMessage}
+            length={voucherValueLength}
+            errorMessage={inputErrorMessage}
+            inputMaskItemStyles={inputMaskItemStyles}
+          />
+          <ActionButton
+            title="Далее"
+            className="voucher-login-button"
+            handleButtonClick={handleSubmit}
+            image={image}
+            style={actionButtonStyles}
+          />
+        </div>
+      </form>
     </>
   )
 }

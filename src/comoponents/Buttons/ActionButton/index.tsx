@@ -5,7 +5,7 @@ import './index.css';
 type ActionButton = {
   title: string,
   image?: string,
-  handleButtonClick?: () => void,
+  handleButtonClick?: (event: any) => void,
   link?: string,
   width?: string,
   height?: string,
