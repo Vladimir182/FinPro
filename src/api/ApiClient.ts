@@ -66,9 +66,16 @@ export default class ApiClient {
 		});
 	}
 
-	handleResponse = (res: any) => {
+	handleResponse = (res: any, url?: any) => {
 		return res
 			.then((res: any) => {
+				const messageError = res?.data?.message_error;
+				console.log('MESSAGE ERROR', messageError)
+				console.log('URL', url)
+				if ((messageError && messageError === "Voucher not found!") && url !== '/find-voucher') {
+					console.log('HANDLE RESPONSE PALTSAMI V SALONE')
+				}
+
 				return res;
 			})
 			.catch((error: any) => {
@@ -112,7 +119,7 @@ export default class ApiClient {
 			timeout: 90000 
 		});
 
-		return this.handleResponse(res);
+		return this.handleResponse(res, url);
 	}
 }
  
