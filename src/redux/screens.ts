@@ -1,5 +1,6 @@
 import api from '../api';
 import { store } from '../App';
+import { closeVoucherSession } from './voucher'; 
 
 const SHOW_ERROR_SCREEN = 'SHOW_ERROR_SCREEN';
 const HIDE_ERROR_SCREEN = 'HIDE_ERROR_SCREEN';
@@ -80,6 +81,7 @@ export const fetchServerConnection = () => (dispatch: any) => {
 		}).catch((error: any) => {
 			if (error.status !== 401 && screens.serverConnectionStatus) {
 				dispatch({ type: REQUEST_SERVER_CONNECTION_FAILURE });
+				dispatch(closeVoucherSession());
 				// dispatch({ type: FETCH_AUTH_FAILURE });
 	  		} else if (error.status === 401 && !screens.serverConnectionStatus) {
 				dispatch({ type: REQUEST_SERVER_CONNECTION_SUCCESS });

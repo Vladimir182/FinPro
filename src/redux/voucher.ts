@@ -96,7 +96,7 @@ export function userAbsenceTimeoutPreccess() {
     clearTimeout(userAbsenceTimer)
   }
   userAbsenceTimer = setTimeout(function() {
-    store.dispatch(setShowUserAbsence(true));
+    // store.dispatch(setShowUserAbsence(true));
   }, Number(process.env.REACT_APP_SHOW_USER_ABSENCE_TIMEOUT))
 }
 
@@ -105,7 +105,6 @@ const voucher = (state = initialState, { type, payload }: Action) => {
 		case REQUEST_VOUCHER_START:
 			return {
 				...state,
-        // voucherSessionKey: '',
         availableWithdrawSum: null,
         isLoading: true,
         isError: false,
@@ -614,6 +613,10 @@ export const setweCountBillsTimer = (timer: any) => ({
 export const resetWeCountBillsTimer = (timer: any) => ({
   type: RESET_WE_COUNT_BILLS_TIMER,
   payload: timer
+});
+
+export const closeVoucherSession = () => ({
+  type: CLOSE_VOUCHER_SESSION_SUCCESS
 });
 
 export default voucher;

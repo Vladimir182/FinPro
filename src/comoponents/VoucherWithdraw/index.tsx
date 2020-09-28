@@ -10,7 +10,8 @@ import {
   fetchVoucherWithdraw, 
   fetchCloseVoucherSession, 
   fetchPrintCheck, 
-  setAvailableWithdrawSum 
+  setAvailableWithdrawSum,
+  fetchShowBalnce 
 } from '../../redux/voucher';
 import LoaderModal from '../Loading/LoaderModal';
 import VoucherPin from '../VoucherPin';
@@ -95,7 +96,8 @@ const inputSubtitleStyles = {
 const withdrawButtonText = 'Далее';
 const placeholderWithdrawSum = 'Введите сумму';
 const noBillsMessage = 'Нет купюр';
-const invalidSumMessage = 'Не можем выдать такую сумму'
+const invalidSumMessage = 'Не можем выдать такую сумму';
+const notEnoughMoneyMessage = 'Недостаточно средств на ваучере';
 const image = window.innerWidth <= 1280 ? ArrowRightShort : ArrowRight;
 
 const VoucherWithdraw: React.FC = () => {
@@ -109,6 +111,7 @@ const VoucherWithdraw: React.FC = () => {
     isLoading,
     withdrawSum,
     pin,
+    balance,
     isError,
     isPinVerified,
     showUserAbsence,
@@ -116,6 +119,7 @@ const VoucherWithdraw: React.FC = () => {
     showWeCountBills
   } = useSelector((state: AppState) => state.voucher);
   const { isShowOptionalCheck } = useSelector((state: AppState) => state.screens);
+  const [ isFormSubmitted, setIsFormSubmitted ] = useState(false);
   const [ withdrawSumInput, setwithdrawSumInput ] = useState<any>(withdrawSum ?? placeholderWithdrawSum);
   const inputRef = React.createRef<HTMLInputElement>();
   const dispatch = useDispatch();
@@ -126,6 +130,12 @@ const VoucherWithdraw: React.FC = () => {
     }
     if (!ws.socket || ws.socket.readyState === 3) {
       ws.setWSConnnection();
+    }
+    if (!isLoading && balance === null && pin) {
+      fetchShowBalnce({
+        pin,
+        msid: voucherSessionKey
+      })(dispatch)
     }
 
     inputRef.current?.focus();
@@ -141,6 +151,13 @@ const VoucherWithdraw: React.FC = () => {
       pin: pin
     };
 
+    if (!isFormSubmitted) {
+      setIsFormSubmitted(true);
+    }
+    if (Number(withdrawSumInput) > balance) {
+      return;
+    }
+
     fetchVoucherWithdraw(data)(dispatch);
   }
 
@@ -151,14 +168,17 @@ const VoucherWithdraw: React.FC = () => {
     if (
       String(value).length > 0 && String(Number(value)) === 'NaN' 
       || String(value).length > 12
-      ) {  
+    ) {  
         return;
-      }
-      if (!String(value).length || !value.trim()) {
-        value = placeholderWithdrawSum;
-      }
+    }
+    if (!String(value).length || !value.trim()) {
+      value = placeholderWithdrawSum;
+    }
+    if (isFormSubmitted) {
+      setIsFormSubmitted(false);
+    }
     
-      dispatch(setAvailableWithdrawSum(null));
+    dispatch(setAvailableWithdrawSum(null));
 
     const parsedValue = value !== placeholderWithdrawSum 
       ? parseInt(value) 
@@ -198,6 +218,26 @@ const VoucherWithdraw: React.FC = () => {
   const availableSumMessage = `Доступная сумма:`;
   const isActionButtonDisabled = !withdrawSumInput || withdrawSumInput === placeholderWithdrawSum;
 
+  const getErrorMessage = () => {
+    if (balance > withdrawSumInput || !isFormSubmitted) {
+      return '';
+    }
+
+    return (
+      <p className="input-subtitle" style={inputSubtitleStyles}>
+        {
+          availableWithdrawSum && (availableWithdrawSum > 0) 
+          ? (<>{availableSumMessage}<span className="withdraw-multiple-sum" style={withdrawMultipleSum}>{availableWithdrawSum}</span></>)
+          : (availableWithdrawSum && availableWithdrawSum <= 0)
+          ? (<span style={{ color: 'red' }}>{invalidSumMessage}</span>)
+          : balance < withdrawSumInput 
+          ? (<span style={{ color: 'red' }}>{notEnoughMoneyMessage}</span>)
+          : ''
+        }
+      </p>
+    )
+  }
+
   const withdrawSumStyles = {
     background: '#67219E',
     display: 'flex',
@@ -223,9 +263,7 @@ const VoucherWithdraw: React.FC = () => {
           rightButtonHandle={handleDontPrintOptionalCheck}
         /> : (
           <>
-            <BackButton
-              link="/voucher"
-            />
+            <BackButton link="/voucher" />
             <div className="withdraw-login-container" style={voucherWithdrawContainerStyles}>
               <div className="withdraw-block" style={inputBlockStyles} onClick={handleBlockClick}>
                 <p className="withdraw-title" style={titleStyles}>
@@ -248,14 +286,7 @@ const VoucherWithdraw: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                { availableWithdrawSum !== null  && (
-                  <p className="input-subtitle" style={inputSubtitleStyles}>
-                    { (availableWithdrawSum && availableWithdrawSum > 0) 
-                      ? (<>{availableSumMessage}<span className="withdraw-multiple-sum" style={withdrawMultipleSum}>{availableWithdrawSum}</span></>)
-                      : <span style={{ color: 'red' }}>{invalidSumMessage}</span>
-                    }
-                  </p>
-                )}
+                { getErrorMessage() }
               </div>
               <ActionButton
                 title={withdrawButtonText}
