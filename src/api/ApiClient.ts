@@ -70,7 +70,8 @@ export default class ApiClient {
 		return res
 			.then((res: any) => {
 				console.log('res', res);
-				console.log('res.data')
+				console.log('res.data', res.data)
+				console.log('res?.data', res?.data)
 				const messageError = res?.data?.message_error;
 				console.log('MESSAGE ERROR', messageError)
 				console.log('URL', url)
