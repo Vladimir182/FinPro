@@ -69,6 +69,8 @@ export default class ApiClient {
 	handleResponse = (res: any, url?: any) => {
 		return res
 			.then((res: any) => {
+				console.log('res', res);
+				console.log('res.data')
 				const messageError = res?.data?.message_error;
 				console.log('MESSAGE ERROR', messageError)
 				console.log('URL', url)
