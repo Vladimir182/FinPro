@@ -71,7 +71,6 @@ export default class ApiClient {
 		return res
 			.then((res: any) => {
 				const messageError = res?.data?.message_error;
-				console.log('URL', url, 'messageError' , messageError,'COND' , messageError && (messageError === "Voucher not found!" || messageError === false) && url !== '/find-voucher')
 
 				if (
 					(messageError && (
@@ -80,10 +79,7 @@ export default class ApiClient {
 						|| messageError === false)
 					) && url !== '/find-voucher'
 				) {
-					console.log('HANDLE RESPONSE PALTSAMI V SALONE')
 					store.dispatch(closeVoucherSession());
-
-					throw false;
 				}
 
 				return res;
