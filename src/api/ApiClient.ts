@@ -80,6 +80,8 @@ export default class ApiClient {
 					) && url !== '/find-voucher'
 				) {
 					store.dispatch(closeVoucherSession());
+
+					throw {};
 				}
 
 				return res;
