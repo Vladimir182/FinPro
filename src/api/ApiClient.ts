@@ -72,12 +72,18 @@ export default class ApiClient {
 			.then((res: any) => {
 				const messageError = res?.data?.message_error;
 				console.log('URL', url, 'messageError' , messageError,'COND' , messageError && (messageError === "Voucher not found!" || messageError === false) && url !== '/find-voucher')
-				// "Voucher not found!"
-				if ((messageError && (messageError === "Voucher not found!" ||  messageError === 'Ваучер не найден.' || messageError === false)) && url !== '/find-voucher') {
+
+				if (
+					(messageError && (
+						messageError === "Voucher not found!" 
+						||  messageError === 'Ваучер не найден.' 
+						|| messageError === false)
+					) && url !== '/find-voucher'
+				) {
 					console.log('HANDLE RESPONSE PALTSAMI V SALONE')
 					store.dispatch(closeVoucherSession());
 
-					return;
+					throw false;
 				}
 
 				return res;
