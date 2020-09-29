@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { store } from '../App';
 import { fetchRefreshToken, logOut } from '../redux/authorization';
 import { fetchServerConnection } from '../redux/screens';
+import { closeVoucherSession } from '../redux/voucher';
 
 type RequestMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
@@ -69,14 +70,16 @@ export default class ApiClient {
 	handleResponse = (res: any, url?: any) => {
 		return res
 			.then((res: any) => {
-				console.log('res', res);
-				console.log('res.data', res.data)
-				console.log('res?.data', res?.data)
+				// console.log('res', res);
+				// console.log('res.data', res.data)
+				// console.log('res?.data', res?.data)
 				const messageError = res?.data?.message_error;
-				console.log('MESSAGE ERROR', messageError)
-				console.log('URL', url)
-				if ((messageError && messageError === "Voucher not found!") && url !== '/find-voucher') {
+				// console.log('MESSAGE ERROR', messageError)
+				console.log('URL', url, 'messageError' , messageError,'COND' , messageError && (messageError === "Voucher not found!" || messageError === false) && url !== '/find-voucher')
+				// "Voucher not found!"
+				if ((messageError && (messageError === "Voucher not found!" || messageError === false)) && url !== '/find-voucher') {
 					console.log('HANDLE RESPONSE PALTSAMI V SALONE')
+					store.dispatch(closeVoucherSession());
 				}
 
 				return res;
