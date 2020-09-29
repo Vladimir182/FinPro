@@ -77,7 +77,7 @@ export default class ApiClient {
 				// console.log('MESSAGE ERROR', messageError)
 				console.log('URL', url, 'messageError' , messageError,'COND' , messageError && (messageError === "Voucher not found!" || messageError === false) && url !== '/find-voucher')
 				// "Voucher not found!"
-				if ((messageError && (messageError === "Voucher not found!" || messageError === false)) && url !== '/find-voucher') {
+				if ((messageError && (messageError === "Voucher not found!" ||  messageError === 'Ваучер не найден.' || messageError === false)) && url !== '/find-voucher') {
 					console.log('HANDLE RESPONSE PALTSAMI V SALONE')
 					store.dispatch(closeVoucherSession());
 				}
