@@ -326,7 +326,6 @@ export const fetchPrintVoucher = () => (dispatch: any) => {
         payload: data
       });
     } else {
-      console.log('data', data)
       if(data && (data.message_error === 'Printer is not active.' || data.message_error === '"Printer not responding"')) {
         dispatch(showPrinterError());
       } else {
@@ -513,6 +512,7 @@ export const fetchPrintCheck = (data: any) => (dispatch: any) => {
   }).catch((error: any) => {
     dispatch({type: REQUEST_VOUCHER_FAILURE, payload: error });
     dispatch({ type: CLOSE_VOUCHER_SESSION_SUCCESS });
+    dispatch(showPrinterError());
   })
 }
 
