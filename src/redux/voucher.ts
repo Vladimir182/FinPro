@@ -510,9 +510,9 @@ export const fetchPrintCheck = (data: any) => (dispatch: any) => {
     dispatch({ type: REQUEST_PRINT_CHECK_SUCCESS });
     dispatch({ type: CLOSE_VOUCHER_SESSION_SUCCESS });
   }).catch((error: any) => {
+    dispatch(showPrinterError());
     dispatch({type: REQUEST_VOUCHER_FAILURE, payload: error });
     dispatch({ type: CLOSE_VOUCHER_SESSION_SUCCESS });
-    dispatch(showPrinterError());
   })
 }
 
