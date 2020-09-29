@@ -96,7 +96,7 @@ export function userAbsenceTimeoutPreccess() {
     clearTimeout(userAbsenceTimer)
   }
   userAbsenceTimer = setTimeout(function() {
-    // store.dispatch(setShowUserAbsence(true));
+    store.dispatch(setShowUserAbsence(true));
   }, Number(process.env.REACT_APP_SHOW_USER_ABSENCE_TIMEOUT))
 }
 
