@@ -75,7 +75,8 @@ export default class ApiClient {
 				if (
 					(messageError && (
 						messageError === "Voucher not found!" 
-						||  messageError === 'Ваучер не найден.' 
+						|| messageError === 'Printer not responding' 
+						|| messageError === 'Ваучер не найден.' 
 						|| messageError === false)
 					) && url !== '/find-voucher'
 				) {
