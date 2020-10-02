@@ -421,7 +421,12 @@ export const fetchVoucherWithdraw = (data: WithdrawBody) => (dispatch: any) => {
     const data = res.data;
     
     if (!data.success) {
-      if (data.validation_errors) {
+      if (data.message_error === 'Terminal limit is exceeded') {
+        dispatch({
+          type: SET_AVAILABLE_WITHDRAW_SUM,
+          payload: data.message_error
+        });
+      } else if (data.validation_errors) {
         dispatch({
           type: SET_AVAILABLE_WITHDRAW_SUM,
           payload: data.validation_errors?.cassette_info
@@ -433,7 +438,7 @@ export const fetchVoucherWithdraw = (data: WithdrawBody) => (dispatch: any) => {
 
     // dispatch(setWithdrawSuccess());
   })
-  .catch((error: any) => {    
+  .catch((error: any) => {
     dispatch({ type: REQUEST_VOUCHER_FAILURE, payload: error });
     dispatch({ type: SET_WE_COUNT_BILLS_REMOVE });
     dispatch(showError());
