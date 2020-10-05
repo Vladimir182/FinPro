@@ -22,7 +22,8 @@ const Authorized: React.FC = (props) => {
   //@ts-ignore
   const isLoginPage = props.location.pathname === '/login';
     //@ts-ignore
-  console.log('AUTHORITHED RENDER', isLoginPage, props.location.pathname)
+  console.log('!isAuth && serverConnectionStatus && !isLoginPage', !isAuth ,'&&', serverConnectionStatus ,'&&', !isLoginPage)
+  console.log('isAuth && isLoginPage', isAuth ,'&&', isLoginPage)
   return (
     <>
       { 
