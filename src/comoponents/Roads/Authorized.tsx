@@ -27,7 +27,7 @@ const Authorized: React.FC = (props) => {
       { 
         isLoading ? <div className="login-page-wrapper"><LoaderModal /></div>
         : <>
-          { (!isAuth && serverConnectionStatus) && <Redirect to="/login" /> }
+          { (!isAuth && serverConnectionStatus && !isLoginPage) && <Redirect to="/login" /> }
           { (isAuth && isLoginPage) && <Redirect to="/" /> }
           <Pages />
         </>
