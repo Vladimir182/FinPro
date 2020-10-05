@@ -17,7 +17,7 @@ const Authorized: React.FC = (props) => {
     } else if (!accessToken && serverConnectionStatus) {
       dispatch({ type: FETCH_LOGIN_FAILURE });
     }
-  }, []);
+  });
 
   //@ts-ignore
   const isLoginPage = props.location.pathname === '/login';
