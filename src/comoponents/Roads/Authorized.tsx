@@ -5,6 +5,7 @@ import { AppState } from '../../redux';
 import Pages from '../../pages';
 import { fetchCheckAuth, FETCH_LOGIN_FAILURE } from '../../redux/authorization';
 import LoaderModal from '../Loading/LoaderModal';
+import ts from 'typescript';
 
 // const Authorized: React.FC = (props) => {
 //   const { isAuth, isLoading, accessToken } = useSelector((state: AppState) => state.authorization);
@@ -39,6 +40,16 @@ import LoaderModal from '../Loading/LoaderModal';
 // }
 
 class Authorized extends React.Component {
+
+  //@ts-ignore
+  shouldComponentUpdate(nextProps, nextState) {
+    //@ts-ignore
+    if (nextProps.isAuth !== this.props.isAuth || nextProps.serverConnectionStatus !== this.props.serverConnectionStatus) {
+      return true;
+    }
+
+    return false;
+  }
 
   componentDidMount() {
     //@ts-ignore
