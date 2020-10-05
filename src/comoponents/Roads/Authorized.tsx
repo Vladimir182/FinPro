@@ -111,7 +111,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const mapDispathToProps = (dispatch: any) => ({
-  fetchCheckAuth: dispatch(fetchCheckAuth),
+  fetchCheckAuth: () => dispatch(fetchCheckAuth),
   fetchLoginFailure: () => dispatch({ type: FETCH_LOGIN_FAILURE })
 })
 
