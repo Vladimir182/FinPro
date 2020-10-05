@@ -47,8 +47,14 @@ class Authorized extends React.Component {
     console.log('nextProps.isAuth', nextProps.isAuth,  'this.props.isAuth', this.props.isAuth)
     //@ts-ignore
     console.log('nextProps.serverConnectionStatus', nextProps.serverConnectionStatus,  'this.props.serverConnectionStatush', this.props.serverConnectionStatus)
+        //@ts-ignore
+        console.log('nextProps.accessToken', nextProps.accessToken,  'this.props.accessToken', this.props.accessToken)
     //@ts-ignore
     if (nextProps.isAuth !== this.props.isAuth || nextProps.serverConnectionStatus !== this.props.serverConnectionStatus) {
+      return true;
+    }
+    //@ts-ignore
+    if (nextProps.accessToken !== this.props.accessToken) {
       return true;
     }
 
