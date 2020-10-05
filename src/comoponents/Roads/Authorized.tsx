@@ -74,7 +74,7 @@ class Authorized extends React.Component {
   componentDidMount() {
     //@ts-ignore
     const { fetchCheckAuth, fetchLoginFailure, isAuth, accessToken, serverConnectionStatus } = this.props;
-
+    console.log('!isAuth && accessToken && serverConnectionStatus', !isAuth && accessToken && serverConnectionStatus, !isAuth ,'&&', accessToken ,'&&', serverConnectionStatus)
     if (!isAuth && accessToken && serverConnectionStatus) {
       fetchCheckAuth();
     } else if (!accessToken && serverConnectionStatus) {
