@@ -38,4 +38,4 @@ const Authorized: React.FC = (props) => {
   )
 }
 
-export default withRouter(Authorized);
+export default React.memo(withRouter(Authorized));
