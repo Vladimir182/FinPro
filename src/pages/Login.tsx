@@ -41,7 +41,7 @@ const Login: React.FC = () => {
   )
 }
 
-export default useMemo(() => Login()); 
+export default Login; 
 
 
 
