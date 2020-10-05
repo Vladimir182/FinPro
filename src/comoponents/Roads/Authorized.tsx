@@ -5,7 +5,6 @@ import { AppState } from '../../redux';
 import Pages from '../../pages';
 import { fetchCheckAuth, FETCH_LOGIN_FAILURE } from '../../redux/authorization';
 import LoaderModal from '../Loading/LoaderModal';
-import ts from 'typescript';
 
 // const Authorized: React.FC = (props) => {
 //   const { isAuth, isLoading, accessToken } = useSelector((state: AppState) => state.authorization);
@@ -44,14 +43,6 @@ class Authorized extends React.Component {
   //@ts-ignore
   shouldComponentUpdate(nextProps, nextState) {
     //@ts-ignore
-    console.log('nextProps.isAuth', nextProps.isAuth,  'this.props.isAuth', this.props.isAuth)
-    //@ts-ignore
-    console.log('nextProps.serverConnectionStatus', nextProps.serverConnectionStatus,  'this.props.serverConnectionStatush', this.props.serverConnectionStatus)
-    //@ts-ignore
-    console.log('nextProps.accessToken', nextProps.accessToken,  'this.props.accessToken', this.props.accessToken)
-    //@ts-ignore
-    console.log('nextProps.isLoading', nextProps.isLoading,  'this.props.isLoading', this.props.isLoading)
-    //@ts-ignore
     if (nextProps.isAuth !== this.props.isAuth) {
       return true;
     }
@@ -74,12 +65,15 @@ class Authorized extends React.Component {
   componentDidMount() {
     //@ts-ignore
     const { fetchCheckAuth, fetchLoginFailure, isAuth, accessToken, serverConnectionStatus } = this.props;
-    console.log('!isAuth && accessToken && serverConnectionStatus', !isAuth && accessToken && serverConnectionStatus, !isAuth ,'&&', accessToken ,'&&', serverConnectionStatus)
     if (!isAuth && accessToken && serverConnectionStatus) {
       fetchCheckAuth();
-    } else if (!accessToken && serverConnectionStatus) {
-      // dispatch({ type: FETCH_LOGIN_FAILURE });
-      fetchLoginFailure()
+
+      return;
+    } 
+    else if (!accessToken && serverConnectionStatus) {
+      fetchLoginFailure();
+
+      return;
     }
   }
   
@@ -94,7 +88,7 @@ class Authorized extends React.Component {
           isLoading ? <div className="login-page-wrapper"><LoaderModal /></div>
           : <>
             { (!isAuth && serverConnectionStatus && !isLoginPage) && <Redirect to="/login" /> }
-            { (isAuth && isLoginPage) && <Redirect to="/" /> }
+            { (isAuth && accessToken && isLoginPage) && <Redirect to="/" /> }
             <Pages />
           </>
         }    
@@ -105,15 +99,15 @@ class Authorized extends React.Component {
 
 const mapStateToProps = (state: AppState) => ({
   isAuth: state.authorization.isAuth,
-  isLoading: state.voucher.isLoading,
+  isLoading: state.authorization.isLoading,
   accessToken: state.authorization.accessToken,
   serverConnectionStatus: state.screens.serverConnectionStatus
 });
 
 const mapDispathToProps = (dispatch: any) => ({
-  fetchCheckAuth: () => dispatch(fetchCheckAuth),
+  fetchCheckAuth: () => fetchCheckAuth()(dispatch),
   fetchLoginFailure: () => dispatch({ type: FETCH_LOGIN_FAILURE })
-})
+});
 
 //@ts-ignore
 export default connect(mapStateToProps, mapDispathToProps)(withRouter(Authorized));
