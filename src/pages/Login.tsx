@@ -13,6 +13,7 @@ const Login: React.FC = () => {
     fetchLogin({ username, password })(dispatch);
   }
 
+  console.log('LOGIN RENDER')
   return (
     <div className="login-page-wrapper">
       <div className="login-container">
