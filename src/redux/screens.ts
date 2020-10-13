@@ -73,7 +73,7 @@ export const fetchServerConnection = () => (dispatch: any) => {
 	const { screens } = store.getState();
 
 	api.voucher
-		.find({ login: 'check'})
+		.ping()
 		.then((res: any) => {
 			if (!screens.serverConnectionStatus) {
 				dispatch({ type: REQUEST_SERVER_CONNECTION_SUCCESS });

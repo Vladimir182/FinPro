@@ -468,6 +468,7 @@ export const fetchCloseVoucherSession = (voucherSessionKey: string, closeWSConne
     dispatch({ type: CLOSE_VOUCHER_SESSION_SUCCESS });
   }).catch((error: any) => {
     dispatch({type: REQUEST_VOUCHER_FAILURE, payload: error });
+    dispatch({ type: CLOSE_VOUCHER_SESSION_SUCCESS });
     dispatch(showError());
   })
 };

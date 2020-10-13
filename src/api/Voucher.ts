@@ -42,6 +42,10 @@ class Voucher extends Base {
 	terminal() {
 		return this.apiClient.post('/terminal');
 	}
+
+	ping() {
+		return this.apiClient.post('/ping');
+	}
 }
 
 export default Voucher;
