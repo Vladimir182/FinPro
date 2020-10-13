@@ -125,9 +125,8 @@ input {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
-
 
 .hidden {
   border: 0;
@@ -146,4 +145,15 @@ input {
 
 .submit-button {
   cursor: pointer;
+  margin-top: 1.7rem;
+}
+
+.form-error-message {
+  position: relative;
+}
+
+.form-error-message p {
+  position: absolute;
+  top: -25px;
+  color: red!important;
 }

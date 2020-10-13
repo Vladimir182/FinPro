@@ -40,6 +40,7 @@ const authorization = (state = initialState, { type, payload }: Action) => {
 				...state,
 				isAuth: false,
 				isLoading: false,
+				isError: false,
 				errorMessage: ''
 			};	
 		case FETCH_AUTH_FAILURE:
@@ -147,6 +148,10 @@ export const logOut = () => (dispatch: any) => {
 	return dispatch({
 	  type: LOG_OUT
 	});
-  };
+};
+
+export const resetAuthErrors = () => ({
+	type: FETCH_LOGIN_FAILURE
+});
 
 export default authorization;
