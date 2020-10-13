@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchLogin } from '../redux/authorization';
 import logo from '../images/logo.svg';
 import './login.css';
+import { closeVoucherSession } from '../redux/voucher';
+import { AppState } from '../redux';
 
 const Login: React.FC = () => {
   const dispatch = useDispatch();
+  const { voucherSessionKey } = useSelector((state: AppState) => state.voucher)
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (voucherSessionKey) {
+      dispatch(closeVoucherSession());
+    }
+  })
 
   const handleSubmit = (e: any) => {
     e.preventDefault();

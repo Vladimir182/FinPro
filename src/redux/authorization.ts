@@ -104,9 +104,9 @@ export const fetchRefreshToken = () => (dispatch: any) => {
 			const { access_token,  refresh_token} = res.data;
 
 			localStorage.setItem('finpro_access_token', access_token);
-      localStorage.setItem('finpro_refresh_token', refresh_token);
-      
-      dispatch({ type: FETCH_LOGIN_SUCCESS, payload: access_token });
+			localStorage.setItem('finpro_refresh_token', refresh_token);
+			
+			dispatch({ type: FETCH_LOGIN_SUCCESS, payload: access_token });
 		})
 		.catch((error: any) => {
       dispatch({ type: FETCH_AUTH_FAILURE });
