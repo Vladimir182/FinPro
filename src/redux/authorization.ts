@@ -110,7 +110,7 @@ export const fetchRefreshToken = () => (dispatch: any) => {
 			dispatch({ type: FETCH_LOGIN_SUCCESS, payload: access_token });
 		})
 		.catch((error: any) => {
-      dispatch({ type: FETCH_AUTH_FAILURE });
+      		dispatch({ type: FETCH_AUTH_FAILURE });
 		});
 };
 

@@ -40,8 +40,8 @@ const VoucherLogin: React.FC = () => {
     alignItems: 'center'
   } as React.CSSProperties;
 
-  const actionButtonStyles = { 
-    marginTop: '7.5vh' 
+  const actionButtonStyles = {
+    marginTop: '7.5vh'
   } as React.CSSProperties;
 
   const inputMaskItemStyles = {

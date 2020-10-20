@@ -99,11 +99,14 @@ const noBillsMessage = 'Нет купюр';
 const invalidSumMessage = 'Не можем выдать такую сумму';
 const notEnoughMoneyMessage = 'Недостаточно средств на ваучере';
 const terminalLimitIsExceeted = 'Превышен лимит треминала';
+const availableSumMessage = `Доступная сумма:`;
 const image = window.innerWidth <= 1280 ? ArrowRightShort : ArrowRight;
 
 const VoucherWithdraw: React.FC = () => {
   //@ts-ignore
   const ws: WS = useContext(WebSocketContext);
+  const dispatch = useDispatch();
+
   let { 
     voucherSessionKey,
     currency,
@@ -119,12 +122,12 @@ const VoucherWithdraw: React.FC = () => {
     isPrintLoading,
     showWeCountBills
   } = useSelector((state: AppState) => state.voucher);
+
   const { isShowOptionalCheck } = useSelector((state: AppState) => state.screens);
   const [ isFormSubmitted, setIsFormSubmitted ] = useState(false);
   const [ withdrawSumInput, setwithdrawSumInput ] = useState<any>(withdrawSum ?? placeholderWithdrawSum);
   const inputRef = React.createRef<HTMLInputElement>();
   inputRef.current?.focus();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!isError && !cassetteInfo && !cassetteInfo?.length && !isLoading && isPinVerified) {
@@ -160,7 +163,7 @@ const VoucherWithdraw: React.FC = () => {
       return;
     }
 
-    fetchVoucherWithdraw(data)(dispatch);
+    fetchVoucherWithdraw(data, ws.closeWSConnection)(dispatch);
   }
 
   const handleChangeWithdrawSum = (value: string) => {
@@ -214,34 +217,24 @@ const VoucherWithdraw: React.FC = () => {
   const handleBlockClick = () => {
     inputRef.current?.focus();
   }
+
+  const getErrorMessage = (isFormSubmitted: boolean) => (
+    availableWithdrawSum && (availableWithdrawSum === 'Terminal limit is exceeded')
+    ? (<span style={{ color: 'red' }}>{terminalLimitIsExceeted}</span>)
+    : availableWithdrawSum && (availableWithdrawSum > 0) 
+    ? (<>{availableSumMessage}<span className="withdraw-multiple-sum" style={withdrawMultipleSum}>{availableWithdrawSum}</span></>)
+    : (availableWithdrawSum && availableWithdrawSum <= 0)
+    ? (<span style={{ color: 'red' }}>{invalidSumMessage}</span>)
+    : balance < withdrawSumInput 
+    ? (<span style={{ color: 'red' }}>{notEnoughMoneyMessage}</span>)
+    : ''
+  )
   
+  const errorMessage = getErrorMessage(isFormSubmitted);
   const availableNominalsTitle = `Доступные купюры, ${currency}:`;
-  // const availableNominals = (!cassetteInfo || (cassetteInfo && !cassetteInfo.length)) ? noBillsMessage : getAvailableBills(cassetteInfo);
-  const availableNominals = (!cassetteInfo || (cassetteInfo && !cassetteInfo.length)) ? '' : getAvailableBills(cassetteInfo);
-  const availableSumMessage = `Доступная сумма:`;
-  const isActionButtonDisabled = !withdrawSumInput || withdrawSumInput === placeholderWithdrawSum;
-
-  const getErrorMessage = (isFormSubmitted: boolean) => {
-    // if (balance > withdrawSumInput || !isFormSubmitted) {
-    //   return '';
-    // }
-    return (
-      <p className="input-subtitle" style={inputSubtitleStyles}>
-        {
-          availableWithdrawSum && (availableWithdrawSum === 'Terminal limit is exceeded')
-          ? (<span style={{ color: 'red' }}>{terminalLimitIsExceeted}</span>)
-          : availableWithdrawSum && (availableWithdrawSum > 0) 
-          ? (<>{availableSumMessage}<span className="withdraw-multiple-sum" style={withdrawMultipleSum}>{availableWithdrawSum}</span></>)
-          : (availableWithdrawSum && availableWithdrawSum <= 0)
-          ? (<span style={{ color: 'red' }}>{invalidSumMessage}</span>)
-          : balance < withdrawSumInput 
-          ? (<span style={{ color: 'red' }}>{notEnoughMoneyMessage}</span>)
-          : ''
-        }
-      </p>
-    )
-  }
-
+  const availableNominals = (!cassetteInfo || (cassetteInfo && !cassetteInfo.length)) ? '...' : getAvailableBills(cassetteInfo);
+  const isActionButtonDisabled = !withdrawSumInput || withdrawSumInput === placeholderWithdrawSum || !!errorMessage;
+  
   const withdrawSumStyles = {
     background: '#67219E',
     display: 'flex',
@@ -290,7 +283,9 @@ const VoucherWithdraw: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                { getErrorMessage(isFormSubmitted) }
+                <p className="input-subtitle" style={inputSubtitleStyles}>
+                  { errorMessage }
+                </p>
               </div>
               <ActionButton
                 title={withdrawButtonText}

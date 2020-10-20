@@ -2,6 +2,7 @@ import api from '../api';
 import { WithdrawBody, PinBody } from '../api/types';
 import { showError, showPrinterError } from './screens';
 import { store } from '../App';
+import { AppState } from '.';
 
 const REQUEST_VOUCHER_START = 'REQUEST_VOUCHER_START';
 const REQUEST_PRINT_LOADER_START = 'REQUEST_PRINT_LOADER_START';
@@ -399,14 +400,16 @@ export const fetchVoucherPin = (data: PinBody) => (dispatch: any) => {
   });
 }
 
-export const fetchVoucherWithdraw = (data: WithdrawBody) => (dispatch: any) => {
+export const fetchVoucherWithdraw = (data: WithdrawBody, closeWSConnection?: () => void) => (dispatch: any) => {
   // dispatch({type: REQUEST_VOUCHER_START});
   dispatch({ type: SET_WE_COUNT_BILLS_START });
 
   const weCountBillsTimer = setTimeout(() => {
-    const state = store.getState();
+    const state: AppState = store.getState();
 
     if (state.voucher.showWeCountBills) {
+      fetchCloseVoucherSession(state.voucher.voucherSessionKey, closeWSConnection)(dispatch);
+      dispatch(closeVoucherSession());
       dispatch(showError());
       dispatch({ type: SET_WE_COUNT_BILLS_REMOVE });
       dispatch(resetWeCountBillsTimer(weCountBillsTimer));
@@ -421,12 +424,23 @@ export const fetchVoucherWithdraw = (data: WithdrawBody) => (dispatch: any) => {
     const data = res.data;
     
     if (!data.success) {
-      if (data.message_error === 'Terminal limit is exceeded') {
+      if (data.message_error) {
+        dispatch(showError());
         dispatch({
           type: SET_AVAILABLE_WITHDRAW_SUM,
           payload: data.message_error
         });
       } else if (data.validation_errors) {
+        if (
+          data.validation_errors?.cassette_info 
+          && (
+            typeof data.validation_errors?.cassette_info === 'string' 
+            && String(Number(data.validation_errors?.cassette_info)) === 'NaN'
+          )
+        ) {
+          dispatch(showError());
+        }
+
         dispatch({
           type: SET_AVAILABLE_WITHDRAW_SUM,
           payload: data.validation_errors?.cassette_info
@@ -445,7 +459,7 @@ export const fetchVoucherWithdraw = (data: WithdrawBody) => (dispatch: any) => {
   });
 };
 
-export const fetchCloseVoucherSession = (voucherSessionKey: string, closeWSConnection: () => void) => (dispatch: any) => {
+export const fetchCloseVoucherSession = (voucherSessionKey: string, closeWSConnection?: () => void) => (dispatch: any) => {
   dispatch({ type: REQUEST_VOUCHER_START });
 
   const data = {

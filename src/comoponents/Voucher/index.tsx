@@ -18,6 +18,7 @@ import Absence from '../absence';
 import BackButton from '../Buttons/BackButton';
 import { WebSocketContext, WS } from '../../WSProvider';
 import './index.css';
+import LoaderModal from '../Loading/LoaderModal';
 
 const depoistButtonText = 'Пополнить';
 const widhdrawButtonText = 'Снять';
@@ -34,7 +35,8 @@ const VoucherRoads: React.FC = () => {
     pin, 
     isBillAccepterReady,
     balance,
-    isError 
+    isLoading,
+    isError
   } = useSelector((state: AppState) => state.voucher);  
   const dispatch = useDispatch();
 
@@ -64,6 +66,7 @@ const VoucherRoads: React.FC = () => {
 
   return (
     <>
+      { isLoading && <LoaderModal /> }
       { !voucherSessionKey && <Redirect to="/" /> }
       {
         showUserAbsence ? <Absence />

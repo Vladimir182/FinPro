@@ -91,7 +91,7 @@ export default ({ children }: { children: any }) => {
           }
           dispatch(setWithdrawSuccess());
           dispatch(hideWeCountBillsScreen());
-          dispatch(showOptionalCheck())
+          dispatch(showOptionalCheck());
         }
         // case 'pong': {
         //   console.log('WS PONG')
