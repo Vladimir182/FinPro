@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import InputMaskItem from './InputMaskItem';
+import moveCursorToEnd from '../../utils/moveCursorToEnd';
 import './index.css';
 
 type InputMaskType = {
@@ -69,10 +70,12 @@ const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessa
   useEffect(() => {
     setInputActive(true);
 
-    inputRef.current?.focus();
-    inputRef.current?.addEventListener('focusout', function() {
-      setInputActive(false);
-    })
+    if (inputRef.current) {
+      inputRef.current?.focus();
+      inputRef.current?.addEventListener('focusout', function() {
+        setInputActive(false);
+      });
+    }
   },[])
 
   const handleBlockClick = () => {
@@ -102,10 +105,24 @@ const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessa
             {Array(length).fill("").map((item, index) => {
               const value = inputValue[index] ?? '';
 
-              return <InputMaskItem key={index} value={value} isInputActive={isInputActive} isError={!!errorMessage} isMasked={isMasked} style={inputMaskItemStyles}/>
+              return <InputMaskItem 
+                key={index} 
+                value={value} 
+                isInputActive={isInputActive} 
+                isError={!!errorMessage} 
+                isMasked={isMasked} 
+                style={inputMaskItemStyles}
+              />
             })}
           </div>
-          <input id="voucher" ref={inputRef} style={inputStyles} value={inputValue} onChange={e => handleChangeInputValue(e.target.value)}/>
+          <input 
+            id="voucher" 
+            ref={inputRef} 
+            style={inputStyles} 
+            value={inputValue} 
+            onKeyDown={e => moveCursorToEnd(e.target)} 
+            onChange={e => handleChangeInputValue(e.target.value)}
+          />
         </label>
       <p className="input-mask-error" style={inputMaskErrorStyles}>{errorMessage}</p>
     </div>

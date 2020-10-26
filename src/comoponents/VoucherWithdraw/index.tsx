@@ -23,6 +23,7 @@ import WeCountBills from '../WeCountBills';
 import BackButton from '../Buttons/BackButton';
 import { hideOptionalCheck } from '../../redux/screens';
 import './index.css';
+import moveCursorToEnd from '../../utils/moveCursorToEnd';
 
 const voucherWithdrawContainerStyles = {
   display: 'flex',
@@ -276,7 +277,8 @@ const VoucherWithdraw: React.FC = () => {
                           id="voucher" 
                           ref={inputRef}  
                           style={inputStyles} 
-                          value={withdrawSumInput} 
+                          value={withdrawSumInput}
+                          onKeyDown={e => moveCursorToEnd(e.target)}
                           onChange={e => handleChangeWithdrawSum(e.target.value)}
                         />
                       </label>

@@ -125,7 +125,7 @@ export default class ApiClient {
 			url: `${process.env.REACT_APP_URL}/${this.prefix}${url}${query}`,
 			data: method !== 'GET' ? body : null,
 			withCredentials: true,
-			timeout: 90000 
+			timeout: 90000
 		});
 
 		return this.handleResponse(res, url);

@@ -17,6 +17,7 @@ const InputMaskItem: React.FC<InputMaskItemType> = ({ value, isError, isMasked, 
   const inputMaskItemWrapperStyles = {
     background: (isInputActive && !isError) ? activeInputMaskItemGradient : isError ? '#FF0000' : '#8400BF',
     filter: (isInputActive && !isError && value) ? 'drop-shadow(0 0 8px #EAA900)' : 'none',
+    transition: 'filter .1s ease-in-out',
     borderRadius: '12px',
     boxSizing: 'border-box',
   } as React.CSSProperties;
