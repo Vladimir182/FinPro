@@ -57,7 +57,9 @@ const VoucherWithdrawPin: React.FC = () => {
     setVoucherPin(value);
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+
     if (errorMessage) {
       return;
     } else if (
@@ -94,24 +96,26 @@ const VoucherWithdrawPin: React.FC = () => {
             <BackButton
               link="/voucher"
             />
-            <div className="voucher-pin-container" style={voucherLoginContainerStyles}>
-              <InputMask 
-                title={inputTitle} 
-                onInputChange={handleChangeInputValue}
-                cleanErrorMessage={cleanErrorMessage}
-                length={voucherPinLength} 
-                errorMessage={errorMessage}
-                isMasked={true}
-                style={InputMaskStyles}
-              />
-              <ActionButton
-                title={submitButtonTittle}
-                className="voucher-pin-button" 
-                handleButtonClick={handleSubmit} 
-                image={image} 
-                style={actionButtonStyles}
-              />
-            </div>
+            <form onSubmit={handleSubmit}>
+              <div className="voucher-pin-container" style={voucherLoginContainerStyles}>
+                <InputMask
+                  title={inputTitle}
+                  onInputChange={handleChangeInputValue}
+                  cleanErrorMessage={cleanErrorMessage}
+                  length={voucherPinLength}
+                  errorMessage={errorMessage}
+                  isMasked={true}
+                  style={InputMaskStyles}
+                />
+                <ActionButton
+                  title={submitButtonTittle}
+                  className="voucher-pin-button"
+                  handleButtonClick={handleSubmit}
+                  image={image}
+                  style={actionButtonStyles}
+                />
+              </div>
+            </form>
           </>
         )
       }

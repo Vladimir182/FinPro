@@ -108,9 +108,25 @@ let VoucherLogin: React.FC = () => {
     if (!ws.socket || ws.socket.readyState > 1) {
       ws.setWSConnnection();
     }
+
+    window.addEventListener('keypress', submitFormHandle);
+
+    return () => window.removeEventListener('keypress', submitFormHandle);
   })
 
-  const handleActionButton = () => {
+  const submitFormHandle = (e: any) => {
+    e.preventDefault();
+    
+    if (e.keyCode !== 13 || !depositSum) {
+      return;
+    }
+    
+    handleActionButton(e);
+  }
+
+  const handleActionButton = (e: any) => {
+    e.preventDefault();
+
     dispatch(showOptionalCheck());
   }
 
@@ -157,7 +173,6 @@ let VoucherLogin: React.FC = () => {
               link={depositSum && depositSum > 0 ? undefined : "/voucher"}
               handleButtonClick={depositSum && depositSum > 0 ? handleBackButtonLink : () => {}}
             />
-
             <div className="voucher-deposit-container" style={voucherLoginContainerStyles}>
               <div className="input-block" style={inputBlockStyles}>
                 <p className="input-title" style={titleStyles}>{inputTitle}:</p>

@@ -59,7 +59,7 @@ const withdrawMultipleSum = {
 } as React.CSSProperties;
 
 const actionButtonStyles = {
-  marginTop: '7.5vh'
+  marginTop: '7.5vh',
   // background: 'linear-gradient(180deg, rgba(64, 0, 93, 0) 0%, #8A00C9 98.96%, #8A00C9 100%)'
 } as React.CSSProperties;
 
@@ -150,7 +150,9 @@ const VoucherWithdraw: React.FC = () => {
     });
   }, [cassetteInfo, isPinVerified, availableWithdrawSum]);
 
-  const handleActionButtonClick = () => {
+  const handleActionButtonClick = (e: any) => {
+    e.preventDefault();
+
     const data = {
       amount: Number(withdrawSumInput),
       msid: voucherSessionKey,
@@ -262,42 +264,44 @@ const VoucherWithdraw: React.FC = () => {
         /> : (
           <>
             <BackButton link="/voucher" />
-            <div className="withdraw-login-container" style={voucherWithdrawContainerStyles}>
-              <div className="withdraw-block" style={inputBlockStyles} onClick={handleBlockClick}>
-                <p className="withdraw-title" style={titleStyles}>
-                  {availableNominalsTitle}
-                  { !isLoading && <span className="withdraw-multiple-sum" style={withdrawMultipleSum}>{availableNominals}</span> }
-                </p>
-                <div className="withdraw-sum-outer-wrapper" style={withdrawSumOuterWrapper}>
-                  <div className="withdraw-sum-outer-middle-wrapper" style={withdrawSumMiddleWrapper}>
-                    <div className="withdraw-sum-wrapper" style={withdrawSumWrapper}>
-                      <label>
-                        <div className="withdraw-sum" style={withdrawSumStyles}>{withdrawSumInput}</div>
-                        <input 
-                          id="voucher" 
-                          ref={inputRef}  
-                          style={inputStyles} 
-                          value={withdrawSumInput}
-                          onKeyDown={e => moveCursorToEnd(e.target)}
-                          onChange={e => handleChangeWithdrawSum(e.target.value)}
-                        />
-                      </label>
+              <form onSubmit={!isActionButtonDisabled ? handleActionButtonClick : (e) => e.preventDefault()}>
+                <div className="withdraw-login-container" style={voucherWithdrawContainerStyles}>
+                    <div className="withdraw-block" style={inputBlockStyles} onClick={handleBlockClick}>
+                      <p className="withdraw-title" style={titleStyles}>
+                        {availableNominalsTitle}
+                        { !isLoading && <span className="withdraw-multiple-sum" style={withdrawMultipleSum}>{availableNominals}</span> }
+                      </p>
+                      <div className="withdraw-sum-outer-wrapper" style={withdrawSumOuterWrapper}>
+                        <div className="withdraw-sum-outer-middle-wrapper" style={withdrawSumMiddleWrapper}>
+                          <div className="withdraw-sum-wrapper" style={withdrawSumWrapper}>
+                            <label>
+                              <div className="withdraw-sum" style={withdrawSumStyles}>{withdrawSumInput}</div>
+                              <input
+                                id="voucher"
+                                ref={inputRef}
+                                style={inputStyles}
+                                value={withdrawSumInput}
+                                onKeyDown={e => moveCursorToEnd(e.target)}
+                                onChange={e => handleChangeWithdrawSum(e.target.value)}
+                              />
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="input-subtitle" style={inputSubtitleStyles}>
+                        { errorMessage }
+                      </p>
                     </div>
-                  </div>
+                    <ActionButton
+                      title={withdrawButtonText}
+                      className="voucher-withdraw-button"
+                      handleButtonClick={handleActionButtonClick}
+                      image={image}
+                      style={actionButtonStyles}
+                      disable={isActionButtonDisabled}
+                    />
                 </div>
-                <p className="input-subtitle" style={inputSubtitleStyles}>
-                  { errorMessage }
-                </p>
-              </div>
-              <ActionButton
-                title={withdrawButtonText}
-                className="voucher-withdraw-button"
-                handleButtonClick={handleActionButtonClick}
-                image={image}
-                style={actionButtonStyles}
-                disable={isActionButtonDisabled}
-              />
-            </div>
+            </form>
           </>
         )
       }
