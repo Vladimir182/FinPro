@@ -132,7 +132,7 @@ const VoucherLogin: React.FC = () => {
       {voucherSessionKey && <Redirect to="/voucher" /> }
       {isLoading && <LoaderModal />}
       <BackButton link="/" />
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={!inputErrorMessage ? handleSubmit : (e: any) => e.preventDefault()}>
         <div className="voucher-login-container" style={voucherLoginContainerStyles}>
           <InputMask 
             title="Введите ваш логин"

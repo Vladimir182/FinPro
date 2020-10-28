@@ -448,11 +448,13 @@ export const fetchVoucherWithdraw = (data: WithdrawBody, closeWSConnection?: () 
         });
       } else if (data.validation_errors) {
         if (
-          data.validation_errors?.cassette_info 
-          && (
-            typeof data.validation_errors?.cassette_info === 'string' 
-            && String(Number(data.validation_errors?.cassette_info)) === 'NaN'
-          )
+          data.validation_errors?.cassette_info === null
+          || (
+            data.validation_errors?.cassette_info 
+            && (
+              typeof data.validation_errors?.cassette_info === 'string' 
+              && String(Number(data.validation_errors?.cassette_info)) === 'NaN'
+          ))
         ) {
           dispatch(showError());
         }

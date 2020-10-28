@@ -148,6 +148,7 @@ const VoucherWithdraw: React.FC = () => {
     inputRef.current?.addEventListener('focusout', function() {
       inputRef.current?.focus();
     });
+    inputRef.current?.addEventListener('paste', (e: any) => e.preventDefault());
   }, [cassetteInfo, isPinVerified, availableWithdrawSum]);
 
   const handleActionButtonClick = (e: any) => {

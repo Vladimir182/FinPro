@@ -68,18 +68,20 @@ const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessa
   
   const inputRef = React.createRef<HTMLInputElement>();
   useEffect(() => {
-    setInputActive(true);
 
+    setInputActive(true);
+    
     if (inputRef.current) {
+      //@ts-ignore
       inputRef.current?.focus();
       inputRef.current?.addEventListener('focusout', function() {
         setInputActive(false);
       });
+      inputRef.current?.addEventListener('paste', (e: any) => e.preventDefault());
     }
   },[])
 
   const handleBlockClick = () => {
-    
     if (cleanErrorMessage) {
       cleanErrorMessage();
     }
@@ -89,7 +91,7 @@ const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessa
   }
 
   const handleChangeInputValue = (value: string) => {
-    if (value.length > length) {
+    if (value.length > length || (/[^A-Za-z|0-9]/.test(value))) {
       return;
     }
 
