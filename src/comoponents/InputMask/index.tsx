@@ -52,8 +52,6 @@ const inputStyles = {
 
 const inputMaskErrorStyles = {
   display: 'inline-block',
-  position: 'absolute',
-  top: '1em',
   fontStyle: 'normal',
   fontWeight: 'normal',
   textAlign: 'center',
