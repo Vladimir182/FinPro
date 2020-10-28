@@ -53,7 +53,7 @@ const inputStyles = {
 const inputMaskErrorStyles = {
   display: 'inline-block',
   position: 'absolute',
-  bottom: '3vh',
+  top: '1em',
   fontStyle: 'normal',
   fontWeight: 'normal',
   textAlign: 'center',
@@ -61,6 +61,13 @@ const inputMaskErrorStyles = {
   color: '#FF0000',
   margin: 0
 } as React.CSSProperties;
+
+const InputMaskErrorWrapperStyles = {
+  display: 'flex',
+  justifyContent: 'center',
+  position: 'relative',
+  width: '100%'
+} as React.CSSProperties
 
 const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessage, onInputChange, cleanErrorMessage, style, isMasked, inputMaskItemStyles }) => {
   const [ inputValue, setInputValue ] = useState('');
@@ -126,7 +133,9 @@ const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessa
             onChange={e => handleChangeInputValue(e.target.value)}
           />
         </label>
-      <p className="input-mask-error" style={inputMaskErrorStyles}>{errorMessage}</p>
+        <div style={InputMaskErrorWrapperStyles}>
+          <p className="input-mask-error" style={inputMaskErrorStyles}>{errorMessage}</p>
+        </div>
     </div>
   )
 }
