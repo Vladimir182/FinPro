@@ -13,7 +13,7 @@ import BackButton from '../Buttons/BackButton';
 import secondsToHms from '../../utils/secondsToHms';
 
 const onlyNumEerrorMessage = 'Здесь можно воодить только цыфры';
-const cantBeEmptyErrorMessage = 'Дрожно быть заполненым';
+const cantBeEmptyErrorMessage = 'Должно быть заполненым';
 const wrongVoucherKeyErrorMessage = 'Ваучер не найден';
 const voucherSessionIsNotClosedMessage = 'Сессия данного ваучера не закрыта';
 
