@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import Arrow from '../../../images/ArrowLeft.svg';
 import './index.css';
@@ -35,12 +35,35 @@ type BackButtonProps = {
 const backButtonText = 'Назад';
 
 const BackButton: React.FC<BackButtonProps> = ({ link, handleButtonClick }) => {
+  const buttonRef = useRef(null);
+
+  const handleBackButtonKeydown = (e: any) => {
+    if (e.keyCode !== 27) {
+      return;
+    }
+    if (handleButtonClick) {
+      handleButtonClick();
+    }
+    if (buttonRef?.current) {      
+      //@ts-ignore
+      buttonRef?.current?.click()
+    } 
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleBackButtonKeydown);
+
+    return () => window.removeEventListener('keydown', handleBackButtonKeydown);
+  });
+
+
 
   return (
     <div style={layer} className='layer'>
       { 
         link 
-        ? <NavLink 
+        ? <NavLink
+            ref={buttonRef}
             to={link} 
             style={backButton} 
             className='backButton' 
@@ -50,6 +73,7 @@ const BackButton: React.FC<BackButtonProps> = ({ link, handleButtonClick }) => {
             {backButtonText}
           </NavLink>
         : <div
+          ref={buttonRef}
           style={backButton} 
           className='backButton' 
           onClick={handleButtonClick}

@@ -56,24 +56,48 @@ const ActionButton: React.FC<ActionButton> = ({ title, link, image, handleButton
     textTransform: 'uppercase'
   } as React.CSSProperties;
 
+  // return (
+  //   <div className={`action-button-block`}  onClick={!disable ? handleButtonClick: () => {}} style={{...buttonBlockStyles, ...style}}>
+  //     <div className={`action-button-wrapper ${className ?? ''}`} style={buttonWrapperStyles}>
+  //       {
+  //         link ? (
+  //           <NavLink to={link} style={linkStyles}>
+  //             <p className="action-button-title" style={titleStyles}>{title}</p>
+  //             { image && <img src={image} style={imageStyles} alt="image" /> }
+  //           </NavLink>
+  //         ) : (
+  //           <div style={linkStyles}>
+  //             <p className="action-button-title" style={titleStyles}>{title}</p>
+  //             { image && <img className="action-button-image" src={image} style={imageStyles} alt="image" /> }
+  //           </div>
+  //         )
+  //       }
+  //     </div>
+  //   </div>
+  // )
+
   return (
-    <div className={`action-button-block`}  onClick={!disable ? handleButtonClick: () => {}} style={{...buttonBlockStyles, ...style}}>
-      <div className={`action-button-wrapper ${className ?? ''}`} style={buttonWrapperStyles}>
-        {
-          link ? (
-            <NavLink to={link} style={linkStyles}>
-              <p className="action-button-title" style={titleStyles}>{title}</p>
-              { image && <img src={image} style={imageStyles} alt="image" /> }
-            </NavLink>
-          ) : (
-            <div style={linkStyles}>
-              <p className="action-button-title" style={titleStyles}>{title}</p>
-              { image && <img className="action-button-image" src={image} style={imageStyles} alt="image" /> }
+        <>
+          {
+            link 
+            ? <NavLink to={link} style={{ ...style }}>
+              <div className={`action-button-block`}  onClick={!disable ? handleButtonClick: () => {}} style={{...buttonBlockStyles}}>
+                <div className={`action-button-wrapper ${className ?? ''}`} style={{  ...buttonWrapperStyles, ...linkStyles }}>
+                        <p className="action-button-title" style={titleStyles}>{title}</p>
+                        { image && <img src={image} style={imageStyles} alt="image" /> }
+                </div>
+              </div>
+          </NavLink>
+          : <div className={`action-button-block`}  onClick={!disable ? handleButtonClick: () => {}} style={{...buttonBlockStyles, ...style}}>
+              <div className={`action-button-wrapper ${className ?? ''}`} style={buttonWrapperStyles}>
+                <div style={linkStyles}>
+                  <p className="action-button-title" style={titleStyles}>{title}</p>
+                  { image && <img className="action-button-image" src={image} style={imageStyles} alt="image" /> }
+                </div>
+              </div>
             </div>
-          )
-        }
-      </div>
-    </div>
+          }
+        </>
   )
 }
 

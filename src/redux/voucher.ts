@@ -29,6 +29,7 @@ const SET_WE_COUNT_BILLS_START = 'SET_WE_COUNT_BILLS_START';
 const SET_WE_COUNT_BILLS_REMOVE = 'SET_WE_COUNT_BILLS_REMOVE';
 const SET_WE_COUNT_BILLS_TIMER = 'SET_WE_COUNT_BILLS_TIMER';
 const RESET_WE_COUNT_BILLS_TIMER = 'RESET_WE_COUNT_BILLS_TIMER';
+const RESET_VOUCHER_CLOSE_TIMEOUT = 'RESET_VOUCHER_CLOSE_TIMEOUT';
 
 const initialState = {
   isLoading: false,
@@ -49,7 +50,8 @@ const initialState = {
   showUserAbsence: false,
   socketConnectionStatus: false,
   showWeCountBills: false,
-  weCountBillsTimer: null
+  weCountBillsTimer: null,
+  voucherCloseTimeout: null
 };
 
 interface Action {
@@ -206,8 +208,9 @@ const voucher = (state = initialState, { type, payload }: Action) => {
 				isLoading: false,
 				isError: true,
         errorMessage: payload.message,
+        voucherCloseTimeout: payload.voucherCloseTimeout,
         isPrintLoading: false,
-      };
+      }
     case SET_SHOW_USER_ABSENCE:
       if (!payload) {
         //@ts-ignore
@@ -233,7 +236,7 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         ...state,
         isLoading: false,
         isError: false,
-        errorMessage: false,
+        errorMessage: '',
         isPrintLoading: false,
         isPinVerified: false,
       }
@@ -284,6 +287,13 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         ...state,
         weCountBillsTimer: null
       }
+    case RESET_VOUCHER_CLOSE_TIMEOUT:
+      return {
+        ...state,
+        voucherCloseTimeout: null,
+        isError: false,
+        errorMessage: '',
+      }  
 		default:
 			return state;
 	}
@@ -299,7 +309,13 @@ export const fetchVoucherLogin = (voucherLogin: string) => (dispatch: any) => {
     const data = res.data;
 
     if (!data.success) {
-      dispatch({ type: REQUEST_VOUCHER_FAILURE, payload: { message: data.validation_errors ?? data.error_message } });
+      dispatch({ 
+        type: REQUEST_VOUCHER_FAILURE, 
+        payload: { 
+          message: data.validation_errors ?? data.error_message,
+          voucherCloseTimeout: data.expiration_date ?? null
+        }
+      });
 
       return;
     }
@@ -432,11 +448,13 @@ export const fetchVoucherWithdraw = (data: WithdrawBody, closeWSConnection?: () 
         });
       } else if (data.validation_errors) {
         if (
-          data.validation_errors?.cassette_info 
-          && (
-            typeof data.validation_errors?.cassette_info === 'string' 
-            && String(Number(data.validation_errors?.cassette_info)) === 'NaN'
-          )
+          data.validation_errors?.cassette_info === null
+          || (
+            data.validation_errors?.cassette_info 
+            && (
+              typeof data.validation_errors?.cassette_info === 'string' 
+              && String(Number(data.validation_errors?.cassette_info)) === 'NaN'
+          ))
         ) {
           dispatch(showError());
         }
@@ -638,5 +656,9 @@ export const resetWeCountBillsTimer = (timer: any) => ({
 export const closeVoucherSession = () => ({
   type: CLOSE_VOUCHER_SESSION_SUCCESS
 });
+
+export const resetVoucherCloseTimeout = () => ({
+  type: RESET_VOUCHER_CLOSE_TIMEOUT
+})
 
 export default voucher;

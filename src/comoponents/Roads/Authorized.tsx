@@ -47,9 +47,9 @@ class Authorized extends React.Component {
       return true;
     }
     //@ts-ignore
-    if (nextProps.accessToken !== this.props.accessToken) {
-      return true; 
-    }
+    // if (nextProps.accessToken !== this.props.accessToken) {
+    //   return true; 
+    // }
     //@ts-ignore
     if (nextProps.serverConnectionStatus !== this.props.serverConnectionStatus) {
       return true; 

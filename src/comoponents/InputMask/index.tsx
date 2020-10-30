@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import InputMaskItem from './InputMaskItem';
+import moveCursorToEnd from '../../utils/moveCursorToEnd';
 import './index.css';
 
 type InputMaskType = {
@@ -51,8 +52,6 @@ const inputStyles = {
 
 const inputMaskErrorStyles = {
   display: 'inline-block',
-  position: 'absolute',
-  bottom: '3vh',
   fontStyle: 'normal',
   fontWeight: 'normal',
   textAlign: 'center',
@@ -61,22 +60,33 @@ const inputMaskErrorStyles = {
   margin: 0
 } as React.CSSProperties;
 
+const InputMaskErrorWrapperStyles = {
+  display: 'flex',
+  justifyContent: 'center',
+  position: 'relative',
+  width: '100%'
+} as React.CSSProperties
+
 const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessage, onInputChange, cleanErrorMessage, style, isMasked, inputMaskItemStyles }) => {
   const [ inputValue, setInputValue ] = useState('');
   const [ isInputActive, setInputActive ] = useState(false);
   
   const inputRef = React.createRef<HTMLInputElement>();
   useEffect(() => {
-    setInputActive(true);
 
-    inputRef.current?.focus();
-    inputRef.current?.addEventListener('focusout', function() {
-      setInputActive(false);
-    })
+    setInputActive(true);
+    
+    if (inputRef.current) {
+      //@ts-ignore
+      inputRef.current?.focus();
+      inputRef.current?.addEventListener('focusout', function() {
+        setInputActive(false);
+      });
+      inputRef.current?.addEventListener('paste', (e: any) => e.preventDefault());
+    }
   },[])
 
   const handleBlockClick = () => {
-    
     if (cleanErrorMessage) {
       cleanErrorMessage();
     }
@@ -86,7 +96,7 @@ const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessa
   }
 
   const handleChangeInputValue = (value: string) => {
-    if (value.length > length) {
+    if (value.length > length || (/[^A-Za-z|0-9]/.test(value))) {
       return;
     }
 
@@ -102,12 +112,28 @@ const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessa
             {Array(length).fill("").map((item, index) => {
               const value = inputValue[index] ?? '';
 
-              return <InputMaskItem key={index} value={value} isInputActive={isInputActive} isError={!!errorMessage} isMasked={isMasked} style={inputMaskItemStyles}/>
+              return <InputMaskItem 
+                key={index} 
+                value={value} 
+                isInputActive={isInputActive} 
+                isError={!!errorMessage} 
+                isMasked={isMasked} 
+                style={inputMaskItemStyles}
+              />
             })}
           </div>
-          <input id="voucher" ref={inputRef} style={inputStyles} value={inputValue} onChange={e => handleChangeInputValue(e.target.value)}/>
+          <input 
+            id="voucher" 
+            ref={inputRef} 
+            style={inputStyles} 
+            value={inputValue} 
+            onKeyDown={e => moveCursorToEnd(e.target)} 
+            onChange={e => handleChangeInputValue(e.target.value)}
+          />
         </label>
-      <p className="input-mask-error" style={inputMaskErrorStyles}>{errorMessage}</p>
+        <div style={InputMaskErrorWrapperStyles}>
+          <p className="input-mask-error" style={inputMaskErrorStyles}>{errorMessage}</p>
+        </div>
     </div>
   )
 }
