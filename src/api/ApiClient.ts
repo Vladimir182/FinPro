@@ -122,7 +122,7 @@ export default class ApiClient {
 		const res = Axios({
 			// ${process.env.REACT_APP_URL}
 			method: 'POST',
-			url: `${process.env.REACT_APP_URL_STAGE}/${this.prefix}${url}${query}`,
+			url: `${process.env.REACT_APP_URL_PROD}/${this.prefix}${url}${query}`,
 			data: method !== 'GET' ? body : null,
 			withCredentials: true,
 			timeout: 90000
