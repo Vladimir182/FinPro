@@ -36,7 +36,7 @@ export default ({ children }: { children: any }) => {
     }
 
     const accessToken = localStorage.getItem('finpro_access_token');
-    const newSocket = new window.WebSocket(`${process.env.REACT_APP_WS_URL}/socket?token=${accessToken}`);
+    const newSocket = new window.WebSocket(`${process.env.REACT_APP_WS_URL_DEV}/socket?token=${accessToken}`);
     
     if (!reconnectTimer) {
       reconnectTimer = setTimeout(function() {
