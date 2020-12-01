@@ -441,7 +441,10 @@ export const fetchVoucherWithdraw = (data: WithdrawBody, closeWSConnection?: () 
     
     if (!data.success) {
       if (data.message_error) {
-        dispatch(showError());
+        if (data.message_error !== 'Terminal limit is exceeded') {
+          dispatch(showError());
+        }
+          
         dispatch({
           type: SET_AVAILABLE_WITHDRAW_SUM,
           payload: data.message_error
