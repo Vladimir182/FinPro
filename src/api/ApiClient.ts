@@ -120,7 +120,7 @@ export default class ApiClient {
 	    query += token ? `?accessToken=${token}` : '';
 
 		const res = Axios({
-			// ${process.env.REACT_APP_URL}
+			// ${process.env.REACT_APP_URL_DEV}
 			method: 'POST',
 			url: `${process.env.REACT_APP_URL_PROD}/${this.prefix}${url}${query}`,
 			data: method !== 'GET' ? body : null,

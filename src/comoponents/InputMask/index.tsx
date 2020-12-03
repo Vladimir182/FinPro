@@ -23,7 +23,7 @@ const inputBlockStyles = {
   position:'relative',
   background: '#480081',
   boxShadow: '0px 4px 30px rgba(174, 130, 225, 0.2)',
-  padding: '7.41vh 3vw 10vh 3vw',
+  padding: '7.41vh 3vw 0 3vw',
   boxSizing: 'border-box'
 } as React.CSSProperties;
 
@@ -51,7 +51,9 @@ const inputStyles = {
 } as React.CSSProperties;
 
 const inputMaskErrorStyles = {
-  display: 'inline-block',
+  display: 'flex',
+  minHeight: '10vh',
+  alignItems: 'center',
   fontStyle: 'normal',
   fontWeight: 'normal',
   textAlign: 'center',
@@ -131,9 +133,7 @@ const InputMask: React.FC<InputMaskType> = ({ title, length, padding, errorMessa
             onChange={e => handleChangeInputValue(e.target.value)}
           />
         </label>
-        <div style={InputMaskErrorWrapperStyles}>
-          <p className="input-mask-error" style={inputMaskErrorStyles}>{errorMessage}</p>
-        </div>
+        <p className="input-mask-error" style={inputMaskErrorStyles}>{errorMessage}</p>
     </div>
   )
 }

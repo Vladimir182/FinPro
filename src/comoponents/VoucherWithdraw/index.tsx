@@ -40,7 +40,7 @@ const inputBlockStyles = {
   position:'relative',
   background: '#480081',
   boxShadow: '0px 4px 30px rgba(174, 130, 225, 0.2)',
-  padding: '7.41vh 3vw 4vw',
+  padding: '7.41vh 3vw 0 4vw',
   boxSizing: 'border-box'
 } as React.CSSProperties;
 
@@ -55,7 +55,8 @@ const titleStyles = {
 
 const withdrawMultipleSum = {
   color: '#FFB800',
-  marginLeft: '1vw'
+  marginLeft: '1vw',
+  fontWeight: 'bolder'
 } as React.CSSProperties;
 
 const actionButtonStyles = {
@@ -83,9 +84,9 @@ const inputStyles = {
 } as React.CSSProperties;
 
 const inputSubtitleStyles = {
-  display: 'inline-block',
-  position: 'absolute',
-  bottom: '2vh',
+  minHeight: '4vw',
+  display:'flex',
+  alignItems: 'center',
   fontStyle: 'normal',
   fontWeight: 'normal',
   textAlign: 'center',
