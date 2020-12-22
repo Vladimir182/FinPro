@@ -51,3 +51,10 @@ a {
   text-decoration: none!important;
   color: #fff;
 }
+
+@media (min-width: 1300px) and (max-width: 1500px) and (max-height: 900px) {
+    .content > * {
+        position: relative;
+        top: -40px;
+    }
+ }
