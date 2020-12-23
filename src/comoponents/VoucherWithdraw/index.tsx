@@ -238,7 +238,7 @@ const VoucherWithdraw: React.FC = () => {
   const errorMessage = getErrorMessage(isFormSubmitted);
   const availableNominalsTitle = `Доступные купюры, ${currency}:`;
   const availableNominals = (isLoading && (!cassetteInfo || (cassetteInfo && !cassetteInfo.length))) ? '...' 
-    : (!isLoading && (!cassetteInfo || (cassetteInfo && !cassetteInfo.length)) ? noBillsMessage
+    : !isLoading && (!cassetteInfo || (cassetteInfo && !cassetteInfo.length)) ? noBillsMessage
     : getAvailableBills(cassetteInfo);
   const isActionButtonDisabled = !withdrawSumInput || withdrawSumInput === placeholderWithdrawSum || !!errorMessage;
   
