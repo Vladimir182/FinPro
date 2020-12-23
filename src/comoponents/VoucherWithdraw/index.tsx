@@ -240,7 +240,8 @@ const VoucherWithdraw: React.FC = () => {
   const availableNominals = (isLoading && (!cassetteInfo || (cassetteInfo && !cassetteInfo.length))) ? '...' 
     : !isLoading && (!cassetteInfo || (cassetteInfo && !cassetteInfo.length)) ? noBillsMessage
     : getAvailableBills(cassetteInfo);
-  const isActionButtonDisabled = !withdrawSumInput || withdrawSumInput === placeholderWithdrawSum || !!errorMessage || availableNominals === noBillsMessage;
+  const isActionButtonDisabled = !withdrawSumInput || withdrawSumInput === placeholderWithdrawSum || !!errorMessage
+  //  || availableNominals === noBillsMessage;
   
   const withdrawSumStyles = {
     background: '#67219E',
