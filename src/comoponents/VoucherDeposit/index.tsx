@@ -3,7 +3,7 @@ import ActionButton from '../Buttons/ActionButton';
 import ArrowRight from '../../images/ArrowRight.svg';
 import ArrowRightShort from '../../images/ArrowRightShort.svg';
 import InputMaskItem from '../InputMask/InputMaskItem';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import LoaderModal from '../Loading/LoaderModal';
 import { 
   fetchDepositInit,
@@ -20,6 +20,7 @@ import PrintCheck from '../Checks';
 import './index.css';
 import Absence from '../absence';
 import BackButton from '../Buttons/BackButton';
+import { CentrifugeContext } from '../../CentrifugeProvider';
 
 const inputBlockStyles = {
   display: 'flex',
@@ -86,6 +87,7 @@ const actionButtonTitle = 'Завершить';
 let VoucherLogin: React.FC = () => {
   //@ts-ignore
   const ws: WS = useContext(WebSocketContext);
+  const centrifuge = useContext(CentrifugeContext);
   const dispatch = useDispatch();
   const { 
     isLoading,
@@ -105,9 +107,10 @@ let VoucherLogin: React.FC = () => {
     if (!isBillAccepterReady && !isLoading && !isError) {
       fetchDepositInit(voucherSessionKey)(dispatch);
     }
-    if (!ws.socket || ws.socket.readyState > 1) {
-      ws.setWSConnnection();
-    }
+
+    // if (!ws.socket || ws.socket.readyState > 1) {
+    //   ws.setWSConnnection();
+    // }
 
     window.addEventListener('keypress', submitFormHandle);
 
@@ -144,7 +147,11 @@ let VoucherLogin: React.FC = () => {
   const handleDontPrintOptionalCheck = () => {
     dispatch(setDepositSum(0));
     dispatch(hideOptionalCheck());
-    fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
+    if (centrifuge) {
+      centrifuge.disconnect();
+    }
+    // fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
+    fetchCloseVoucherSession(voucherSessionKey)(dispatch);
   }
 
   const handleBackButtonLink = () => {

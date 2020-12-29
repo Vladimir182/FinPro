@@ -24,6 +24,7 @@ import BackButton from '../Buttons/BackButton';
 import { hideOptionalCheck } from '../../redux/screens';
 import './index.css';
 import moveCursorToEnd from '../../utils/moveCursorToEnd';
+import { CentrifugeContext } from '../../CentrifugeProvider';
 
 const voucherWithdrawContainerStyles = {
   display: 'flex',
@@ -107,6 +108,7 @@ const image = window.innerWidth <= 1280 ? ArrowRightShort : ArrowRight;
 const VoucherWithdraw: React.FC = () => {
   //@ts-ignore
   const ws: WS = useContext(WebSocketContext);
+  const centrifuge = useContext(CentrifugeContext);
   const dispatch = useDispatch();
 
   let { 
@@ -135,9 +137,9 @@ const VoucherWithdraw: React.FC = () => {
     if (!isError && !cassetteInfo && !cassetteInfo?.length && !isLoading && isPinVerified) {
       fetchCassetteInfo({ msid: voucherSessionKey })(dispatch);
     }
-    if (!ws.socket || ws.socket.readyState === 3) {
-      ws.setWSConnnection();
-    }
+    // if (!ws.socket || ws.socket.readyState === 3) {
+    //   ws.setWSConnnection();
+    // }
     if (!isLoading && balance === null && pin) {
       fetchShowBalnce({
         pin,
@@ -168,7 +170,11 @@ const VoucherWithdraw: React.FC = () => {
       return;
     }
 
-    fetchVoucherWithdraw(data, ws.closeWSConnection)(dispatch);
+    // if (centrifuge) {
+    //   centrifuge.disconnect();
+    // }
+    // fetchVoucherWithdraw(data, ws.closeWSConnection)(dispatch);
+    fetchVoucherWithdraw(data)(dispatch);
   }
 
   const handleChangeWithdrawSum = (value: string) => {
@@ -215,7 +221,11 @@ const VoucherWithdraw: React.FC = () => {
   }
 
   const handleDontPrintOptionalCheck = () => {
-    fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
+    if (centrifuge) {
+      centrifuge.disconnect();
+    }
+    // fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
+    fetchCloseVoucherSession(voucherSessionKey)(dispatch);
     dispatch(hideOptionalCheck());
   }
 

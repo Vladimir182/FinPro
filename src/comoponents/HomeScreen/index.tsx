@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense, lazy} from 'react';
+import React, { useEffect, Suspense, lazy, useContext} from 'react';
 import newVoucher from '../../images/icon_new_voucher.svg';
 import existingVoucher from '../../images/icon_voucher.svg';
 import BaseButton from '../Buttons/BaseButton';
@@ -9,9 +9,11 @@ import PrintCheck from '../Checks';
 import {fetchPrintVoucher, resetVoucherErrors} from "../../redux/voucher";
 import './index.module.css';
 import './index.css';
+import { CentrifugeContext } from '../../CentrifugeProvider';
 // const BaseButton = React.lazy(() => import('../Buttons/BaseButton'));
 
 const HomeScreen: React.FC = () => {
+  const centrifuge = useContext(CentrifugeContext)
   const dispatch = useDispatch();
   const { 
     isPrintLoading,
@@ -23,6 +25,9 @@ const HomeScreen: React.FC = () => {
   useEffect(() => {
     if (isError || errorMessage) {
       dispatch(resetVoucherErrors());
+    }
+    if (centrifuge) {
+      centrifuge.disconnect();
     }
   }, [isError, errorMessage, voucherSessionKey]);
   

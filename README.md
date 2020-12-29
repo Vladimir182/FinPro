@@ -8,3 +8,5 @@
     npm rebuild node-sass
     npm run build
 ```
+
+#[Api documentation](https://kiosk-api.kiosk-frontend.finpro.pw/docs/index.html)

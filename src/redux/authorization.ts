@@ -3,6 +3,8 @@ import { fetchTerminal } from './voucher';
 
 const FETCH_AUTH_START = 'FETCH_AUTH_START';
 const FETCH_LOGIN_SUCCESS = 'FETCH_LOGIN_SUCCESS';
+const FETCH_WS_TOKEN_SUCCESS = 'FETCH_WS_TOKEN_SUCCESS';
+const FETCH_WS_TOKEN_FAILURE = 'FETCH_WS_TOKEN_FAILURE'; 
 export const FETCH_AUTH_FAILURE = 'FETCH_AUTH_FAILURE';
 export const FETCH_LOGIN_FAILURE = 'FETCH_LOGIN_FAILURE';
 const LOG_OUT = 'LOG_OUT';
@@ -12,7 +14,8 @@ const initialState = {
 	isAuth: false,
 	isError: false,
 	errorMessage: '',
-	accessToken: localStorage.getItem('finpro_access_token')
+	accessToken: localStorage.getItem('finpro_access_token'),
+	wssToken: ''
 };
 
 interface Action {
@@ -52,6 +55,19 @@ const authorization = (state = initialState, { type, payload }: Action) => {
 				errorMessage: payload,
 				accessToken: null
 			};
+		case FETCH_WS_TOKEN_SUCCESS: 
+			return {
+				...state,
+				isLoading: false,
+				wssToken: payload
+			}	
+		case FETCH_WS_TOKEN_FAILURE:
+			return {
+				...state,
+				isLoading: false,
+				wssToken: '',
+				isError: true
+			} 	
 		case LOG_OUT:            
 			return {
 				...initialState,
@@ -113,6 +129,23 @@ export const fetchRefreshToken = () => (dispatch: any) => {
       		dispatch({ type: FETCH_AUTH_FAILURE });
 		});
 };
+
+export const fetchWssToken = () => (dispatch: any) => {
+	// dispatch({ type: FETCH_AUTH_START });
+
+	return api.voucher
+	.wssToken()
+	.then((res: any) => {
+		const { token } = res.data;
+		// localStorage.setItem('finpro_access_token', access_token);
+		// localStorage.setItem('finpro_refresh_token', refresh_token);
+
+		dispatch({ type: FETCH_WS_TOKEN_SUCCESS, payload: token });
+	})
+	.catch((error: any) => {
+		dispatch({ type: FETCH_WS_TOKEN_FAILURE });
+	});
+}
 
 export const fetchLogin = ({ username, password }: any) => (dispatch: any) => {
 	dispatch({ type: FETCH_AUTH_START });
