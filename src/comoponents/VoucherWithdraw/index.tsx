@@ -116,6 +116,7 @@ const VoucherWithdraw: React.FC = () => {
     currency,
     availableWithdrawSum,
     cassetteInfo,
+    isCassetteInfoLoading,
     isLoading,
     withdrawSum,
     pin,
@@ -238,18 +239,20 @@ const VoucherWithdraw: React.FC = () => {
     ? (<span style={{ color: 'red' }}>{terminalLimitIsExceeted}</span>)
     : availableWithdrawSum && (availableWithdrawSum > 0) 
     ? (<>{availableSumMessage}<span className="withdraw-multiple-sum" style={withdrawMultipleSum}>{availableWithdrawSum}</span></>)
-    : (availableWithdrawSum && availableWithdrawSum <= 0)
+    : (availableWithdrawSum === 0 || (availableWithdrawSum && availableWithdrawSum < 0))
     ? (<span style={{ color: 'red' }}>{invalidSumMessage}</span>)
     : balance < withdrawSumInput 
     ? (<span style={{ color: 'red' }}>{notEnoughMoneyMessage}</span>)
     : ''
   )
   
+  console.log('isCassetteInfoLoading',availableWithdrawSum)
   const errorMessage = getErrorMessage(isFormSubmitted);
   const availableNominalsTitle = `Доступные купюры, ${currency}:`;
-  const availableNominals = (isLoading && (!cassetteInfo || (cassetteInfo && !cassetteInfo.length))) ? '...' 
+  const availableNominals = (isCassetteInfoLoading && (!cassetteInfo || (cassetteInfo && !cassetteInfo.length))) ? '...' 
     : !isLoading && (!cassetteInfo || (cassetteInfo && !cassetteInfo.length)) ? noBillsMessage
-    : getAvailableBills(cassetteInfo);
+    : !isLoading && cassetteInfo ? getAvailableBills(cassetteInfo)
+    : '';
   const isActionButtonDisabled = 
     !withdrawSumInput || withdrawSumInput === placeholderWithdrawSum || !!errorMessage
     //  || availableNominals === noBillsMessage;
