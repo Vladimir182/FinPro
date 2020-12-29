@@ -86,7 +86,6 @@ const CentProvider = (props: any) => {
 			centrifuge.connect();
 
 			centrifuge.on('connect', function(context: any) {
-				console.log('CONNECT')
 				centrifuge.subscribe('check', function(message: any) {
 					if (message.data.success) {
 						if (depositSum) {
@@ -115,7 +114,6 @@ const CentProvider = (props: any) => {
 				});	
 			});
 			centrifuge.on('disconnect', function() {
-				console.log('DISCONNECT')
 				setCentrifugeToState(null);
 			});
 
