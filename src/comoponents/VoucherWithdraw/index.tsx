@@ -246,7 +246,6 @@ const VoucherWithdraw: React.FC = () => {
     : ''
   )
   
-  console.log('isCassetteInfoLoading',availableWithdrawSum)
   const errorMessage = getErrorMessage(isFormSubmitted);
   const availableNominalsTitle = `Доступные купюры, ${currency}:`;
   const availableNominals = (isCassetteInfoLoading && (!cassetteInfo || (cassetteInfo && !cassetteInfo.length))) ? '...' 
