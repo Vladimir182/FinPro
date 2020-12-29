@@ -91,8 +91,9 @@ const CentProvider = (props: any) => {
 						if (depositSum) {
 							dispatch(showOptionalCheck())
 						} else {
-							// console.log('PATH', location.pathname, location.pathname === '/voucher-deposit')
-							fetchDepositInit(voucherSessionKey)(dispatch);
+							if (window.location.pathname === '/voucher-deposit') {		
+								fetchDepositInit(voucherSessionKey)(dispatch);
+							}
 						}
 					}
 				});
