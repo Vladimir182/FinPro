@@ -15,7 +15,8 @@ const initialState = {
 	isError: false,
 	errorMessage: '',
 	accessToken: localStorage.getItem('finpro_access_token'),
-	wssToken: ''
+	wssToken: '',
+	node: null
 };
 
 interface Action {
@@ -59,13 +60,15 @@ const authorization = (state = initialState, { type, payload }: Action) => {
 			return {
 				...state,
 				isLoading: false,
-				wssToken: payload
+				wssToken: payload?.token,
+				node: payload?.node
 			}	
 		case FETCH_WS_TOKEN_FAILURE:
 			return {
 				...state,
 				isLoading: false,
 				wssToken: '',
+				node: null,
 				isError: true
 			} 	
 		case LOG_OUT:            
@@ -136,11 +139,12 @@ export const fetchWssToken = () => (dispatch: any) => {
 	return api.voucher
 	.wssToken()
 	.then((res: any) => {
-		const { token } = res.data;
 		// localStorage.setItem('finpro_access_token', access_token);
 		// localStorage.setItem('finpro_refresh_token', refresh_token);
-
-		dispatch({ type: FETCH_WS_TOKEN_SUCCESS, payload: token });
+		
+		if (res?.data?.success) {
+			dispatch({ type: FETCH_WS_TOKEN_SUCCESS, payload: res.data });
+		}
 	})
 	.catch((error: any) => {
 		dispatch({ type: FETCH_WS_TOKEN_FAILURE });

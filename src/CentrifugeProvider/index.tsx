@@ -21,7 +21,7 @@ const CentProvider = (props: any) => {
 	const dispatch = useDispatch();
 	const location = useLocation();
 	const [ centrifuge, setCentrifugeToState ] = useState<any>(null);
-	const { wssToken } = useSelector((state: AppState) => state.authorization);
+	const { wssToken, node } = useSelector((state: AppState) => state.authorization);
 	const { depositSum, voucherSessionKey, weCountBillsTimer } = useSelector((state: AppState) => state.voucher);
 
 	useEffect(() => {
@@ -86,7 +86,7 @@ const CentProvider = (props: any) => {
 			centrifuge.connect();
 
 			centrifuge.on('connect', function(context: any) {
-				centrifuge.subscribe('check', function(message: any) {
+				centrifuge.subscribe(`check#${node}`, function(message: any) {
 					if (message.data.success) {
 						if (depositSum) {
 							dispatch(showOptionalCheck())
@@ -97,7 +97,7 @@ const CentProvider = (props: any) => {
 						}
 					}
 				});
-				centrifuge.subscribe('withdraw', function(message: any) {
+				centrifuge.subscribe(`withdraw#${node}`, function(message: any) {
 					if (message.data.success) {
 						if (weCountBillsTimer) {
 							dispatch(resetWeCountBillsTimer(weCountBillsTimer));
@@ -107,7 +107,7 @@ const CentProvider = (props: any) => {
 						  dispatch(showOptionalCheck());
 					}
 				});
-				centrifuge.subscribe('deposit', function(message: any) {
+				centrifuge.subscribe(`deposit#${node}`, function(message: any) {
 					if (message.data.success && message.data.amount) {
 						dispatch(setDepositSum(Math.round(message.data.amount)));   
 						userAbsenceTimeoutPreccess();
