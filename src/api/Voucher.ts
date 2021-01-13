@@ -3,8 +3,8 @@ import { Body, WithdrawBody, PinBody } from './types';
 const path = '';
 
 class Voucher extends Base {
-	wssToken() {
-		return this.apiClient.get('/socket-token');
+	wssToken(params: Body) {
+		return this.apiClient.get('/socket-token', params);
 	}
 
 	find(body: Body) {

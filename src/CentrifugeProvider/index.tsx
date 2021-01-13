@@ -26,7 +26,7 @@ const CentProvider = (props: any) => {
 
 	useEffect(() => {
 		if (!wssToken && voucherSessionKey) {
-			fetchWssToken()(dispatch);
+			fetchWssToken(voucherSessionKey)(dispatch);
 		}
 
 		// if (wssToken && voucherSessionKey && !centrifuge) {

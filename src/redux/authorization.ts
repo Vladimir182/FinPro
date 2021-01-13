@@ -130,11 +130,14 @@ export const fetchRefreshToken = () => (dispatch: any) => {
 		});
 };
 
-export const fetchWssToken = () => (dispatch: any) => {
+export const fetchWssToken = (msid: string) => (dispatch: any) => {
 	// dispatch({ type: FETCH_AUTH_START });
-
+	const params = {
+		msid: msid
+	};
+	
 	return api.voucher
-	.wssToken()
+	.wssToken(params)
 	.then((res: any) => {
 		// localStorage.setItem('finpro_access_token', access_token);
 		// localStorage.setItem('finpro_refresh_token', refresh_token);
