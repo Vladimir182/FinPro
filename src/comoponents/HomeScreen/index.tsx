@@ -34,6 +34,8 @@ const HomeScreen: React.FC = () => {
     if (wssToken) {
       dispatch(resetWsToken());
     }
+    
+    window.onpopstate = () => {};
   }, [isError, errorMessage, voucherSessionKey]);
 
   const handlePrintVoucher = () =>{

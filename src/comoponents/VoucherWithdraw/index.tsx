@@ -25,6 +25,7 @@ import { hideOptionalCheck } from '../../redux/screens';
 import './index.css';
 import moveCursorToEnd from '../../utils/moveCursorToEnd';
 import { CentrifugeContext } from '../../CentrifugeProvider';
+import { fetchWssToken } from '../../redux/authorization';
 
 const voucherWithdrawContainerStyles = {
   display: 'flex',
@@ -129,6 +130,7 @@ const VoucherWithdraw: React.FC = () => {
   } = useSelector((state: AppState) => state.voucher);
 
   const { isShowOptionalCheck } = useSelector((state: AppState) => state.screens);
+  const { wssToken } = useSelector((state: AppState) => state.authorization);
   const [ isFormSubmitted, setIsFormSubmitted ] = useState(false);
   const [ withdrawSumInput, setwithdrawSumInput ] = useState<any>(withdrawSum ?? placeholderWithdrawSum);
   const inputRef = React.createRef<HTMLInputElement>();
@@ -148,12 +150,26 @@ const VoucherWithdraw: React.FC = () => {
       })(dispatch)
     }
 
+    if (!wssToken && voucherSessionKey) {
+			fetchWssToken(voucherSessionKey)(dispatch);
+		}
+
+    window.onpopstate = () => {
+      fetchCloseVoucherSession(voucherSessionKey)(dispatch);
+    }
+
     inputRef.current?.focus();
     inputRef.current?.addEventListener('focusout', function() {
       inputRef.current?.focus();
     });
     inputRef.current?.addEventListener('paste', (e: any) => e.preventDefault());
   }, [cassetteInfo, isPinVerified, availableWithdrawSum]);
+
+  useEffect(() => {
+    if (wssToken && centrifuge) {
+      centrifuge.connect();
+    }
+  }, [wssToken])
 
   const handleActionButtonClick = (e: any) => {
     e.preventDefault();

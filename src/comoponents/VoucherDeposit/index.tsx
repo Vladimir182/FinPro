@@ -9,8 +9,10 @@ import {
   fetchDepositInit,
   fetchPrintCheck,
   fetchCloseVoucherSession,
-  setDepositSum
+  setDepositSum,
+  closeVoucherSession
 } from '../../redux/voucher';
+import { fetchWssToken } from '../../redux/authorization';
 import { hideOptionalCheck, showOptionalCheck } from '../../redux/screens';
 import { AppState } from '../../redux';
 import { WebSocketContext, WS } from '../../WSProvider';
@@ -101,6 +103,7 @@ let VoucherLogin: React.FC = () => {
     showUserAbsence,
   } = useSelector((state: AppState) => state.voucher);
   const { isShowOptionalCheck } = useSelector((state: AppState) => state.screens);
+  const { wssToken } = useSelector((state: AppState) => state.authorization);
   const depositSumInputLength = 10;
   
   useEffect(() => {
@@ -112,10 +115,26 @@ let VoucherLogin: React.FC = () => {
     //   ws.setWSConnnection();
     // }
 
+		if (!wssToken && voucherSessionKey) {
+			fetchWssToken(voucherSessionKey)(dispatch);
+		}
+
     window.addEventListener('keypress', submitFormHandle);
 
-    return () => window.removeEventListener('keypress', submitFormHandle);
+    window.onpopstate = () => {
+      fetchCloseVoucherSession(voucherSessionKey)(dispatch);
+    }
+
+    return () => {
+      window.removeEventListener('keypress', submitFormHandle);
+    }
   })
+
+  useEffect(() => {
+    if (wssToken && centrifuge) {
+      centrifuge.connect();
+    }
+  }, [wssToken])
 
   const submitFormHandle = (e: any) => {
     e.preventDefault();
