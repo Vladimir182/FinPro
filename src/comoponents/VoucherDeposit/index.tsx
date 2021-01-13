@@ -103,7 +103,7 @@ let VoucherLogin: React.FC = () => {
     showUserAbsence,
   } = useSelector((state: AppState) => state.voucher);
   const { isShowOptionalCheck } = useSelector((state: AppState) => state.screens);
-  const { wssToken } = useSelector((state: AppState) => state.authorization);
+  const { wssToken, isWsLoading } = useSelector((state: AppState) => state.authorization);
   const depositSumInputLength = 10;
   
   useEffect(() => {
@@ -115,7 +115,7 @@ let VoucherLogin: React.FC = () => {
     //   ws.setWSConnnection();
     // }
 
-		if (!wssToken && voucherSessionKey) {
+		if (!wssToken && !isWsLoading && voucherSessionKey) {
 			fetchWssToken(voucherSessionKey)(dispatch);
 		}
 

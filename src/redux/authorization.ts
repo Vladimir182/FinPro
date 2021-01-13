@@ -12,6 +12,7 @@ const LOG_OUT = 'LOG_OUT';
 
 const initialState = {
 	isLoading: true,
+	isWsLoading: false,
 	isAuth: false,
 	isError: false,
 	errorMessage: '',
@@ -31,6 +32,11 @@ const authorization = (state = initialState, { type, payload }: Action) => {
 				...state,
 				isLoading: true
 			};
+		case FETCH_AUTH_START:
+			return {
+				...state,
+				isWsLoading: true,
+			};	
 		case FETCH_LOGIN_SUCCESS:
 			return {
 				...state,
@@ -59,20 +65,20 @@ const authorization = (state = initialState, { type, payload }: Action) => {
 		case FETCH_WS_TOKEN_SUCCESS: 
 			return {
 				...state,
-				isLoading: false,
+				isWsLoading: false,
 				wssToken: payload,
 			}	
 		case FETCH_WS_TOKEN_FAILURE:
 			return {
 				...state,
-				isLoading: false,
+				isWsLoading: false,
 				wssToken: '',
 				isError: true
 			}
 		case RESET_WS_TOKEN:
 			return {
 				...state,
-				isLoading: false,
+				isWsLoading: false,
 				wssToken: '',
 			}		
 		case LOG_OUT:            

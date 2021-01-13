@@ -19,11 +19,11 @@ export const CentrifugeContext = createContext<any>(null);
 const CentProvider = (props: any) => {
 	const dispatch = useDispatch();
 	const [ centrifuge, setCentrifugeToState ] = useState<any>(null);
-	const { wssToken } = useSelector((state: AppState) => state.authorization);
+	const { wssToken, isWsLoading } = useSelector((state: AppState) => state.authorization);
 	const { depositSum, voucherSessionKey, weCountBillsTimer } = useSelector((state: AppState) => state.voucher);
 
 	useEffect(() => {
-		if (!wssToken && voucherSessionKey) {
+		if (!wssToken && !isWsLoading && voucherSessionKey) {
 			fetchWssToken(voucherSessionKey)(dispatch);
 		}
 

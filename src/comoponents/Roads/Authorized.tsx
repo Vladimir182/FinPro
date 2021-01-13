@@ -87,8 +87,8 @@ class Authorized extends React.Component {
         { 
           isLoading ? <div className="login-page-wrapper"><LoaderModal /></div>
           : <>
-            { (!isAuth && serverConnectionStatus && !isLoginPage) && <Redirect to="/login" /> }
-            { (isAuth && accessToken && isLoginPage) && <Redirect to="/" /> }
+            { (!isLoading && !isAuth && serverConnectionStatus && !isLoginPage) && <Redirect to="/login" /> }
+            { ( isAuth && accessToken && isLoginPage) && <Redirect to="/" /> }
             <Pages />
           </>
         }    

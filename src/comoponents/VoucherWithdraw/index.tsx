@@ -130,7 +130,7 @@ const VoucherWithdraw: React.FC = () => {
   } = useSelector((state: AppState) => state.voucher);
 
   const { isShowOptionalCheck } = useSelector((state: AppState) => state.screens);
-  const { wssToken } = useSelector((state: AppState) => state.authorization);
+  const { wssToken, isWsLoading } = useSelector((state: AppState) => state.authorization);
   const [ isFormSubmitted, setIsFormSubmitted ] = useState(false);
   const [ withdrawSumInput, setwithdrawSumInput ] = useState<any>(withdrawSum ?? placeholderWithdrawSum);
   const inputRef = React.createRef<HTMLInputElement>();
@@ -150,7 +150,7 @@ const VoucherWithdraw: React.FC = () => {
       })(dispatch)
     }
 
-    if (!wssToken && voucherSessionKey) {
+    if (!wssToken && !isWsLoading && voucherSessionKey) {
 			fetchWssToken(voucherSessionKey)(dispatch);
 		}
 
