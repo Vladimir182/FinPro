@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppState} from '../../redux';
 import PrintCheck from '../Checks';
 import {fetchPrintVoucher, resetVoucherErrors} from "../../redux/voucher";
+import {resetWsToken} from '../../redux/authorization';
 import './index.module.css';
 import './index.css';
 import { CentrifugeContext } from '../../CentrifugeProvider';
@@ -21,6 +22,7 @@ const HomeScreen: React.FC = () => {
     isError,
     errorMessage
    } = useSelector((state: AppState) => state.voucher);
+  const { wssToken } = useSelector((state: AppState) => state.authorization)
   
   useEffect(() => {
     if (isError || errorMessage) {
@@ -29,8 +31,11 @@ const HomeScreen: React.FC = () => {
     if (centrifuge) {
       centrifuge.disconnect();
     }
+    if (wssToken) {
+      dispatch(resetWsToken());
+    }
   }, [isError, errorMessage, voucherSessionKey]);
-  
+
   const handlePrintVoucher = () =>{
     fetchPrintVoucher()(dispatch);
   };

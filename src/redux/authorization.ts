@@ -5,6 +5,7 @@ const FETCH_AUTH_START = 'FETCH_AUTH_START';
 const FETCH_LOGIN_SUCCESS = 'FETCH_LOGIN_SUCCESS';
 const FETCH_WS_TOKEN_SUCCESS = 'FETCH_WS_TOKEN_SUCCESS';
 const FETCH_WS_TOKEN_FAILURE = 'FETCH_WS_TOKEN_FAILURE'; 
+const RESET_WS_TOKEN = 'RESET_WS_TOKEN';
 export const FETCH_AUTH_FAILURE = 'FETCH_AUTH_FAILURE';
 export const FETCH_LOGIN_FAILURE = 'FETCH_LOGIN_FAILURE';
 const LOG_OUT = 'LOG_OUT';
@@ -67,7 +68,13 @@ const authorization = (state = initialState, { type, payload }: Action) => {
 				isLoading: false,
 				wssToken: '',
 				isError: true
-			} 	
+			}
+		case RESET_WS_TOKEN:
+			return {
+				...state,
+				isLoading: false,
+				wssToken: '',
+			}		
 		case LOG_OUT:            
 			return {
 				...initialState,
@@ -139,9 +146,7 @@ export const fetchWssToken = (msid: string) => (dispatch: any) => {
 	return api.voucher
 	.wssToken(params)
 	.then((res: any) => {
-		// localStorage.setItem('finpro_access_token', access_token);
-		// localStorage.setItem('finpro_refresh_token', refresh_token);
-		
+
 		if (res?.data?.success) {
 			const token = res.data.token;
 
@@ -192,5 +197,9 @@ export const logOut = () => (dispatch: any) => {
 export const resetAuthErrors = () => ({
 	type: FETCH_LOGIN_FAILURE
 });
+
+export const resetWsToken = () => ({
+	type: RESET_WS_TOKEN
+})
 
 export default authorization;

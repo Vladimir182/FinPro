@@ -1,25 +1,23 @@
 import React, { createContext, useState, useEffect } from 'react';
 import Centrifuge from 'centrifuge';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import { fetchWssToken } from '../redux/authorization';
+import { fetchWssToken, resetWsToken } from '../redux/authorization';
 import { 
   setDepositSum, 
   setWithdrawSuccess,
   hideWeCountBillsScreen, 
   userAbsenceTimeoutPreccess, 
   fetchDepositInit,
-  resetWeCountBillsTimer
+  resetWeCountBillsTimer,
 } from '../redux/voucher';
 import { showOptionalCheck } from '../redux/screens';
 import { AppState } from '../redux';
 import { useLocation } from 'react-router';
-import { disconnect } from 'process';
 
 export const CentrifugeContext = createContext<any>(null);
 
 const CentProvider = (props: any) => {
 	const dispatch = useDispatch();
-	const location = useLocation();
 	const [ centrifuge, setCentrifugeToState ] = useState<any>(null);
 	const { wssToken } = useSelector((state: AppState) => state.authorization);
 	const { depositSum, voucherSessionKey, weCountBillsTimer } = useSelector((state: AppState) => state.voucher);
@@ -116,6 +114,7 @@ const CentProvider = (props: any) => {
 			});
 			centrifuge.on('disconnect', function() {
 				setCentrifugeToState(null);
+				dispatch(resetWsToken());
 			});
 
 		}
