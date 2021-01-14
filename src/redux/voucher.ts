@@ -380,14 +380,12 @@ export const fetchPrintVoucher = () => (dispatch: any) => {
 
 export const fetchCassetteInfo = (data: { msid: string }) => (dispatch: any) => {
   dispatch({type: REQUEST_CASSETTE_INFO_START});
-  console.log('fetchCassetteInfo START')
   api.voucher
   .cassetteInfo(data)
   .then((res: any) => {
     const data = res.data;
     
     if (data.success) {
-      console.log('fetchCassetteInfo SUCCESS')
       dispatch({
         type: REQUEST_CASSETTE_INFO_SUCCESS,
         payload: data
