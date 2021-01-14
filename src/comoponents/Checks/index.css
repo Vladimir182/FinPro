@@ -1,27 +1,39 @@
 
 .check-page-wrapper .page-container-check {
     display: flex;
-    justify-content: center; }
-.wrapper-check {
-    width: 100%;
-    max-width: 635px;
-    position: relative;
+    justify-content: center; 
 }
+
+.wrapper-check {
+    position: relative;
+    top: -100px;
+    width: 35vw;
+    height: 35vw;
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .wrapper-check img {
     width: 100%;
 }
+
 .block-check {
     display: flex;
     align-items: center;
     text-align: center;
     flex-direction: column;
     padding: 10px 50px 20px;
-    position: absolute;
-    top: 140px;
-    left: 95px;
+    /* position: absolute; */
+    /* top: 140px;
+    left: 95px; */
     width: 100%;
     max-width: 443px;
 }
+
 .wrapp-loading{
     padding: 50px 0 30px;
     transform: scale(1);
@@ -33,6 +45,7 @@
     margin-bottom: 20px;
     font-size: 36px;
 }
+
 .block-check .text {
     font-weight: normal;
     color: #4D4D4D;
@@ -41,17 +54,13 @@
     line-height: 150%;
 }
 .output-check-text {
-    /* border-top: 1px dashed #000000; */
-    /* border-bottom: 1px solid #000; */
     display:flex;
     justify-content: space-between;
     padding: 12px 0 1px;
     width: 100%;
     color: red;
 }
-/*.output-check p {*/
-/*    font-size: 18px;*/
-/*}*/
+
 .output-check-text .wrapper{
     font-size: 18px;
     color: #4D4D4D;
@@ -61,12 +70,34 @@
     margin-bottom: 8px;
     line-height: 150%;
 }
+
 .output-check-text .item-right{
     margin-bottom: 8px;
     line-height: 150%;
 }
+
+@media (max-height: 900px) {
+    .block-check {
+        padding: 10px 40px;
+        top: 122px;
+        left: 83px;
+        max-width: 386px;
+    }
+    .block-check p {
+        font-size: 30px;
+    }
+    .output-check-text .wrapper{
+        font-size: 16px;
+    }
+    .block-check .text {
+        font-size: 16px;
+    }
+}
+
 @media (max-width: 1280px) {
-    .wrapper-check{
+    .wrapper-check {
+        width: 40vw;
+        height: 40vw;
         max-width: 554px;
     }
     .block-check {
@@ -74,7 +105,6 @@
         top: 122px;
         left: 83px;
         max-width: 386px;
-
     }
     .block-check p {
         font-size: 30px;
@@ -88,7 +118,9 @@
 }
 
 @media (max-height:720px) and (max-width: 1280px){
-    .wrapper-check{
+    .wrapper-check {
+        width: 35vw;
+        height: 35vw;
         max-width: 467px;
     }
     .block-check {
@@ -106,7 +138,9 @@
 }
 
 @media (max-width: 1152px) {
-    .wrapper-check{
+    .wrapper-check {
+        width: 40vw;
+        height: 40vw;
         max-width: 467px;
     }
     .block-check {
@@ -127,7 +161,10 @@
 }
 
 @media (max-width: 800px) {
-    .wrapper-check{
+    .wrapper-check {
+        top: -80px;
+        width: 40vw;
+        height: 40vw;
         max-width: 360px;
     }
     .block-check {

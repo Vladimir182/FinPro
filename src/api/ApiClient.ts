@@ -113,14 +113,16 @@ export default class ApiClient {
 	request: Request = async ({ url, method, params = {}, body }) => {
     	const token = localStorage.getItem('finpro_access_token');
 
+		params['accessToken'] = token;
+
 		let query = Object.keys(params).length
 			? `?${queryString.stringify(params)}`
       		: '';
 
-	    query += token ? `?accessToken=${token}` : '';
+	    // query += token ? `?accessToken=${token}` : '';
 
 		const res = Axios({
-			// ${process.env.REACT_APP_URL}
+			// ${process.env.REACT_APP_URL_DEV}  - ADD THIS BEFORE PUSH TO REMOTE OR REMOVE FROM URL TO RUN LOCALY.
 			method: 'POST',
 			url: `${process.env.REACT_APP_URL_STAGE}/${this.prefix}${url}${query}`,
 			data: method !== 'GET' ? body : null,

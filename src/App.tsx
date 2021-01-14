@@ -5,7 +5,8 @@ import { initStore } from './redux/store';
 import Roads from './comoponents/Roads';
 import ThemeContextProvider from './ThemeContextProvider';
 import HeaderContextProvider from './comoponents/Header/HeaderContextProvider';
-import WSProvider from './WSProvider';
+// import WSProvider from './WSProvider';
+import CentProvider from './CentrifugeProvider';
 import './App.css';
 
 const getStateFromStorage = () => {
@@ -24,9 +25,9 @@ const App = () => {
       <BrowserRouter>
         <ThemeContextProvider>
           <HeaderContextProvider>
-            <WSProvider>
+            <CentProvider>
               <Roads />
-            </WSProvider>  
+            </CentProvider>
           </HeaderContextProvider>
         </ThemeContextProvider>
       </BrowserRouter>

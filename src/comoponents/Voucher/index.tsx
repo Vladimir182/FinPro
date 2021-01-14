@@ -19,6 +19,7 @@ import BackButton from '../Buttons/BackButton';
 import { WebSocketContext, WS } from '../../WSProvider';
 import './index.css';
 import LoaderModal from '../Loading/LoaderModal';
+import { CentrifugeContext } from '../../CentrifugeProvider';
 
 const depoistButtonText = 'Пополнить';
 const widhdrawButtonText = 'Снять';
@@ -28,6 +29,7 @@ const buttonStyles = {};
 const VoucherRoads: React.FC = () => {
   //@ts-ignore
   const ws: WS = useContext(WebSocketContext);
+  const centrifuge = useContext(CentrifugeContext);
   let { 
     voucherSessionKey, 
     showUserAbsence, 
@@ -41,6 +43,9 @@ const VoucherRoads: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (centrifuge && !isLoading) {
+      centrifuge.connect();
+    }
     if (pin) {
       dispatch(resetVoucherPin());
     }
@@ -60,7 +65,11 @@ const VoucherRoads: React.FC = () => {
 
   const handleBackButton = () => {
     if (voucherSessionKey) {
-      fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
+      // fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
+      fetchCloseVoucherSession(voucherSessionKey)(dispatch);
+    }
+    if (centrifuge) {
+      centrifuge.disconnect();
     }
   }
 

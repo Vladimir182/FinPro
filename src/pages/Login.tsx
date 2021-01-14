@@ -6,7 +6,8 @@ import './login.css';
 import { closeVoucherSession } from '../redux/voucher';
 import { AppState } from '../redux';
 
-const invalidLoginMessageText = 'Проверьте правильность данных';
+// const invalidLoginMessageText = 'Проверьте правильность данных';
+const invalidLoginMessageText = 'Введены неверные данные';
 
 const Login: React.FC = () => {
   const dispatch = useDispatch();

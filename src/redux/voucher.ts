@@ -8,7 +8,9 @@ const REQUEST_VOUCHER_START = 'REQUEST_VOUCHER_START';
 const REQUEST_PRINT_LOADER_START = 'REQUEST_PRINT_LOADER_START';
 const REQUEST_VOUCHER_LOGIN_SUCCESS = 'REQUEST_VOUCHER_LOGIN_SUCCESS';
 const REQUEST_VOUCHER_FAILURE = 'REQUEST_VOUCHER_FAILURE';
+const REQUEST_CASSETTE_INFO_START = 'REQUEST_CASSETTE_INFO_START';
 const REQUEST_CASSETTE_INFO_SUCCESS = 'REQUEST_CASSETTE_INFO_SUCCESS';
+const REQUEST_CASSETTE_INFO_FAULURE = 'REQUEST_CASSETTE_INFO_FAULURE';
 const CLOSE_VOUCHER_SESSION_SUCCESS = 'CLOSE_VOUCHER_SESSION_SUCCESS';
 const SET_AVAILABLE_WITHDRAW_SUM = 'SET_AVAILABLE_WITHDRAW_SUM';
 const REQUEST_VOUCHER_PIN_SUCCESS = 'REQUEST_VOUCHER_PIN_SUCCESS';
@@ -33,6 +35,7 @@ const RESET_VOUCHER_CLOSE_TIMEOUT = 'RESET_VOUCHER_CLOSE_TIMEOUT';
 
 const initialState = {
   isLoading: false,
+  isCassetteInfoLoading: false,
   isPrintLoading: false,
   terminalId: null,
   isPinVerified: false,
@@ -131,11 +134,23 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         isError: false,
 				errorMessage: ''
       };
+    case REQUEST_CASSETTE_INFO_START:
+      return {
+        ...state,
+        isCassetteInfoLoading: true
+      }
     case REQUEST_CASSETTE_INFO_SUCCESS: 
       return {
         ...state,
         cassetteInfo: payload.cassete_info,
-        isLoading: false
+        isCassetteInfoLoading: false
+      }  
+    case REQUEST_CASSETTE_INFO_FAULURE:
+      return {
+				...state,
+				isCassetteInfoLoading: false,
+				isError: true,
+        errorMessage: payload.message,
       }  
     case CLOSE_VOUCHER_SESSION_SUCCESS:
       window.removeEventListener('mousemove', userAbsenceTimeoutPreccess);
@@ -364,8 +379,7 @@ export const fetchPrintVoucher = () => (dispatch: any) => {
 };
 
 export const fetchCassetteInfo = (data: { msid: string }) => (dispatch: any) => {
-  dispatch({type: REQUEST_VOUCHER_START});
-  
+  dispatch({type: REQUEST_CASSETTE_INFO_START});
   api.voucher
   .cassetteInfo(data)
   .then((res: any) => {
@@ -377,13 +391,13 @@ export const fetchCassetteInfo = (data: { msid: string }) => (dispatch: any) => 
         payload: data
       });
     } else {
-      dispatch({ type: REQUEST_VOUCHER_FAILURE, payload: '' });
+      dispatch({ type: REQUEST_CASSETTE_INFO_FAULURE, payload: '' });
       dispatch(showError());
     }
 
     return;
   }).catch((error: any) => {
-    dispatch({type: REQUEST_VOUCHER_FAILURE,
+    dispatch({type: REQUEST_CASSETTE_INFO_FAULURE,
       payload: error
     });
     dispatch(showError());
@@ -441,7 +455,10 @@ export const fetchVoucherWithdraw = (data: WithdrawBody, closeWSConnection?: () 
     
     if (!data.success) {
       if (data.message_error) {
-        dispatch(showError());
+        if (data.message_error !== 'Terminal limit is exceeded') {
+          dispatch(showError());
+        }
+          
         dispatch({
           type: SET_AVAILABLE_WITHDRAW_SUM,
           payload: data.message_error
