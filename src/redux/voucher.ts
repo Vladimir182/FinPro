@@ -286,22 +286,26 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         ...state,
         showWeCountBills: true
       }
-    case SET_WE_COUNT_BILLS_REMOVE:  
+    case SET_WE_COUNT_BILLS_REMOVE: 
       return {
         ...state,
         showWeCountBills: false
       }
-    case SET_WE_COUNT_BILLS_TIMER:
+    case SET_WE_COUNT_BILLS_TIMER: {
+      console.log('SET TIMER', payload)
       return {
         ...state,
         weCountBillsTimer: payload
       }
-    case RESET_WE_COUNT_BILLS_TIMER:
+    }
+    case RESET_WE_COUNT_BILLS_TIMER: {
+      console.log('RESET TIMER', payload)
       clearTimeout(payload);
       return {
         ...state,
         weCountBillsTimer: null
       }
+    } 
     case RESET_VOUCHER_CLOSE_TIMEOUT:
       return {
         ...state,
@@ -438,6 +442,7 @@ export const fetchVoucherWithdraw = (data: WithdrawBody, closeWSConnection?: () 
     const state: AppState = store.getState();
 
     if (state.voucher.showWeCountBills) {
+      console.log('TIMEOUT')
       fetchCloseVoucherSession(state.voucher.voucherSessionKey, closeWSConnection)(dispatch);
       dispatch(closeVoucherSession());
       dispatch(showError());
