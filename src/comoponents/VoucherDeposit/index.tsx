@@ -121,10 +121,6 @@ let VoucherLogin: React.FC = () => {
 
     window.addEventListener('keypress', submitFormHandle);
 
-    window.onpopstate = () => {
-      fetchCloseVoucherSession(voucherSessionKey)(dispatch);
-    }
-
     return () => {
       window.removeEventListener('keypress', submitFormHandle);
     }
