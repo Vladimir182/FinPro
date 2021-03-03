@@ -65,7 +65,6 @@ const VoucherRoads: React.FC = () => {
 
   const handleBackButton = () => {
     if (voucherSessionKey) {
-      // fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
       fetchCloseVoucherSession(voucherSessionKey)(dispatch);
     }
     if (centrifuge) {

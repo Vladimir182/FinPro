@@ -121,10 +121,6 @@ let VoucherLogin: React.FC = () => {
 
     window.addEventListener('keypress', submitFormHandle);
 
-    window.onpopstate = () => {
-      fetchCloseVoucherSession(voucherSessionKey)(dispatch);
-    }
-
     return () => {
       window.removeEventListener('keypress', submitFormHandle);
     }
@@ -166,10 +162,11 @@ let VoucherLogin: React.FC = () => {
   const handleDontPrintOptionalCheck = () => {
     dispatch(setDepositSum(0));
     dispatch(hideOptionalCheck());
+    
     if (centrifuge) {
       centrifuge.disconnect();
     }
-    // fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
+
     fetchCloseVoucherSession(voucherSessionKey)(dispatch);
   }
 

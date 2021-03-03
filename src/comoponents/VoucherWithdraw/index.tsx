@@ -154,10 +154,6 @@ const VoucherWithdraw: React.FC = () => {
 			fetchWssToken(voucherSessionKey)(dispatch);
 		}
 
-    window.onpopstate = () => {
-      fetchCloseVoucherSession(voucherSessionKey)(dispatch);
-    }
-
     inputRef.current?.focus();
     inputRef.current?.addEventListener('focusout', function() {
       inputRef.current?.focus();
@@ -241,7 +237,7 @@ const VoucherWithdraw: React.FC = () => {
     if (centrifuge) {
       centrifuge.disconnect();
     }
-    // fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
+
     fetchCloseVoucherSession(voucherSessionKey)(dispatch);
     dispatch(hideOptionalCheck());
   }
