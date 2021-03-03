@@ -7,6 +7,7 @@ import { fetchCloseVoucherSession, setShowUserAbsence } from '../../redux/vouche
 import { AppState } from '../../redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { WebSocketContext, WS } from '../../WSProvider';
+import { CentrifugeContext } from '../../CentrifugeProvider';
 import './index.css';
 import { hideOptionalCheck } from '../../redux/screens';
 
@@ -15,6 +16,7 @@ const absenceMessageTitle = 'ВЫ ЕЩЕ ЗДЕСЬ?';
 const Absence: React.FC = () => {
   //@ts-ignore
   const ws: WS = useContext(WebSocketContext);
+  const centrifuge = useContext(CentrifugeContext);
   const { voucherSessionKey } = useSelector((state: AppState) => state.voucher);
   const [ timer, setTimer ] = useState<number>(Number(process.env.REACT_APP_CLOSE_SESSION_USER_ABSENCE_TIMEOUT_SECONDS));
   const [ intervalTimer, setIntervalTimer ] = useState<any>(null);
@@ -30,8 +32,13 @@ const Absence: React.FC = () => {
     }
     if (timer <= 0) {
       clearInterval(intervalTimer);
+      setIntervalTimer(null);
       dispatch(setShowUserAbsence(false));
-      fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
+      
+      if (centrifuge) {
+        centrifuge.disconnect();
+      }
+      fetchCloseVoucherSession(voucherSessionKey)(dispatch);
       dispatch(hideOptionalCheck());
       setTimer(Number(process.env.REACT_APP_CLOSE_SESSION_USER_ABSENCE_TIMEOUT_SECONDS));
     }

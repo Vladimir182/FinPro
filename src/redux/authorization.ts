@@ -3,16 +3,21 @@ import { fetchTerminal } from './voucher';
 
 const FETCH_AUTH_START = 'FETCH_AUTH_START';
 const FETCH_LOGIN_SUCCESS = 'FETCH_LOGIN_SUCCESS';
+const FETCH_WS_TOKEN_SUCCESS = 'FETCH_WS_TOKEN_SUCCESS';
+const FETCH_WS_TOKEN_FAILURE = 'FETCH_WS_TOKEN_FAILURE'; 
+const RESET_WS_TOKEN = 'RESET_WS_TOKEN';
 export const FETCH_AUTH_FAILURE = 'FETCH_AUTH_FAILURE';
 export const FETCH_LOGIN_FAILURE = 'FETCH_LOGIN_FAILURE';
 const LOG_OUT = 'LOG_OUT';
 
 const initialState = {
 	isLoading: true,
+	isWsLoading: false,
 	isAuth: false,
 	isError: false,
 	errorMessage: '',
-	accessToken: localStorage.getItem('finpro_access_token')
+	accessToken: localStorage.getItem('finpro_access_token'),
+	wssToken: '',
 };
 
 interface Action {
@@ -27,6 +32,11 @@ const authorization = (state = initialState, { type, payload }: Action) => {
 				...state,
 				isLoading: true
 			};
+		case FETCH_AUTH_START:
+			return {
+				...state,
+				isWsLoading: true,
+			};	
 		case FETCH_LOGIN_SUCCESS:
 			return {
 				...state,
@@ -52,6 +62,25 @@ const authorization = (state = initialState, { type, payload }: Action) => {
 				errorMessage: payload,
 				accessToken: null
 			};
+		case FETCH_WS_TOKEN_SUCCESS: 
+			return {
+				...state,
+				isWsLoading: false,
+				wssToken: payload,
+			}	
+		case FETCH_WS_TOKEN_FAILURE:
+			return {
+				...state,
+				isWsLoading: false,
+				wssToken: '',
+				isError: true
+			}
+		case RESET_WS_TOKEN:
+			return {
+				...state,
+				isWsLoading: false,
+				wssToken: '',
+			}		
 		case LOG_OUT:            
 			return {
 				...initialState,
@@ -114,6 +143,27 @@ export const fetchRefreshToken = () => (dispatch: any) => {
 		});
 };
 
+export const fetchWssToken = (msid: string) => (dispatch: any) => {
+	// dispatch({ type: FETCH_AUTH_START });
+	const params = {
+		msid: msid
+	};
+	
+	return api.voucher
+	.wssToken(params)
+	.then((res: any) => {
+
+		if (res?.data?.success) {
+			const token = res.data.token;
+
+			dispatch({ type: FETCH_WS_TOKEN_SUCCESS, payload: token });
+		}
+	})
+	.catch((error: any) => {
+		dispatch({ type: FETCH_WS_TOKEN_FAILURE });
+	});
+}
+
 export const fetchLogin = ({ username, password }: any) => (dispatch: any) => {
 	dispatch({ type: FETCH_AUTH_START });
 
@@ -153,5 +203,9 @@ export const logOut = () => (dispatch: any) => {
 export const resetAuthErrors = () => ({
 	type: FETCH_LOGIN_FAILURE
 });
+
+export const resetWsToken = () => ({
+	type: RESET_WS_TOKEN
+})
 
 export default authorization;

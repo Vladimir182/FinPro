@@ -8,7 +8,9 @@ const REQUEST_VOUCHER_START = 'REQUEST_VOUCHER_START';
 const REQUEST_PRINT_LOADER_START = 'REQUEST_PRINT_LOADER_START';
 const REQUEST_VOUCHER_LOGIN_SUCCESS = 'REQUEST_VOUCHER_LOGIN_SUCCESS';
 const REQUEST_VOUCHER_FAILURE = 'REQUEST_VOUCHER_FAILURE';
+const REQUEST_CASSETTE_INFO_START = 'REQUEST_CASSETTE_INFO_START';
 const REQUEST_CASSETTE_INFO_SUCCESS = 'REQUEST_CASSETTE_INFO_SUCCESS';
+const REQUEST_CASSETTE_INFO_FAULURE = 'REQUEST_CASSETTE_INFO_FAULURE';
 const CLOSE_VOUCHER_SESSION_SUCCESS = 'CLOSE_VOUCHER_SESSION_SUCCESS';
 const SET_AVAILABLE_WITHDRAW_SUM = 'SET_AVAILABLE_WITHDRAW_SUM';
 const REQUEST_VOUCHER_PIN_SUCCESS = 'REQUEST_VOUCHER_PIN_SUCCESS';
@@ -33,6 +35,7 @@ const RESET_VOUCHER_CLOSE_TIMEOUT = 'RESET_VOUCHER_CLOSE_TIMEOUT';
 
 const initialState = {
   isLoading: false,
+  isCassetteInfoLoading: false,
   isPrintLoading: false,
   terminalId: null,
   isPinVerified: false,
@@ -131,11 +134,23 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         isError: false,
 				errorMessage: ''
       };
+    case REQUEST_CASSETTE_INFO_START:
+      return {
+        ...state,
+        isCassetteInfoLoading: true
+      }
     case REQUEST_CASSETTE_INFO_SUCCESS: 
       return {
         ...state,
         cassetteInfo: payload.cassete_info,
-        isLoading: false
+        isCassetteInfoLoading: false
+      }  
+    case REQUEST_CASSETTE_INFO_FAULURE:
+      return {
+				...state,
+				isCassetteInfoLoading: false,
+				isError: true,
+        errorMessage: payload.message,
       }  
     case CLOSE_VOUCHER_SESSION_SUCCESS:
       window.removeEventListener('mousemove', userAbsenceTimeoutPreccess);
@@ -271,22 +286,31 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         ...state,
         showWeCountBills: true
       }
-    case SET_WE_COUNT_BILLS_REMOVE:  
+    case SET_WE_COUNT_BILLS_REMOVE: {
+      if (state.weCountBillsTimer) {
+        //@ts-ignore
+        clearTimeout(state.weCountBillsTimer);
+      }
+
       return {
         ...state,
-        showWeCountBills: false
+        showWeCountBills: false,
+        weCountBillsTimer: null
       }
+    }
     case SET_WE_COUNT_BILLS_TIMER:
       return {
         ...state,
         weCountBillsTimer: payload
       }
-    case RESET_WE_COUNT_BILLS_TIMER:
+    case RESET_WE_COUNT_BILLS_TIMER: {
       clearTimeout(payload);
+
       return {
         ...state,
         weCountBillsTimer: null
       }
+    } 
     case RESET_VOUCHER_CLOSE_TIMEOUT:
       return {
         ...state,
@@ -364,8 +388,7 @@ export const fetchPrintVoucher = () => (dispatch: any) => {
 };
 
 export const fetchCassetteInfo = (data: { msid: string }) => (dispatch: any) => {
-  dispatch({type: REQUEST_VOUCHER_START});
-  
+  dispatch({type: REQUEST_CASSETTE_INFO_START});
   api.voucher
   .cassetteInfo(data)
   .then((res: any) => {
@@ -377,13 +400,13 @@ export const fetchCassetteInfo = (data: { msid: string }) => (dispatch: any) => 
         payload: data
       });
     } else {
-      dispatch({ type: REQUEST_VOUCHER_FAILURE, payload: '' });
+      dispatch({ type: REQUEST_CASSETTE_INFO_FAULURE, payload: '' });
       dispatch(showError());
     }
 
     return;
   }).catch((error: any) => {
-    dispatch({type: REQUEST_VOUCHER_FAILURE,
+    dispatch({type: REQUEST_CASSETTE_INFO_FAULURE,
       payload: error
     });
     dispatch(showError());
@@ -420,67 +443,73 @@ export const fetchVoucherWithdraw = (data: WithdrawBody, closeWSConnection?: () 
   // dispatch({type: REQUEST_VOUCHER_START});
   dispatch({ type: SET_WE_COUNT_BILLS_START });
 
-  const weCountBillsTimer = setTimeout(() => {
-    const state: AppState = store.getState();
+  const state: AppState = store.getState();
 
-    if (state.voucher.showWeCountBills) {
-      fetchCloseVoucherSession(state.voucher.voucherSessionKey, closeWSConnection)(dispatch);
-      dispatch(closeVoucherSession());
-      dispatch(showError());
-      dispatch({ type: SET_WE_COUNT_BILLS_REMOVE });
+  if (!state.voucher.weCountBillsTimer) {
+
+    const weCountBillsTimer = setTimeout(() => {
+
+      const state: AppState = store.getState();
+  
+      if (state.voucher.showWeCountBills) {
+        fetchCloseVoucherSession(state.voucher.voucherSessionKey, closeWSConnection)(dispatch);
+        dispatch(closeVoucherSession());
+        dispatch(showError());
+        dispatch({ type: SET_WE_COUNT_BILLS_REMOVE });
+      }
+  
       dispatch(resetWeCountBillsTimer(weCountBillsTimer));
-    }
-  }, Number(process.env.REACT_APP_SOCKET_WITHDRAW_WAIT_TIMER));
-
-  dispatch(setweCountBillsTimer(weCountBillsTimer));
+      
+    }, Number(process.env.REACT_APP_SOCKET_WITHDRAW_WAIT_TIMER));
+  
+    dispatch(setweCountBillsTimer(weCountBillsTimer));
+  }
 
   api.voucher
-  .withdraw(data)
+  .withdraw(data) 
   .then((res: any) => {
     const data = res.data;
     
     if (!data.success) {
       if (data.message_error) {
-        if (data.message_error !== 'Terminal limit is exceeded') {
-          dispatch(showError());
-        }
-          
-        dispatch({
-          type: SET_AVAILABLE_WITHDRAW_SUM,
-          payload: data.message_error
-        });
-      } else if (data.validation_errors) {
-        if (
-          data.validation_errors?.cassette_info === null
-          || (
-            data.validation_errors?.cassette_info 
+        dispatch(showError());
+      }
+
+      // dispatch({
+      //   type: SET_AVAILABLE_WITHDRAW_SUM,
+      //   payload: data.message_error
+      // });
+
+      if (data.validation_errors && Object.keys(data.validation_errors).length > 0) {
+        if ( data.validation_errors?.cassette_info === null
+          || (data.validation_errors?.cassette_info 
             && (
               typeof data.validation_errors?.cassette_info === 'string' 
               && String(Number(data.validation_errors?.cassette_info)) === 'NaN'
           ))
         ) {
           dispatch(showError());
+        } else {
+          dispatch({
+            type: SET_AVAILABLE_WITHDRAW_SUM,
+            payload: data.validation_errors?.cassette_info
+          });
         }
-
-        dispatch({
-          type: SET_AVAILABLE_WITHDRAW_SUM,
-          payload: data.validation_errors?.cassette_info
-        });
       }
-
-      return;
     }
-
+    
+    return;
     // dispatch(setWithdrawSuccess());
-  })
-  .catch((error: any) => {
+  }).catch((error: any) => {
     dispatch({ type: REQUEST_VOUCHER_FAILURE, payload: error });
     dispatch({ type: SET_WE_COUNT_BILLS_REMOVE });
     dispatch(showError());
   });
+
 };
 
 export const fetchCloseVoucherSession = (voucherSessionKey: string, closeWSConnection?: () => void) => (dispatch: any) => {
+
   dispatch({ type: REQUEST_VOUCHER_START });
 
   const data = {
@@ -651,10 +680,12 @@ export const setweCountBillsTimer = (timer: any) => ({
   payload: timer
 });
 
-export const resetWeCountBillsTimer = (timer: any) => ({
-  type: RESET_WE_COUNT_BILLS_TIMER,
-  payload: timer
-});
+export const resetWeCountBillsTimer = (timer: any) => {
+  return ({
+    type: RESET_WE_COUNT_BILLS_TIMER,
+    payload: timer
+  })
+};
 
 export const closeVoucherSession = () => ({
   type: CLOSE_VOUCHER_SESSION_SUCCESS

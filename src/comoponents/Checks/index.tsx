@@ -14,8 +14,8 @@ const Check: React.FC = () => {
     <>
       <div className="check-page-wrapper">
           <div className="page-container-check">
-            <div className="wrapper-check">
-              <img src={paperCheck} alt=""/>
+            <div className="wrapper-check" style={{ backgroundImage: `url(${paperCheck})` }}>
+              {/* <img src={paperCheck} alt=""/> */}
               <div className="block-check">
                 <div className="wrapp-loading">
                  <Loading />

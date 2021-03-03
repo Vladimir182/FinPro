@@ -24,6 +24,8 @@ import BackButton from '../Buttons/BackButton';
 import { hideOptionalCheck } from '../../redux/screens';
 import './index.css';
 import moveCursorToEnd from '../../utils/moveCursorToEnd';
+import { CentrifugeContext } from '../../CentrifugeProvider';
+import { fetchWssToken } from '../../redux/authorization';
 
 const voucherWithdrawContainerStyles = {
   display: 'flex',
@@ -107,6 +109,7 @@ const image = window.innerWidth <= 1280 ? ArrowRightShort : ArrowRight;
 const VoucherWithdraw: React.FC = () => {
   //@ts-ignore
   const ws: WS = useContext(WebSocketContext);
+  const centrifuge = useContext(CentrifugeContext);
   const dispatch = useDispatch();
 
   let { 
@@ -114,6 +117,7 @@ const VoucherWithdraw: React.FC = () => {
     currency,
     availableWithdrawSum,
     cassetteInfo,
+    isCassetteInfoLoading,
     isLoading,
     withdrawSum,
     pin,
@@ -126,6 +130,7 @@ const VoucherWithdraw: React.FC = () => {
   } = useSelector((state: AppState) => state.voucher);
 
   const { isShowOptionalCheck } = useSelector((state: AppState) => state.screens);
+  const { wssToken, isWsLoading } = useSelector((state: AppState) => state.authorization);
   const [ isFormSubmitted, setIsFormSubmitted ] = useState(false);
   const [ withdrawSumInput, setwithdrawSumInput ] = useState<any>(withdrawSum ?? placeholderWithdrawSum);
   const inputRef = React.createRef<HTMLInputElement>();
@@ -135,9 +140,9 @@ const VoucherWithdraw: React.FC = () => {
     if (!isError && !cassetteInfo && !cassetteInfo?.length && !isLoading && isPinVerified) {
       fetchCassetteInfo({ msid: voucherSessionKey })(dispatch);
     }
-    if (!ws.socket || ws.socket.readyState === 3) {
-      ws.setWSConnnection();
-    }
+    // if (!ws.socket || ws.socket.readyState === 3) {
+    //   ws.setWSConnnection();
+    // }
     if (!isLoading && balance === null && pin) {
       fetchShowBalnce({
         pin,
@@ -145,12 +150,22 @@ const VoucherWithdraw: React.FC = () => {
       })(dispatch)
     }
 
+    if (!wssToken && !isWsLoading && voucherSessionKey) {
+			fetchWssToken(voucherSessionKey)(dispatch);
+		}
+
     inputRef.current?.focus();
     inputRef.current?.addEventListener('focusout', function() {
       inputRef.current?.focus();
     });
     inputRef.current?.addEventListener('paste', (e: any) => e.preventDefault());
   }, [cassetteInfo, isPinVerified, availableWithdrawSum]);
+
+  useEffect(() => {
+    if (wssToken && centrifuge) {
+      centrifuge.connect();
+    }
+  }, [wssToken])
 
   const handleActionButtonClick = (e: any) => {
     e.preventDefault();
@@ -168,7 +183,11 @@ const VoucherWithdraw: React.FC = () => {
       return;
     }
 
-    fetchVoucherWithdraw(data, ws.closeWSConnection)(dispatch);
+    // if (centrifuge) {
+    //   centrifuge.disconnect();
+    // }
+    // fetchVoucherWithdraw(data, ws.closeWSConnection)(dispatch);
+    fetchVoucherWithdraw(data)(dispatch);
   }
 
   const handleChangeWithdrawSum = (value: string) => {
@@ -215,7 +234,11 @@ const VoucherWithdraw: React.FC = () => {
   }
 
   const handleDontPrintOptionalCheck = () => {
-    fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
+    if (centrifuge) {
+      centrifuge.disconnect();
+    }
+
+    fetchCloseVoucherSession(voucherSessionKey)(dispatch);
     dispatch(hideOptionalCheck());
   }
 
@@ -228,7 +251,7 @@ const VoucherWithdraw: React.FC = () => {
     ? (<span style={{ color: 'red' }}>{terminalLimitIsExceeted}</span>)
     : availableWithdrawSum && (availableWithdrawSum > 0) 
     ? (<>{availableSumMessage}<span className="withdraw-multiple-sum" style={withdrawMultipleSum}>{availableWithdrawSum}</span></>)
-    : (availableWithdrawSum && availableWithdrawSum <= 0)
+    : (availableWithdrawSum === 0 || (availableWithdrawSum && availableWithdrawSum < 0))
     ? (<span style={{ color: 'red' }}>{invalidSumMessage}</span>)
     : balance < withdrawSumInput 
     ? (<span style={{ color: 'red' }}>{notEnoughMoneyMessage}</span>)
@@ -237,8 +260,13 @@ const VoucherWithdraw: React.FC = () => {
   
   const errorMessage = getErrorMessage(isFormSubmitted);
   const availableNominalsTitle = `Доступные купюры, ${currency}:`;
-  const availableNominals = (!cassetteInfo || (cassetteInfo && !cassetteInfo.length)) ? '...' : getAvailableBills(cassetteInfo);
-  const isActionButtonDisabled = !withdrawSumInput || withdrawSumInput === placeholderWithdrawSum || !!errorMessage;
+  const availableNominals = (isCassetteInfoLoading && (!cassetteInfo || (cassetteInfo && !cassetteInfo.length))) ? '...' 
+    : !isLoading && (!cassetteInfo || (cassetteInfo && !cassetteInfo.length)) ? noBillsMessage
+    : !isLoading && cassetteInfo ? getAvailableBills(cassetteInfo)
+    : '';
+  const isActionButtonDisabled = 
+    !withdrawSumInput || withdrawSumInput === placeholderWithdrawSum || !!errorMessage
+    //  || availableNominals === noBillsMessage;
   
   const withdrawSumStyles = {
     background: '#67219E',
@@ -271,7 +299,7 @@ const VoucherWithdraw: React.FC = () => {
                     <div className="withdraw-block" style={inputBlockStyles} onClick={handleBlockClick}>
                       <p className="withdraw-title" style={titleStyles}>
                         {availableNominalsTitle}
-                        { !isLoading && <span className="withdraw-multiple-sum" style={withdrawMultipleSum}>{availableNominals}</span> }
+                        { <span className="withdraw-multiple-sum" style={withdrawMultipleSum}>{availableNominals}</span> }
                       </p>
                       <div className="withdraw-sum-outer-wrapper" style={withdrawSumOuterWrapper}>
                         <div className="withdraw-sum-outer-middle-wrapper" style={withdrawSumMiddleWrapper}>
