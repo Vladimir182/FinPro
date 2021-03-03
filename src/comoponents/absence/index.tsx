@@ -32,11 +32,12 @@ const Absence: React.FC = () => {
     }
     if (timer <= 0) {
       clearInterval(intervalTimer);
+      setIntervalTimer(null);
       dispatch(setShowUserAbsence(false));
+      
       if (centrifuge) {
         centrifuge.disconnect();
       }
-      // fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
       fetchCloseVoucherSession(voucherSessionKey)(dispatch);
       dispatch(hideOptionalCheck());
       setTimer(Number(process.env.REACT_APP_CLOSE_SESSION_USER_ABSENCE_TIMEOUT_SECONDS));

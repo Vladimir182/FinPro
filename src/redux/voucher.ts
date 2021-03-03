@@ -286,11 +286,18 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         ...state,
         showWeCountBills: true
       }
-    case SET_WE_COUNT_BILLS_REMOVE: 
+    case SET_WE_COUNT_BILLS_REMOVE: {
+      if (state.weCountBillsTimer) {
+        //@ts-ignore
+        clearTimeout(state.weCountBillsTimer);
+      }
+
       return {
         ...state,
-        showWeCountBills: false
+        showWeCountBills: false,
+        weCountBillsTimer: null
       }
+    }
     case SET_WE_COUNT_BILLS_TIMER:
       return {
         ...state,
@@ -436,69 +443,73 @@ export const fetchVoucherWithdraw = (data: WithdrawBody, closeWSConnection?: () 
   // dispatch({type: REQUEST_VOUCHER_START});
   dispatch({ type: SET_WE_COUNT_BILLS_START });
 
-  const weCountBillsTimer = setTimeout(() => {
-    const state: AppState = store.getState();
+  const state: AppState = store.getState();
 
-    if (state.voucher.showWeCountBills) {
-      fetchCloseVoucherSession(state.voucher.voucherSessionKey, closeWSConnection)(dispatch);
-      dispatch(closeVoucherSession());
-      dispatch(showError());
-      dispatch({ type: SET_WE_COUNT_BILLS_REMOVE });
-    }
+  if (!state.voucher.weCountBillsTimer) {
 
-    dispatch(resetWeCountBillsTimer(weCountBillsTimer));
-    
-  }, Number(process.env.REACT_APP_SOCKET_WITHDRAW_WAIT_TIMER));
+    const weCountBillsTimer = setTimeout(() => {
 
-  dispatch(setweCountBillsTimer(weCountBillsTimer));
+      const state: AppState = store.getState();
+  
+      if (state.voucher.showWeCountBills) {
+        fetchCloseVoucherSession(state.voucher.voucherSessionKey, closeWSConnection)(dispatch);
+        dispatch(closeVoucherSession());
+        dispatch(showError());
+        dispatch({ type: SET_WE_COUNT_BILLS_REMOVE });
+      }
+  
+      dispatch(resetWeCountBillsTimer(weCountBillsTimer));
+      
+    }, Number(process.env.REACT_APP_SOCKET_WITHDRAW_WAIT_TIMER));
+  
+    dispatch(setweCountBillsTimer(weCountBillsTimer));
+  }
 
   api.voucher
-  .withdraw(data)
+  .withdraw(data) 
   .then((res: any) => {
     const data = res.data;
     
     if (!data.success) {
       if (data.message_error) {
-        if (data.message_error !== 'Terminal limit is exceeded') {
-          dispatch(showError());
-        }
-          
-        dispatch({
-          type: SET_AVAILABLE_WITHDRAW_SUM,
-          payload: data.message_error
-        });
-      } else if (data.validation_errors) {
-        if (
-          data.validation_errors?.cassette_info === null
-          || (
-            data.validation_errors?.cassette_info 
+        dispatch(showError());
+      }
+
+      // dispatch({
+      //   type: SET_AVAILABLE_WITHDRAW_SUM,
+      //   payload: data.message_error
+      // });
+
+      if (data.validation_errors && Object.keys(data.validation_errors).length > 0) {
+        if ( data.validation_errors?.cassette_info === null
+          || (data.validation_errors?.cassette_info 
             && (
               typeof data.validation_errors?.cassette_info === 'string' 
               && String(Number(data.validation_errors?.cassette_info)) === 'NaN'
           ))
         ) {
           dispatch(showError());
+        } else {
+          dispatch({
+            type: SET_AVAILABLE_WITHDRAW_SUM,
+            payload: data.validation_errors?.cassette_info
+          });
         }
-
-        dispatch({
-          type: SET_AVAILABLE_WITHDRAW_SUM,
-          payload: data.validation_errors?.cassette_info
-        });
       }
-
-      return;
     }
-
+    
+    return;
     // dispatch(setWithdrawSuccess());
-  })
-  .catch((error: any) => {
+  }).catch((error: any) => {
     dispatch({ type: REQUEST_VOUCHER_FAILURE, payload: error });
     dispatch({ type: SET_WE_COUNT_BILLS_REMOVE });
     dispatch(showError());
   });
+
 };
 
 export const fetchCloseVoucherSession = (voucherSessionKey: string, closeWSConnection?: () => void) => (dispatch: any) => {
+
   dispatch({ type: REQUEST_VOUCHER_START });
 
   const data = {
@@ -669,10 +680,12 @@ export const setweCountBillsTimer = (timer: any) => ({
   payload: timer
 });
 
-export const resetWeCountBillsTimer = (timer: any) => ({
-  type: RESET_WE_COUNT_BILLS_TIMER,
-  payload: timer
-});
+export const resetWeCountBillsTimer = (timer: any) => {
+  return ({
+    type: RESET_WE_COUNT_BILLS_TIMER,
+    payload: timer
+  })
+};
 
 export const closeVoucherSession = () => ({
   type: CLOSE_VOUCHER_SESSION_SUCCESS

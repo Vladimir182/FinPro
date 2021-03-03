@@ -237,7 +237,7 @@ const VoucherWithdraw: React.FC = () => {
     if (centrifuge) {
       centrifuge.disconnect();
     }
-    // fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
+
     fetchCloseVoucherSession(voucherSessionKey)(dispatch);
     dispatch(hideOptionalCheck());
   }

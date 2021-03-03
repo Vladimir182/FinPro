@@ -162,10 +162,11 @@ let VoucherLogin: React.FC = () => {
   const handleDontPrintOptionalCheck = () => {
     dispatch(setDepositSum(0));
     dispatch(hideOptionalCheck());
+    
     if (centrifuge) {
       centrifuge.disconnect();
     }
-    // fetchCloseVoucherSession(voucherSessionKey, ws.closeWSConnection)(dispatch);
+
     fetchCloseVoucherSession(voucherSessionKey)(dispatch);
   }
 
