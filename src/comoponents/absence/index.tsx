@@ -6,7 +6,6 @@ import ActionButton from '../Buttons/ActionButton';
 import { fetchCloseVoucherSession, setShowUserAbsence } from '../../redux/voucher';
 import { AppState } from '../../redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { WebSocketContext, WS } from '../../WSProvider';
 import { CentrifugeContext } from '../../CentrifugeProvider';
 import './index.css';
 import { hideOptionalCheck } from '../../redux/screens';

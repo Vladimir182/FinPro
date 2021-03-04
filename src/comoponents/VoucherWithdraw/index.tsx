@@ -18,7 +18,6 @@ import VoucherPin from '../VoucherPin';
 import Absence from '../absence';
 import OptionalCheck from '../OptionalCheck';
 import PrintCheck from '../Checks';
-import { WebSocketContext, WS } from '../../WSProvider';
 import WeCountBills from '../WeCountBills';
 import BackButton from '../Buttons/BackButton';
 import { hideOptionalCheck } from '../../redux/screens';
@@ -108,7 +107,6 @@ const image = window.innerWidth <= 1280 ? ArrowRightShort : ArrowRight;
 
 const VoucherWithdraw: React.FC = () => {
   //@ts-ignore
-  const ws: WS = useContext(WebSocketContext);
   const centrifuge = useContext(CentrifugeContext);
   const dispatch = useDispatch();
 
@@ -140,9 +138,6 @@ const VoucherWithdraw: React.FC = () => {
     if (!isError && !cassetteInfo && !cassetteInfo?.length && !isLoading && isPinVerified) {
       fetchCassetteInfo({ msid: voucherSessionKey })(dispatch);
     }
-    // if (!ws.socket || ws.socket.readyState === 3) {
-    //   ws.setWSConnnection();
-    // }
     if (!isLoading && balance === null && pin) {
       fetchShowBalnce({
         pin,

@@ -77,7 +77,7 @@ const CentProvider = (props: any) => {
 
 	const connectCentrifuge = () => {
 		if (wssToken && voucherSessionKey && !centrifuge) {
-			const centrifuge = new Centrifuge(`${process.env.REACT_APP_WS_CENTRIFUGE_URL_DEV}`);
+			const centrifuge = new Centrifuge(`${process.env.REACT_APP_WS_CENTRIFUGE_URL_DEV}/centrifugo/connection/websocket`);
    			centrifuge.setToken(wssToken);
 			setCentrifugeToState(centrifuge);
 

@@ -7,7 +7,7 @@ module.exports = function(app) {
     secure:false
   }));
   app.use('/', createProxyMiddleware('/socket', { 
-    target: process.env.REACT_APP_WS_URL_DEV,
+    target: process.env.REACT_APP_WS_CENTRIFUGE_URL_DEV,
     changeOrigin: true,
     secure: false,
     ws: true 

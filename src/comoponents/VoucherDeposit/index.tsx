@@ -15,7 +15,6 @@ import {
 import { fetchWssToken } from '../../redux/authorization';
 import { hideOptionalCheck, showOptionalCheck } from '../../redux/screens';
 import { AppState } from '../../redux';
-import { WebSocketContext, WS } from '../../WSProvider';
 import { Redirect } from 'react-router-dom';
 import OptionalCheck from '../OptionalCheck';
 import PrintCheck from '../Checks';
@@ -88,7 +87,6 @@ const actionButtonTitle = 'Завершить';
 
 let VoucherLogin: React.FC = () => {
   //@ts-ignore
-  const ws: WS = useContext(WebSocketContext);
   const centrifuge = useContext(CentrifugeContext);
   const dispatch = useDispatch();
   const { 
@@ -110,10 +108,6 @@ let VoucherLogin: React.FC = () => {
     if (!isBillAccepterReady && !isLoading && !isError) {
       fetchDepositInit(voucherSessionKey)(dispatch);
     }
-
-    // if (!ws.socket || ws.socket.readyState > 1) {
-    //   ws.setWSConnnection();
-    // }
 
 		if (!wssToken && !isWsLoading && voucherSessionKey) {
 			fetchWssToken(voucherSessionKey)(dispatch);

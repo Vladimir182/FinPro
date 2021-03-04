@@ -497,7 +497,6 @@ export const fetchVoucherWithdraw = (data: WithdrawBody, closeWSConnection?: () 
         }
       }
     }
-    console.log('weCountBillsTimer', weCountBillsTimer);
     
     if (weCountBillsTimer) {
       dispatch(resetWeCountBillsTimer(weCountBillsTimer));
