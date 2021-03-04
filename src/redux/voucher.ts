@@ -297,7 +297,7 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         showWeCountBills: false,
         weCountBillsTimer: null
       }
-    }
+    } 
     case SET_WE_COUNT_BILLS_TIMER:
       return {
         ...state,
@@ -497,7 +497,8 @@ export const fetchVoucherWithdraw = (data: WithdrawBody, closeWSConnection?: () 
         }
       }
     }
-
+    console.log('weCountBillsTimer', weCountBillsTimer);
+    
     if (weCountBillsTimer) {
       dispatch(resetWeCountBillsTimer(weCountBillsTimer));
     }
