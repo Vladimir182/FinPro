@@ -16,7 +16,6 @@ import {
 } from '../../redux/voucher';
 import Absence from '../absence';
 import BackButton from '../Buttons/BackButton';
-import { WebSocketContext, WS } from '../../WSProvider';
 import './index.css';
 import LoaderModal from '../Loading/LoaderModal';
 import { CentrifugeContext } from '../../CentrifugeProvider';
@@ -27,8 +26,6 @@ const checkBalanceButtonText = 'Проверить баланс';
 const buttonStyles = {};
 
 const VoucherRoads: React.FC = () => {
-  //@ts-ignore
-  const ws: WS = useContext(WebSocketContext);
   const centrifuge = useContext(CentrifugeContext);
   let { 
     voucherSessionKey, 

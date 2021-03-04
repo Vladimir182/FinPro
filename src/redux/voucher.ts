@@ -297,7 +297,7 @@ const voucher = (state = initialState, { type, payload }: Action) => {
         showWeCountBills: false,
         weCountBillsTimer: null
       }
-    }
+    } 
     case SET_WE_COUNT_BILLS_TIMER:
       return {
         ...state,
@@ -442,12 +442,12 @@ export const fetchVoucherPin = (data: PinBody) => (dispatch: any) => {
 export const fetchVoucherWithdraw = (data: WithdrawBody, closeWSConnection?: () => void) => (dispatch: any) => {
   // dispatch({type: REQUEST_VOUCHER_START});
   dispatch({ type: SET_WE_COUNT_BILLS_START });
-
   const state: AppState = store.getState();
+  let weCountBillsTimer: any = null;
 
   if (!state.voucher.weCountBillsTimer) {
 
-    const weCountBillsTimer = setTimeout(() => {
+    weCountBillsTimer = setTimeout(() => {
 
       const state: AppState = store.getState();
   
@@ -498,7 +498,10 @@ export const fetchVoucherWithdraw = (data: WithdrawBody, closeWSConnection?: () 
       }
     }
     
-    return;
+    if (weCountBillsTimer) {
+      dispatch(resetWeCountBillsTimer(weCountBillsTimer));
+    }
+
     // dispatch(setWithdrawSuccess());
   }).catch((error: any) => {
     dispatch({ type: REQUEST_VOUCHER_FAILURE, payload: error });
